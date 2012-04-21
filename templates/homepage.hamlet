@@ -6,7 +6,26 @@
         ^{formWidget}
         <input type="submit" value="Submit">
     $maybe player <- submission
-      <div .message>
-        Added <b>#{playerName player}</b> 
-        with <b>#{show $ playerUpvotes player}</b> upvotes 
-        and <b>#{show $ playerDownvotes player}</b> downvotes.
+        <div .message>
+            Added <b>#{playerName player}</b> 
+            with <b>#{show $ playerUpvotes player}</b> upvotes 
+            and <b>#{show $ playerDownvotes player}</b> downvotes.
+    <div .message>
+        <table>
+            <tr>
+                <th>
+                <th> Name
+                <th> Upvotes
+                <th> Downvotes
+                <th> Ratio
+            $forall Entity _ player <- allPlayers
+                <tr>
+                    <td>
+                        <div .arrows>
+                            <div .uparrow>
+                            <div> foo
+                            <div .downarrow>
+                    <td> #{playerName player}
+                    <td .upvotes> #{playerUpvotes player}
+                    <td .downvotes> #{playerDownvotes player}
+                    <td> #{playerRatio player}
