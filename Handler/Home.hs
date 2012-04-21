@@ -13,8 +13,8 @@ import Import
 getHomeR :: Handler RepHtml
 getHomeR = do
     (formWidget, formEnctype) <- generateFormPost sampleForm
-    let submission = Nothing :: Maybe (FileInfo, Text)
-        handlerName = "getHomeR" :: Text
+    let handlerName = "getHomeR" :: Text
+        submission = Nothing :: Maybe Player 
     defaultLayout $ do
         aDomId <- lift newIdent
         setTitle "Welcome To Yesod!"
@@ -25,7 +25,7 @@ postHomeR = do
     ((result, formWidget), formEnctype) <- runFormPost sampleForm
     let handlerName = "postHomeR" :: Text
         submission = case result of
-            FormSuccess res -> Just res
+            FormSuccess res -> Just $ Player res 0 0
             _ -> Nothing
 
     defaultLayout $ do
@@ -33,7 +33,5 @@ postHomeR = do
         setTitle "Welcome To Yesod!"
         $(widgetFile "homepage")
 
-sampleForm :: Form (FileInfo, Text)
-sampleForm = renderDivs $ (,)
-    <$> fileAFormReq "Choose a file"
-    <*> areq textField "What's on the file?" Nothing
+sampleForm :: Form Text
+sampleForm = renderDivs $ areq textField "Player name:" Nothing
