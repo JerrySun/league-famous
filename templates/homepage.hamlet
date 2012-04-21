@@ -15,15 +15,14 @@
             <tr>
                 <th>
                 <th> Name
-                <th> Upvotes
+                <th> Upvotes ▾
                 <th> Downvotes
                 <th> Ratio
             $forall Entity _ player <- allPlayers
                 <tr>
-                    <td>
+                    <td .arrows>
                         <div .arrows>
                             <div .uparrow>
-                            <div> foo
                             <div .downarrow>
                     <td> #{playerName player}
                     <td .upvotes> #{playerUpvotes player}

@@ -46,6 +46,7 @@ td
     padding-bottom: 10px
     padding-left: 10px
     padding-right: 10px
+    vertical-align: middle
 
 td.upvotes
     color: #ff8b60
@@ -56,7 +57,7 @@ td.downvotes
 table
     width: 100%
 
-div.arrows:
+div.arrows
     background-attachment: scroll
     background-clip: border-box
     background-color: transparent
@@ -69,7 +70,7 @@ div.arrows:
     font-style: normal
     font-variant: normal
     font-weight: bold
-    height: 48px
+    height: 32px
     line-height: normal
     list-style-type: none
     margin-bottom: 0px
@@ -85,7 +86,17 @@ div.arrows:
     width: 35px
     z-index: auto
 
-div.uparrow:
+td.arrows
+    padding-left: 0px
+    padding-right: 0px
+    width: 35px
+
+th.arrows
+    padding-left: 0px
+    padding-right: 0px
+    width: 35px
+
+div.uparrow
     background-position: -63px -612px
     background-color: transparent
     background-image: url('http://www.redditstatic.com/sprite-reddit.rQ7y8qN-wzQ.png')
@@ -111,7 +122,7 @@ div.uparrow:
     width: 15px
     z-index: auto
 
-div.downarrow:
+div.downarrow
     background-color: transparent
     background-image: url('http://www.redditstatic.com/sprite-reddit.rQ7y8qN-wzQ.png')
     background-position: -31px -612px
