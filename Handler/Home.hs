@@ -17,7 +17,8 @@ getHomeR = do
     (formWidget, formEnctype) <- generateFormPost sampleForm
     let handlerName = "getHomeR" :: Text
         submission = Nothing :: Maybe Player 
-    let allPlayers = [Player "Only Person" 1 0]
+    acid <- fmap state getYesod
+    players <- query' acid AllPlayers
     defaultLayout $ do
         aDomId <- lift newIdent
         setTitle "Welcome To Yesod!"
@@ -32,8 +33,13 @@ postHomeR = do
                         FormSuccess res -> Just res
                         _ -> Nothing
     
-    let allPlayers = [Player "Only Person" 1 0]
+    acid <- fmap state getYesod
+    case submission of
+        Just p -> update' acid (SetPlayer p)
+        Nothing -> return ()
 
+    players <- query' acid AllPlayers
+   
     defaultLayout $ do
         aDomId <- lift newIdent
         setTitle "Welcome To Yesod!"

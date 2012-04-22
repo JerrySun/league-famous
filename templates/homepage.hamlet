@@ -18,7 +18,7 @@
                 <th> Upvotes ▾
                 <th> Downvotes
                 <th> Ratio
-            $forall player <- allPlayers
+            $forall player <- players
                 <tr>
                     <td .arrows>
                         <div .arrows>

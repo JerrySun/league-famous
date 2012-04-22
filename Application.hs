@@ -18,7 +18,6 @@ import Yesod.Logger (Logger, logBS, toProduction)
 import Network.Wai.Middleware.RequestLogger (logCallback)
 #endif
 import Network.HTTP.Conduit (newManager, def)
-import Data.Acid (openLocalState)
 
 -- Import all relevant handler modules here.
 -- Don't forget to add new modules to your cabal file!
