@@ -18,6 +18,7 @@ import Yesod.Logger (Logger, logBS, toProduction)
 import Network.Wai.Middleware.RequestLogger (logCallback)
 #endif
 import Network.HTTP.Conduit (newManager, def)
+import Data.Acid (openLocalState)
 
 -- Import all relevant handler modules here.
 -- Don't forget to add new modules to your cabal file!
@@ -50,7 +51,8 @@ makeFoundation :: AppConfig DefaultEnv Extra -> Logger -> IO App
 makeFoundation conf setLogger = do
     manager <- newManager def
     s <- staticSite
-    return $ App conf setLogger s manager 
+    state <- openLocalState emptyStore
+    return $ App conf setLogger s manager state
 
 -- for yesod devel
 getApplicationDev :: IO (Int, Application)

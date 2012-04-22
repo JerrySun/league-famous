@@ -11,18 +11,6 @@ import Import
 -- functions. You can spread them across multiple files if you are so
 -- inclined, or create a single monolithic file.
 
-data Player = Player { playerName :: Text
-                     , playerUpvotes :: Int
-                     , playerDownvotes :: Int }
-
-playerRatio :: Player -> Float
-playerRatio p = let up = playerUpvotes p
-                    down = playerDownvotes p
-                    fI = fromIntegral
-                in case up `compare` down of
-                    GT -> fI up / fI down
-                    LT -> fI down / fI up * (-1)
-                    EQ -> 1
 
 getHomeR :: Handler RepHtml
 getHomeR = do

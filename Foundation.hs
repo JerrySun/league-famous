@@ -28,6 +28,8 @@ import Text.Jasmine (minifym)
 import Web.ClientSession (getKey)
 import Text.Hamlet (hamletFile)
 import Data.Text (Text)
+import State (PlayerStore)
+import Data.Acid (AcidState)
 
 -- | The site argument for your application. This can be a good place to
 -- keep settings and values requiring initialization before your application
@@ -38,6 +40,7 @@ data App = App
     , getLogger :: Logger
     , getStatic :: Static -- ^ Settings for static file serving.
     , httpManager :: Manager
+    , state :: AcidState PlayerStore
     }
 
 -- Set up i18n messages. See the message folder.
