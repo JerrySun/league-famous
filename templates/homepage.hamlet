@@ -13,9 +13,9 @@
     <div .message>
         <table>
             <tr>
-                <th>
+                <th #votecol> ▾
                 <th> Name
-                <th> Upvotes ▾
+                <th> Upvotes
                 <th> Downvotes
                 <th> Ratio
             $forall player <- players
@@ -23,6 +23,7 @@
                     <td .arrows>
                         <div .arrows>
                             <div .uparrow>
+                            <div> #{playerScore player}
                             <div .downarrow>
                     <td> #{playerName player}
                     <td .upvotes> #{playerUpvotes player}

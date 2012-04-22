@@ -9,6 +9,7 @@ import Control.Monad.State (gets, put)
 import Control.Monad.Reader (asks)
 import Data.Text (Text)
 import Prelude
+import Data.Function (on)
 
 data Player = Player { playerName :: Text
                      , playerUpvotes :: Int

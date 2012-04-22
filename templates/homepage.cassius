@@ -70,7 +70,7 @@ div.arrows
     font-style: normal
     font-variant: normal
     font-weight: bold
-    height: 32px
+    height: 48px
     line-height: normal
     list-style-type: none
     margin-bottom: 0px
@@ -83,18 +83,22 @@ div.arrows
     padding-left: 0px
     padding-right: 0px
     padding-top: 0px
-    width: 35px
+    width: 39px
     z-index: auto
+    text-align: center
+
+th#votecol
+    text-align: center
 
 td.arrows
     padding-left: 0px
     padding-right: 0px
-    width: 35px
+    width: 40px
 
 th.arrows
     padding-left: 0px
     padding-right: 0px
-    width: 35px
+    width: 40px
 
 div.uparrow
     background-position: -63px -612px
@@ -112,8 +116,8 @@ div.uparrow
     line-height: normal
     list-style-type: none
     margin-bottom: 0px
-    margin-left: 10px
-    margin-right: 10px
+    margin-left: 12px
+    margin-right: 12px
     margin-top: 2px
     padding-bottom: 0px
     padding-left: 0px
@@ -138,8 +142,8 @@ div.downarrow
     line-height: normal
     list-style-type: none
     margin-bottom: 0px
-    margin-left: 10px
-    margin-right: 10px
+    margin-left: 12px
+    margin-right: 12px
     margin-top: 2px
     padding-bottom: 0px
     padding-left: 0px

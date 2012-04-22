@@ -2,6 +2,8 @@
 module Handler.Home where
 
 import Import
+import Data.Function (on)
+import Data.List (sortBy)
 
 -- This is a handler function for the GET request method on the HomeR
 -- resource pattern. All of your resource patterns are defined in
@@ -38,12 +40,16 @@ postHomeR = do
         Just p -> update' acid (SetPlayer p)
         Nothing -> return ()
 
-    players <- query' acid AllPlayers
+    players <- sortBy (flip compare `on` playerScore) <$> query' acid AllPlayers
    
     defaultLayout $ do
         aDomId <- lift newIdent
         setTitle "Welcome To Yesod!"
         $(widgetFile "homepage")
+
+
+playerScore p = playerUpvotes p * 5 - playerDownvotes p * 3
+
 
 sampleForm :: Form Player
 sampleForm = renderDivs $ Player
