@@ -17,8 +17,6 @@ import Network.Wai.Middleware.RequestLogger (logCallbackDev)
 import Yesod.Logger (Logger, logBS, toProduction)
 import Network.Wai.Middleware.RequestLogger (logCallback)
 #endif
-import qualified Database.Persist.Store
-import Database.Persist.GenericSql (runMigration)
 import Network.HTTP.Conduit (newManager, def)
 
 -- Import all relevant handler modules here.
@@ -52,12 +50,7 @@ makeFoundation :: AppConfig DefaultEnv Extra -> Logger -> IO App
 makeFoundation conf setLogger = do
     manager <- newManager def
     s <- staticSite
-    dbconf <- withYamlEnvironment "config/sqlite.yml" (appEnv conf)
-              Database.Persist.Store.loadConfig >>=
-              Database.Persist.Store.applyEnv
-    p <- Database.Persist.Store.createPoolConfig (dbconf :: Settings.PersistConfig)
-    Database.Persist.Store.runPool dbconf (runMigration migrateAll) p
-    return $ App conf setLogger s p manager dbconf
+    return $ App conf setLogger s manager 
 
 -- for yesod devel
 getApplicationDev :: IO (Int, Application)

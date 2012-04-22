@@ -11,6 +11,10 @@ import Import
 -- functions. You can spread them across multiple files if you are so
 -- inclined, or create a single monolithic file.
 
+data Player = Player { playerName :: Text
+                     , playerUpvotes :: Int
+                     , playerDownvotes :: Int }
+
 playerRatio :: Player -> Float
 playerRatio p = let up = playerUpvotes p
                     down = playerDownvotes p
@@ -25,7 +29,7 @@ getHomeR = do
     (formWidget, formEnctype) <- generateFormPost sampleForm
     let handlerName = "getHomeR" :: Text
         submission = Nothing :: Maybe Player 
-    allPlayers <- runDB $ selectList [] [Desc PlayerUpvotes]
+    let allPlayers = [Player "Only Person" 1 0]
     defaultLayout $ do
         aDomId <- lift newIdent
         setTitle "Welcome To Yesod!"
@@ -40,18 +44,8 @@ postHomeR = do
                         FormSuccess res -> Just res
                         _ -> Nothing
     
-    let processPlayer p = runDB $ do
-        existing <- getBy $ UniquePlayerName (playerName p)
-        _ <- case existing of
-                Nothing     -> insert p >> return ()
-                Just player -> replace (entityKey player) p
-        return ()
+    let allPlayers = [Player "Only Person" 1 0]
 
-    maybe (return ()) processPlayer submission
-    
-    allPlayers <- runDB $ selectList [] [Desc PlayerUpvotes]
-
-    --allPlayers <- return [Player "not_your_player" 100 29]
     defaultLayout $ do
         aDomId <- lift newIdent
         setTitle "Welcome To Yesod!"
