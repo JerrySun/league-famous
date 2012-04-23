@@ -50,8 +50,8 @@ makeFoundation :: AppConfig DefaultEnv Extra -> Logger -> IO App
 makeFoundation conf setLogger = do
     manager <- newManager def
     s <- staticSite
-    state <- openLocalState emptyStore
-    return $ App conf setLogger s manager state
+    theState <- openLocalState emptyStore
+    return $ App conf setLogger s manager theState
 
 -- for yesod devel
 getApplicationDev :: IO (Int, Application)

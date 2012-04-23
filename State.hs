@@ -9,7 +9,6 @@ import Control.Monad.State (gets, put)
 import Control.Monad.Reader (asks)
 import Data.Text (Text)
 import Prelude
-import Data.Function (on)
 import Data.Word (Word32)
 import Data.Maybe (fromMaybe)
 
@@ -30,6 +29,7 @@ type Name = Text
 
 data PlayerStore = PlayerStore {unwrapMap :: M.Map Name Player} deriving (Typeable)
 
+emptyStore ::  PlayerStore
 emptyStore = PlayerStore M.empty
 
 $(deriveSafeCopy 0 'base ''Player)

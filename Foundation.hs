@@ -44,6 +44,7 @@ data App = App
     , state :: AcidState PlayerStore
     }
 
+getAcid :: GHandler sub App (AcidState PlayerStore)
 getAcid = fmap state getYesod
 
 -- Set up i18n messages. See the message folder.

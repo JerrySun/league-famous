@@ -4,8 +4,6 @@ module Handler.Home where
 import Import
 import Data.Function (on)
 import Data.List (sortBy)
-import Text.Hamlet (hamletFile)
-import Text.Cassius (cassiusFile)
 import Network.Wai (remoteHost)
 import Network.Socket (SockAddr(..))
 
@@ -24,6 +22,7 @@ getHomeR = do
     doHome Nothing form
 
 
+doHome :: Maybe Player -> (Widget, Enctype) -> GHandler App App RepHtml
 doHome newPlayer (formWidget, formEnctype) = do
     let submission = newPlayer
     acid <- getAcid
@@ -45,13 +44,14 @@ postHomeR = do
                         _ -> Nothing
     
     acid <- getAcid
-    case submission of
-        Just p -> update' acid (SetPlayer p)
-        Nothing -> return ()
+    _ <- case submission of
+            Just p -> update' acid (SetPlayer p)
+            Nothing -> return ()
 
     doHome submission (formWidget, formEnctype)
 
 
+playerScore ::  Player -> Int
 playerScore p = playerUpvotes p - playerDownvotes p `div` 2
 
 getUpvoteR :: Name -> Handler RepHtml
