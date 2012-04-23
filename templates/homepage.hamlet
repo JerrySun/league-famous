@@ -11,21 +11,4 @@
             with <b>#{show $ playerUpvotes player}</b> upvotes 
             and <b>#{show $ playerDownvotes player}</b> downvotes.
     <div .message>
-        <table>
-            <tr>
-                <th #votecol> ▾
-                <th> Name
-                <th> Upvotes
-                <th> Downvotes
-                <th> Ratio
-            $forall player <- players
-                <tr>
-                    <td .arrows>
-                        <div .arrows>
-                            <div .uparrow onclick="upvote('#{playerName player}')">
-                            <div> #{playerScore player}
-                            <div .downarrow onclick="downvote('#{playerName player}')">
-                    <td> #{playerName player}
-                    <td .upvotes> #{playerUpvotes player}
-                    <td .downvotes> #{playerDownvotes player}
-                    <td> #{playerRatio player}
+        ^{table}

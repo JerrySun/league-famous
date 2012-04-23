@@ -1,0 +1,18 @@
+<table #votes>
+    <tr>
+        <th #votecol> ▾
+        <th> Name
+        <th> Upvotes
+        <th> Downvotes
+        <th> Ratio
+    $forall player <- players
+        <tr>
+            <td .arrows>
+                <div .arrows>
+                    <div .uparrow data-name="#{playerName player}">
+                    <div> #{playerScore player}
+                    <div .downarrow data-name="#{playerName player}">
+            <td> #{playerName player}
+            <td .upvotes> #{playerUpvotes player}
+            <td .downvotes> #{playerDownvotes player}
+            <td> #{playerRatio player}

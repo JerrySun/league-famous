@@ -4,6 +4,8 @@ module Handler.Home where
 import Import
 import Data.Function (on)
 import Data.List (sortBy)
+import Text.Hamlet (hamletFile)
+import Text.Cassius (cassiusFile)
 
 -- This is a handler function for the GET request method on the HomeR
 -- resource pattern. All of your resource patterns are defined in
@@ -25,12 +27,9 @@ doHome newPlayer (formWidget, formEnctype) = do
     acid <- fmap state getYesod
     players <- sortBy (flip compare `on` playerScore) <$> query' acid AllPlayers
     defaultLayout $ do
+        let table = $(widgetFile "table")
         aDomId <- lift newIdent
         setTitle "Welcome To Yesod!"
-        toWidgetHead [coffee|
-            @upvote = (x) -> window.location = "/upvote/" + x
-            @downvote = (x) -> window.location = "/downvote/" + x
-            |]
         $(widgetFile "homepage")
 
 
@@ -67,8 +66,19 @@ getDownvoteR name = do
         Nothing -> notFound
         Just _ -> redirect HomeR
 
+getTableR :: Handler RepHtml
+getTableR = do
+    acid <- fmap state getYesod
+    players <- sortBy (flip compare `on` playerScore) <$> query' acid AllPlayers
+    pc <- widgetToPageContent $(widgetFile "table")
+    hamletToRepHtml [hamlet|
+        ^{pageBody pc}
+        |]
+        
+
 sampleForm :: Form Player
 sampleForm = renderDivs $ Player
     <$> areq textField "Player name:" Nothing
     <*> areq intField "Upvotes" Nothing
     <*> areq intField "Downvotes" Nothing
+

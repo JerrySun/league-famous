@@ -33,6 +33,7 @@ library
                      Settings.StaticFiles
                      Handler.Home
                      State
+                     Util
 
     ghc-options:   -Wall -threaded -O0
     cpp-options:   -DDEVELOPMENT
@@ -105,6 +106,7 @@ executable         leaguesay
                  , containers
                  , safecopy
                  , mtl
+                 , transformers
 
 test-suite integration-tests
     type: exitcode-stdio-1.0

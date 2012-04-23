@@ -8,3 +8,5 @@
 
 /upvote/#Text UpvoteR GET
 /downvote/#Text DownvoteR GET
+
+/table TableR GET 

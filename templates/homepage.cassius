@@ -3,9 +3,6 @@ body
 h1
     text-align: center
 
-h2##{aDomId}
-    color: #990
-
 div.content
     padding-top: 20px
     padding-bottom: 20px
@@ -151,3 +148,9 @@ div.downarrow
     padding-top: 0px
     width: 15px
     z-index: auto
+
+div.activedown
+    background-position: -47px -612px
+
+div.activeup
+    background-position: -79px -612px
