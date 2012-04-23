@@ -5,8 +5,8 @@ import Data.Acid
 import Data.SafeCopy
 import qualified Data.Map as M
 import Data.Typeable
-import Control.Monad.State (gets, put)
-import Control.Monad.Reader (asks)
+import Control.Monad.State (get, gets, put)
+import Control.Monad.Reader (ask, asks)
 import Data.Text (Text)
 import Prelude
 import Data.Word (Word32)
@@ -15,6 +15,37 @@ import Data.Maybe (fromMaybe)
 data Player = Player { playerName :: Name
                      , playerUpvotes :: Int
                      , playerDownvotes :: Int } deriving (Typeable)
+
+type Name = Text
+
+data PlayerStore = PlayerStore {unwrapMap :: M.Map Name Player} deriving (Typeable)
+
+$(deriveSafeCopy 0 'base ''Player)
+$(deriveSafeCopy 0 'base ''PlayerStore)
+
+----
+data Vote = Up | Down | Neutral deriving (Typeable)
+
+data IP = IPv4 Word32 | IPv6 (Word32, Word32, Word32, Word32) deriving (Ord, Eq, Typeable)
+
+data IPStore = IPStore (M.Map IP (M.Map Name Vote)) deriving (Typeable)
+
+$(deriveSafeCopy 0 'base ''Vote)
+$(deriveSafeCopy 0 'base ''IP)
+$(deriveSafeCopy 0 'base ''IPStore)
+
+----
+data AppState = AppState { getPlayerStore :: PlayerStore
+                         , getIPStore :: IPStore } deriving (Typeable)
+
+$(deriveSafeCopy 0 'base ''AppState)
+
+emptyState ::  AppState
+emptyState = AppState emptyPlayerS emptyIPS
+
+
+emptyPlayerS ::PlayerStore
+emptyPlayerS = PlayerStore M.empty
 
 playerRatio :: Player -> Float
 playerRatio p = let up = playerUpvotes p
@@ -25,26 +56,30 @@ playerRatio p = let up = playerUpvotes p
                     LT -> fI down / fI up * (-1)
                     EQ -> 1
 
-type Name = Text
+playerUpdater :: (PlayerStore -> (PlayerStore, a)) -> Update AppState a
+playerUpdater f = do AppState players ips <- get
+                     let (players', result) = f players
+                     put $ AppState players' ips
+                     return result
 
-data PlayerStore = PlayerStore {unwrapMap :: M.Map Name Player} deriving (Typeable)
+playerQueryer :: (PlayerStore -> a) -> Query AppState a
+playerQueryer f = do AppState players _ <- ask
+                     let result = f players
+                     return result
 
-emptyStore ::  PlayerStore
-emptyStore = PlayerStore M.empty
+setPlayer' :: Player -> PlayerStore -> (PlayerStore, ())
+setPlayer' p (PlayerStore s) = (PlayerStore $ M.insert (playerName p) p s, ())
 
-$(deriveSafeCopy 0 'base ''Player)
-$(deriveSafeCopy 0 'base ''PlayerStore)
+setPlayer :: Player -> Update AppState ()
+setPlayer p = playerUpdater $ setPlayer' p
 
-setPlayer :: Player -> Update PlayerStore ()
-setPlayer p = gets (M.insert (playerName p) p . unwrapMap) >>= put . PlayerStore
+getPlayer :: Name -> Query AppState (Maybe Player)
+getPlayer n = playerQueryer $ M.lookup n . unwrapMap
 
-getPlayer :: Name -> Query PlayerStore (Maybe Player)
-getPlayer n = asks $ M.lookup n . unwrapMap
+allPlayers :: Query AppState [Player]
+allPlayers = playerQueryer $ M.elems . unwrapMap
 
-allPlayers :: Query PlayerStore [Player]
-allPlayers = asks $ M.elems . unwrapMap
-
-upvote ::  Name -> Update PlayerStore (Maybe Player)
+upvote ::  Name -> Update AppState (Maybe Player)
 upvote n = do
     player <- runQuery $ getPlayer n
     case player of
@@ -52,7 +87,7 @@ upvote n = do
                                       in setPlayer new >> return (Just new)
         Nothing -> return Nothing
                                       
-downvote ::  Name -> Update PlayerStore (Maybe Player)
+downvote ::  Name -> Update AppState (Maybe Player)
 downvote n = do
     player <- runQuery $ getPlayer n
     case player of
@@ -60,13 +95,12 @@ downvote n = do
                                       in setPlayer new >> return (Just new)
         Nothing -> return Nothing
                                     
-$(makeAcidic ''PlayerStore ['setPlayer, 'getPlayer, 'allPlayers, 'upvote, 'downvote])
 
-data Vote = Up | Down | Neutral deriving (Typeable)
+----------------
+----------------
 
-data IP = IPv4 Word32 | IPv6 (Word32, Word32, Word32, Word32) deriving (Ord, Eq, Typeable)
-
-data IPStore = IPStore (M.Map IP (M.Map Name Vote)) deriving (Typeable)
+emptyIPS :: IPStore
+emptyIPS = IPStore M.empty
 
 vote :: IP -> Name -> Vote -> IPStore -> (IPStore, Vote)
 vote ip n v (IPStore s) = 
@@ -75,3 +109,18 @@ vote ip n v (IPStore s) =
                         , Neutral )
         Just votemap -> ( IPStore $ M.insert ip (M.insert n v votemap) s
                         , fromMaybe Neutral (M.lookup n votemap))
+
+updateVote :: IP -> Name -> Vote -> Update AppState Vote
+updateVote ip n v = ipUpdater $ vote ip n v
+
+ipUpdater :: (IPStore -> (IPStore, a)) -> Update AppState a
+ipUpdater f = do AppState players ips <- get
+                 let (ips', result) = f ips
+                 put $ AppState players ips'
+                 return result
+
+----------------
+----------------
+
+
+$(makeAcidic ''AppState ['setPlayer, 'getPlayer, 'allPlayers, 'upvote, 'downvote, 'updateVote])

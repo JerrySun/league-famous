@@ -29,7 +29,7 @@ import Text.Jasmine (minifym)
 import Web.ClientSession (getKey)
 import Text.Hamlet (hamletFile)
 import Data.Text (Text)
-import State (PlayerStore)
+import State (AppState)
 import Data.Acid (AcidState)
 
 -- | The site argument for your application. This can be a good place to
@@ -41,10 +41,10 @@ data App = App
     , getLogger :: Logger
     , getStatic :: Static -- ^ Settings for static file serving.
     , httpManager :: Manager
-    , state :: AcidState PlayerStore
+    , state :: AcidState AppState
     }
 
-getAcid :: GHandler sub App (AcidState PlayerStore)
+getAcid :: GHandler sub App (AcidState AppState)
 getAcid = fmap state getYesod
 
 -- Set up i18n messages. See the message folder.
