@@ -16,22 +16,28 @@ import Data.List (sortBy)
 
 getHomeR :: Handler RepHtml
 getHomeR = do
-    (formWidget, formEnctype) <- generateFormPost sampleForm
-    let handlerName = "getHomeR" :: Text
-        submission = Nothing :: Maybe Player 
+    form <- generateFormPost sampleForm
+    doHome Nothing form
+
+
+doHome newPlayer (formWidget, formEnctype) = do
+    let submission = newPlayer
     acid <- fmap state getYesod
-    players <- query' acid AllPlayers
+    players <- sortBy (flip compare `on` playerScore) <$> query' acid AllPlayers
     defaultLayout $ do
         aDomId <- lift newIdent
         setTitle "Welcome To Yesod!"
+        toWidgetHead [coffee|
+            @upvote = (x) -> window.location = "/upvote/" + x
+            @downvote = (x) -> window.location = "/downvote/" + x
+            |]
         $(widgetFile "homepage")
 
 
 postHomeR :: Handler RepHtml
 postHomeR = do
     ((result, formWidget), formEnctype) <- runFormPost sampleForm
-    let handlerName = "postHomeR" :: Text
-        submission = case result of
+    let submission = case result of
                         FormSuccess res -> Just res
                         _ -> Nothing
     
@@ -40,16 +46,26 @@ postHomeR = do
         Just p -> update' acid (SetPlayer p)
         Nothing -> return ()
 
-    players <- sortBy (flip compare `on` playerScore) <$> query' acid AllPlayers
-   
-    defaultLayout $ do
-        aDomId <- lift newIdent
-        setTitle "Welcome To Yesod!"
-        $(widgetFile "homepage")
+    doHome submission (formWidget, formEnctype)
 
 
-playerScore p = playerUpvotes p * 5 - playerDownvotes p * 3
+playerScore p = playerUpvotes p - playerDownvotes p `div` 2
 
+getUpvoteR :: Name -> Handler RepHtml
+getUpvoteR name = do 
+    acid <- fmap state getYesod
+    updateRes <- update' acid $ Upvote name
+    case updateRes of
+        Nothing -> notFound
+        Just _ -> redirect HomeR
+
+getDownvoteR :: Name -> Handler RepHtml
+getDownvoteR name = do 
+    acid <- fmap state getYesod
+    updateRes <- update' acid $ Downvote name
+    case updateRes of
+        Nothing -> notFound
+        Just _ -> redirect HomeR
 
 sampleForm :: Form Player
 sampleForm = renderDivs $ Player

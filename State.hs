@@ -42,4 +42,20 @@ getPlayer n = asks $ M.lookup n . unwrapMap
 allPlayers :: Query PlayerStore [Player]
 allPlayers = asks $ M.elems . unwrapMap
 
-$(makeAcidic ''PlayerStore ['setPlayer, 'getPlayer, 'allPlayers])
+upvote ::  Name -> Update PlayerStore (Maybe Player)
+upvote n = do
+    player <- runQuery $ getPlayer n
+    case player of
+        Just (Player name up down) -> let new = Player name (up + 1) down
+                                      in setPlayer new >> return (Just new)
+        Nothing -> return Nothing
+                                      
+downvote ::  Name -> Update PlayerStore (Maybe Player)
+downvote n = do
+    player <- runQuery $ getPlayer n
+    case player of
+        Just (Player name up down) -> let new = Player name up (down + 1)
+                                      in setPlayer new >> return (Just new)
+        Nothing -> return Nothing
+                                    
+$(makeAcidic ''PlayerStore ['setPlayer, 'getPlayer, 'allPlayers, 'upvote, 'downvote])

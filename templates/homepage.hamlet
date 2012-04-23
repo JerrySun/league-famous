@@ -1,7 +1,7 @@
 <div .content>
     <p> This is an example trivial Form. Read the #
         <a href="http://www.yesodweb.com/book/forms">Forms chapter</a> #
-        on the yesod book to learn more about them.  This is #{handlerName}.
+        on the yesod book to learn more about them.
     <form method=post action=@{HomeR}#form enctype=#{formEnctype}>
         ^{formWidget}
         <input type="submit" value="Submit">
@@ -22,9 +22,9 @@
                 <tr>
                     <td .arrows>
                         <div .arrows>
-                            <div .uparrow>
+                            <div .uparrow onclick="upvote('#{playerName player}')">
                             <div> #{playerScore player}
-                            <div .downarrow>
+                            <div .downarrow onclick="downvote('#{playerName player}')">
                     <td> #{playerName player}
                     <td .upvotes> #{playerUpvotes player}
                     <td .downvotes> #{playerDownvotes player}
