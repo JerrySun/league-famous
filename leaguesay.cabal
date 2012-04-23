@@ -108,6 +108,7 @@ executable         leaguesay
                  , mtl
                  , transformers
                  , wai
+                 , network
 
 test-suite integration-tests
     type: exitcode-stdio-1.0

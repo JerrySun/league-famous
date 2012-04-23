@@ -7,6 +7,7 @@ import Data.List (sortBy)
 import Text.Hamlet (hamletFile)
 import Text.Cassius (cassiusFile)
 import Network.Wai (remoteHost)
+import Network.Socket (SockAddr(..))
 
 -- This is a handler function for the GET request method on the HomeR
 -- resource pattern. All of your resource patterns are defined in
@@ -25,9 +26,10 @@ getHomeR = do
 
 doHome newPlayer (formWidget, formEnctype) = do
     let submission = newPlayer
-    acid <- fmap state getYesod
+    acid <- getAcid
     players <- sortBy (flip compare `on` playerScore) <$> query' acid AllPlayers
-    ip <- fmap (show . remoteHost . reqWaiRequest) getRequest
+    --ip <- fmap (show . remoteHost . reqWaiRequest) getRequest
+    ip <- fmap (show . (\(SockAddrInet _ a) -> a) . remoteHost . reqWaiRequest) getRequest
     defaultLayout $ do
         let table = $(widgetFile "table")
         aDomId <- lift newIdent
@@ -42,7 +44,7 @@ postHomeR = do
                         FormSuccess res -> Just res
                         _ -> Nothing
     
-    acid <- fmap state getYesod
+    acid <- getAcid
     case submission of
         Just p -> update' acid (SetPlayer p)
         Nothing -> return ()
@@ -54,7 +56,7 @@ playerScore p = playerUpvotes p - playerDownvotes p `div` 2
 
 getUpvoteR :: Name -> Handler RepHtml
 getUpvoteR name = do 
-    acid <- fmap state getYesod
+    acid <- getAcid
     updateRes <- update' acid $ Upvote name
     case updateRes of
         Nothing -> notFound
@@ -62,7 +64,7 @@ getUpvoteR name = do
 
 getDownvoteR :: Name -> Handler RepHtml
 getDownvoteR name = do 
-    acid <- fmap state getYesod
+    acid <- getAcid
     updateRes <- update' acid $ Downvote name
     case updateRes of
         Nothing -> notFound
@@ -70,7 +72,7 @@ getDownvoteR name = do
 
 getTableR :: Handler RepHtml
 getTableR = do
-    acid <- fmap state getYesod
+    acid <- getAcid
     players <- sortBy (flip compare `on` playerScore) <$> query' acid AllPlayers
     pc <- widgetToPageContent $(widgetFile "table")
     hamletToRepHtml [hamlet|

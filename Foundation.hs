@@ -8,6 +8,7 @@ module Foundation
     , Form
     , maybeAuth
     , requireAuth
+    , getAcid
     , module Settings
     ) where
 
@@ -42,6 +43,8 @@ data App = App
     , httpManager :: Manager
     , state :: AcidState PlayerStore
     }
+
+getAcid = fmap state getYesod
 
 -- Set up i18n messages. See the message folder.
 mkMessage "App" "messages" "en"

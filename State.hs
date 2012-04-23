@@ -10,8 +10,10 @@ import Control.Monad.Reader (asks)
 import Data.Text (Text)
 import Prelude
 import Data.Function (on)
+import Data.Word (Word32)
+import Data.Maybe (fromMaybe)
 
-data Player = Player { playerName :: Text
+data Player = Player { playerName :: Name
                      , playerUpvotes :: Int
                      , playerDownvotes :: Int } deriving (Typeable)
 
@@ -59,3 +61,17 @@ downvote n = do
         Nothing -> return Nothing
                                     
 $(makeAcidic ''PlayerStore ['setPlayer, 'getPlayer, 'allPlayers, 'upvote, 'downvote])
+
+data Vote = Up | Down | Neutral deriving (Typeable)
+
+data IP = IPv4 Word32 | IPv6 (Word32, Word32, Word32, Word32) deriving (Ord, Eq, Typeable)
+
+data IPStore = IPStore (M.Map IP (M.Map Name Vote)) deriving (Typeable)
+
+vote :: IP -> Name -> Vote -> IPStore -> (IPStore, Vote)
+vote ip n v (IPStore s) = 
+    case M.lookup ip s of
+        Nothing      -> ( IPStore $ M.insert ip (M.singleton n v) s
+                        , Neutral )
+        Just votemap -> ( IPStore $ M.insert ip (M.insert n v votemap) s
+                        , fromMaybe Neutral (M.lookup n votemap))
