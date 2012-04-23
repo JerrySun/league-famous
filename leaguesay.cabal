@@ -107,6 +107,7 @@ executable         leaguesay
                  , safecopy
                  , mtl
                  , transformers
+                 , wai
 
 test-suite integration-tests
     type: exitcode-stdio-1.0

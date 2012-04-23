@@ -6,6 +6,7 @@ import Data.Function (on)
 import Data.List (sortBy)
 import Text.Hamlet (hamletFile)
 import Text.Cassius (cassiusFile)
+import Network.Wai (remoteHost)
 
 -- This is a handler function for the GET request method on the HomeR
 -- resource pattern. All of your resource patterns are defined in
@@ -26,6 +27,7 @@ doHome newPlayer (formWidget, formEnctype) = do
     let submission = newPlayer
     acid <- fmap state getYesod
     players <- sortBy (flip compare `on` playerScore) <$> query' acid AllPlayers
+    ip <- fmap (show . remoteHost . reqWaiRequest) getRequest
     defaultLayout $ do
         let table = $(widgetFile "table")
         aDomId <- lift newIdent
