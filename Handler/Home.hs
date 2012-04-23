@@ -6,6 +6,8 @@ import Data.Function (on)
 import Data.List (sortBy)
 import Network.Wai (remoteHost)
 import Network.Socket (SockAddr(..))
+import Data.List (elemIndex)
+import Data.Maybe (fromJust)
 
 -- This is a handler function for the GET request method on the HomeR
 -- resource pattern. All of your resource patterns are defined in
@@ -27,8 +29,11 @@ doHome newPlayer (formWidget, formEnctype) = do
     let submission = newPlayer
     acid <- getAcid
     players <- sortBy (flip compare `on` playerScore) <$> query' acid AllPlayers
-    --ip <- fmap (show . remoteHost . reqWaiRequest) getRequest
-    ip <- fmap (show . (\(SockAddrInet _ a) -> a) . remoteHost . reqWaiRequest) getRequest
+    ip <- requestIP
+    votes <- mapM (\x -> query' acid (GetVote ip (playerName x))) players
+    let voteOf p = votes !! (fromJust $ elemIndex p players)
+    let isUpvoted = (== Up) . voteOf
+    let isDownvoted = (== Down) . voteOf
     defaultLayout $ do
         let table = $(widgetFile "table")
         aDomId <- lift newIdent
@@ -56,24 +61,48 @@ playerScore p = playerUpvotes p - playerDownvotes p `div` 2
 
 getUpvoteR :: Name -> Handler RepHtml
 getUpvoteR name = do 
+    ip <- requestIP
     acid <- getAcid
-    updateRes <- update' acid $ Upvote name
-    case updateRes of
+    player' <- query' acid $ GetPlayer name
+    case player' of
         Nothing -> notFound
-        Just _ -> redirect HomeR
+        Just (Player n u d) -> do
+            prevVote <- update' acid $ UpdateVote ip n Up
+            case prevVote of 
+                Up        -> return ()
+                Down      -> update' acid $ SetPlayer $ Player n (u + 1) (d - 1)
+                Neutral   -> update' acid $ SetPlayer $ Player n (u + 1) d
+            defaultLayout $ [whamlet| |]
+
+requestIP = fmap (sockIP . remoteHost . reqWaiRequest) getRequest
+            where sockIP (SockAddrInet _ a) = IPv4 a
+                  sockIP (SockAddrInet6 _ _ a _) = IPv6 a
+                  sockIP _ = IPv4 0 -- Kind of just don't handle unix sockets
 
 getDownvoteR :: Name -> Handler RepHtml
 getDownvoteR name = do 
+    ip <- requestIP
     acid <- getAcid
-    updateRes <- update' acid $ Downvote name
-    case updateRes of
+    player' <- query' acid $ GetPlayer name
+    case player' of
         Nothing -> notFound
-        Just _ -> redirect HomeR
+        Just (Player n u d) -> do
+            prevVote <- update' acid $ UpdateVote ip n Down
+            _ <- case prevVote of 
+                     Up        -> update' acid $ SetPlayer $ Player n (u - 1) (d + 1)
+                     Down      -> return ()
+                     Neutral   -> update' acid $ SetPlayer $ Player n u (d + 1)
+            defaultLayout $ [whamlet| |]
 
 getTableR :: Handler RepHtml
 getTableR = do
+    ip <- requestIP
     acid <- getAcid
     players <- sortBy (flip compare `on` playerScore) <$> query' acid AllPlayers
+    votes <- mapM (\x -> query' acid (GetVote ip (playerName x))) players
+    let voteOf p = votes !! (fromJust $ elemIndex p players)
+    let isUpvoted = (== Up) . voteOf
+    let isDownvoted = (== Down) . voteOf
     pc <- widgetToPageContent $(widgetFile "table")
     hamletToRepHtml [hamlet|
         ^{pageBody pc}

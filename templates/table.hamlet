@@ -9,9 +9,15 @@
         <tr>
             <td .arrows>
                 <div .arrows>
-                    <div .uparrow data-name="#{playerName player}">
+                    $if isUpvoted player
+                        <div .uparrow .activeup data-name="#{playerName player}">
+                    $else
+                        <div .uparrow data-name="#{playerName player}">
                     <div> #{playerScore player}
-                    <div .downarrow data-name="#{playerName player}">
+                    $if isDownvoted player
+                        <div .downarrow .activedown data-name="#{playerName player}">
+                    $else
+                        <div .downarrow data-name="#{playerName player}">
             <td> #{playerName player}
             <td .upvotes> #{playerUpvotes player}
             <td .downvotes> #{playerDownvotes player}

@@ -14,7 +14,7 @@ import Data.Maybe (fromMaybe)
 
 data Player = Player { playerName :: Name
                      , playerUpvotes :: Int
-                     , playerDownvotes :: Int } deriving (Typeable)
+                     , playerDownvotes :: Int } deriving (Eq, Typeable)
 
 type Name = Text
 
@@ -24,7 +24,7 @@ $(deriveSafeCopy 0 'base ''Player)
 $(deriveSafeCopy 0 'base ''PlayerStore)
 
 ----
-data Vote = Up | Down | Neutral deriving (Typeable)
+data Vote = Up | Down | Neutral deriving (Show, Eq, Typeable)
 
 data IP = IPv4 Word32 | IPv6 (Word32, Word32, Word32, Word32) deriving (Ord, Eq, Typeable)
 
@@ -119,8 +119,16 @@ ipUpdater f = do AppState players ips <- get
                  put $ AppState players ips'
                  return result
 
+ipQueryer :: (IPStore -> a) -> Query AppState a
+ipQueryer f = do AppState _ ips <- ask
+                 let result = f ips
+                 return result
+
+getVote :: IP -> Name -> Query AppState Vote
+getVote ip name = ipQueryer f
+                  where f (IPStore s) = fromMaybe Neutral $ M.lookup ip s >>= M.lookup name
 ----------------
 ----------------
 
 
-$(makeAcidic ''AppState ['setPlayer, 'getPlayer, 'allPlayers, 'upvote, 'downvote, 'updateVote])
+$(makeAcidic ''AppState ['setPlayer, 'getPlayer, 'allPlayers, 'upvote, 'downvote, 'updateVote, 'getVote])
