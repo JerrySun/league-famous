@@ -63,16 +63,8 @@ getUpvoteR :: Name -> Handler RepHtml
 getUpvoteR name = do 
     ip <- requestIP
     acid <- getAcid
-    player' <- query' acid $ GetPlayer name
-    case player' of
-        Nothing -> notFound
-        Just (Player n u d) -> do
-            prevVote <- update' acid $ UpdateVote ip n Up
-            case prevVote of 
-                Up        -> return ()
-                Down      -> update' acid $ SetPlayer $ Player n (u + 1) (d - 1)
-                Neutral   -> update' acid $ SetPlayer $ Player n (u + 1) d
-            defaultLayout $ [whamlet| |]
+    _ <- update' acid $ ProcessVote ip name Up
+    defaultLayout $ [whamlet| |]
 
 requestIP = fmap (sockIP . remoteHost . reqWaiRequest) getRequest
             where sockIP (SockAddrInet _ a) = IPv4 a
@@ -83,16 +75,8 @@ getDownvoteR :: Name -> Handler RepHtml
 getDownvoteR name = do 
     ip <- requestIP
     acid <- getAcid
-    player' <- query' acid $ GetPlayer name
-    case player' of
-        Nothing -> notFound
-        Just (Player n u d) -> do
-            prevVote <- update' acid $ UpdateVote ip n Down
-            _ <- case prevVote of 
-                     Up        -> update' acid $ SetPlayer $ Player n (u - 1) (d + 1)
-                     Down      -> return ()
-                     Neutral   -> update' acid $ SetPlayer $ Player n u (d + 1)
-            defaultLayout $ [whamlet| |]
+    _ <- update' acid $ ProcessVote ip name Down
+    defaultLayout $ [whamlet| |]
 
 getTableR :: Handler RepHtml
 getTableR = do

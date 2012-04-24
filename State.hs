@@ -130,5 +130,37 @@ getVote ip name = ipQueryer f
 ----------------
 ----------------
 
+applyVote new old p@(Player n u d) = f new old
+                                       where f Up Up      = p
+                                             f Up Neutral = Player n (u + 1) d
+                                             f Up Down    = Player n (u + 1) (d - 1)
+                                             f Down Down    = p
+                                             f Down Neutral = Player n u (d + 1)
+                                             f Down Up      = Player n (u - 1) (d + 1)
+                                             f Neutral Neutral = p
+                                             f Neutral Up      = Player n (u - 1) d
+                                             f Neutral Down    = Player n u (d - 1)
 
-$(makeAcidic ''AppState ['setPlayer, 'getPlayer, 'allPlayers, 'upvote, 'downvote, 'updateVote, 'getVote])
+processVote :: IP -> Name -> Vote -> Update AppState Bool
+processVote ip n v = do
+    AppState (PlayerStore players) (IPStore ips) <- get
+
+    case M.lookup n players of
+        Nothing -> return False
+        Just player -> do
+            let (ips', prevVote) = case M.lookup ip ips of
+                                    Nothing ->
+                                        (M.insert ip (M.singleton n v) ips, Neutral)
+                                    Just votemap ->
+                                        (M.insert ip (M.insert n v votemap) ips, fromMaybe Neutral (M.lookup n votemap))
+            let player' = applyVote v prevVote player
+            let players' = M.insert n player' players
+            put $ AppState (PlayerStore players') (IPStore ips')
+            return True
+
+            
+
+
+
+
+$(makeAcidic ''AppState ['setPlayer, 'getPlayer, 'allPlayers, 'upvote, 'downvote, 'updateVote, 'getVote, 'processVote])
