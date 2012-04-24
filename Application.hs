@@ -32,10 +32,10 @@ mkYesodDispatch "App" resourcesApp
 -- performs initialization and creates a WAI application. This is also the
 -- place to put your migrate statements to have automatic database
 -- migrations handled by Yesod.
-makeApplication :: AppConfig DefaultEnv Extra -> Logger -> IO Application
-makeApplication conf logger = do
-    foundation <- makeFoundation conf setLogger
-    app <- toWaiAppPlain foundation
+makeApplication :: AcidState AppState -> AppConfig DefaultEnv Extra -> Logger -> IO Application
+makeApplication acid conf logger = do
+    foundation <- makeFoundation acid conf setLogger
+    app <- toWaiApp foundation
     return $ logWare app
   where
 #ifdef DEVELOPMENT
@@ -46,17 +46,22 @@ makeApplication conf logger = do
     logWare = logCallback (logBS setLogger)
 #endif
 
-makeFoundation :: AppConfig DefaultEnv Extra -> Logger -> IO App
-makeFoundation conf setLogger = do
+
+makeFoundation :: AcidState AppState -> AppConfig DefaultEnv Extra -> Logger -> IO App
+makeFoundation acid conf setLogger = do
     manager <- newManager def
     s <- staticSite
-    theState <- openLocalState emptyState
-    return $ App conf setLogger s manager theState
+    return $ App conf setLogger s manager acid
+
 
 -- for yesod devel
 getApplicationDev :: IO (Int, Application)
-getApplicationDev =
-    defaultDevelApp loader makeApplication
+getApplicationDev = do
+    acid <- openLocalState emptyState
+    putStrLn "============================================="
+    createCheckpoint acid
+    putStrLn "============================================="
+    defaultDevelApp loader (makeApplication acid)
   where
     loader = loadConfig (configSettings Development)
         { csParseExtra = parseExtra

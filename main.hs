@@ -3,6 +3,11 @@ import Yesod.Default.Config (fromArgs)
 import Yesod.Default.Main   (defaultMain)
 import Settings             (parseExtra)
 import Application          (makeApplication)
+import Data.Acid            (openLocalState, createCheckpoint)
+import State                (emptyState)
+import Control.Exception    (bracket)
 
 main :: IO ()
-main = defaultMain (fromArgs parseExtra) makeApplication
+main = do bracket (openLocalState emptyState)
+                  (\acid -> defaultMain (fromArgs parseExtra) (makeApplication acid))
+                  (createCheckpoint)
