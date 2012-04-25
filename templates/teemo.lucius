@@ -1,10 +1,14 @@
 
+*{
+	margin:0;
+	}
 
-body {
+body, html {
 	font-family:Arial,"Lucida Grande", sans-serif;
 	font-size:12px;
-	background-color: #c3bca8;
+	background-color:#cec2a0;
 	margin:0px;
+	height:100%;
 }
 
 #wrapper{
@@ -13,8 +17,8 @@ body {
 	background-image: url('vertdash.png');
 	background-repeat: repeat-y;
 	background-position: 179px 0px;
-	background-color:#cdc8b7; border-bottom:2px solid #beffd2;
-	margin:0px auto 0px auto;
+	background-color:transparent;
+	margin:0px auto 0px;
 }
 
 #menu {
@@ -41,7 +45,7 @@ body {
 }
 
 .menu-item{
-	border-bottom: 1px solid #b2aea1;
+	border-bottom: 1px solid #afa588;
 }
 
 li.menu-item a{
@@ -58,8 +62,8 @@ li.menu-item a{
 	background-image:url('header.png');
 	background-position:center;
 	background-repeat:no-repeat;
-	border-top: 1px solid #b2aea1;
-	border-bottom: 1px solid #b2aea1;
+	border-top: 1px solid #afa588;
+	border-bottom: 1px solid #afa588;
 	padding:30px 0px 20px 0px;
 	margin:0px;
 }
@@ -89,9 +93,10 @@ li.menu-item a{
 }
 
 .contentheader{
+	position:relative;
 	height:110px;
-	border-top: 1px solid #b2aea1;
-	border-bottom: 1px solid #b2aea1;
+	border-top: 1px solid #afa588;
+	border-bottom: 1px solid #afa588;
 	padding:30px 0px 20px 0px;
 	margin:0px 0px 30px 0px;
 }
@@ -152,6 +157,7 @@ h2{
 
 
 .filterbuttons{
+	position:relative;
 	float:left;
 	margin-top:2px;
 	list-style:none;
@@ -170,6 +176,7 @@ h2{
 }
 
 .addbutton{
+	display:none;
 	display:block;
 	position:relative;
 	height:19px;
@@ -177,6 +184,58 @@ h2{
 	background-repeat:no-repeat;
 	padding-left:32px;
 	margin-right:20px;
+}
+
+#addplayer{
+	display:hidden;
+	position:absolute;
+	left:-11px;
+	bottom:3px;
+	width:200px;
+	height:22px;
+	background-color:#e2d7b9;
+	padding:10px;
+	border:1px solid #bbb29a;
+	box-shadow:4px 4px 2px #afa588;
+}
+
+#addplayerbottom{
+	display:hidden;
+	position:absolute;
+	left:-11px;
+	bottom:-8px;
+	width:200px;
+	height:22px;
+	background-color:#e2d7b9;
+	padding:10px;
+	border:1px solid #bbb29a;
+	box-shadow:4px 4px 2px #afa588;
+}
+
+.addplayerpopupbutton{
+	display:block;
+	height:19px;
+	width:32px;
+	background-image:url('addbutton.png');
+	background-repeat:no-repeat;
+	position:relative;
+	top:2px;
+}
+
+.addplayer-input{
+	position:absolute;
+	top:10px;
+	right:10px;
+	margin-top:0px;
+	width:150px;
+	height:16px;
+	padding:2px 5px;
+	background-color:white;
+	border: 1px solid #77684e;
+	-moz-box-shadow: inset 0 1px 4px rgba(0,0,0,.16);
+	box-shadow: inset 0 1px 4px rgba(0,0,0,.16);
+	font-size:14px;
+	font-weight:bold;
 }
 
 .clockbutton{
@@ -210,7 +269,7 @@ h2{
 	width:190px;
 	height:18px;
 	padding:2px 5px;
-	background-color:#d7d3c6;
+	background-color:#e0d7b8;
 	background-image:url('magnifyingglass.png');
 	background-repeat:no-repeat;
 	background-position:180px 3px;
@@ -347,11 +406,11 @@ h2{
 	display:hidden;
 	position:absolute;
 	right:0px;
-	background-color:#e6e2d8;
-	box-shadow:4px 4px 2px #bcb7aa;
+	background-color:#e2d7b9;
+	box-shadow:4px 4px 2px #afa588;
 	width:300px;
 	margin:10px;
-	border:1px solid #bdbaaf;
+	border:1px solid #bbb29a;
 	padding:0px;
 	z-index:2;
 }
@@ -405,10 +464,16 @@ h3{
 }
 
 #footer{
-	background-color: #63615b;
-	border-top:2px solid #444;
-	color:#ddd;
+	position:relative;
+	width:100%;
+	bottom:0px;
+	border-top:1px solid #afa588;
+	color:#555;
 	font-size:12px;
-	padding:30px;
-	margin:20px 0px 0px;
+	margin:0px 0px 0px;
+	padding:0px;
+}
+
+.footnote{
+	padding:20px;
 }

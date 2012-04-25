@@ -39,9 +39,11 @@
             <h1>RANKINGS
             <ul .headerbuttons>
                 <li>
-                    <a href="" .addbutton>ADD PLAYER
+                    <a href="javascript:unhide('addplayer');" .addbutton>ADD PLAYER
                 <li>
-                    <a href="" .clockbutton>ALL TIME
+                    <div #addplayer .hidden>
+                        <a href="javascript:unhide('addplayer');" .addplayerpopupbutton>
+                        <input type="text" .addplayer-input>
         <div #filter>
             <input type="text" .filter-input>
             <span .pages>
@@ -77,18 +79,17 @@
         <div #filterfooter>
             <ul .filterbuttons>
                 <li>
-                    <a href="" .addbutton>ADD PLAYER
+                    <a href="javascript:unhide('addplayerbottom');" .addbutton>ADD PLAYER
                 <li>
-                    <a href="" .clockbutton>ALL TIME
+                    <div #addplayerbottom .hidden>
+                        <a href="javascript:unhide('addplayerbottom');" .addplayerpopupbutton>
+                        <input type="text" .addplayer-input>
             <div .pages>Page 1 of 2370
                 <a href="">Next
                 <a href="">Last
 
-        <div>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam,
 
 <div #footer>
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-    tempor incididunt ut labore et dolore magna aliqua.
+    <div .footnote>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua.
