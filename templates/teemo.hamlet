@@ -1,0 +1,144 @@
+<div #wrapper>
+    <div #menu>
+        <ul>
+            <li>
+                <a href="" .header>
+            <li .menu-item>
+                <a href="">BROWSE
+            <li .menu-item>
+                <a href="">FORUMS
+            <li .menu-item>
+                <a href="">BLOG
+            <li .menu-item>
+                <a href="">HELP / FAQ
+    <div #right>
+        <div .contentheader>
+            <h2>WELCOME
+            <span .login>
+                <a href="">LOGIN / REGISTER
+        <div>
+            <h2>NEW
+    <div #preview .hidden>
+        <div #previewheader>
+            <h3>Crs Crumbzz
+            <ul #previewstats>
+                <li>
+                    <div>1
+                    <div>rank
+                <li>
+                    <div>700
+                    <div>score
+                <li .stat-blue>
+                    <div>1000
+                    <div>likes
+                <li .stat-red>
+                    <div>266
+                    <div>dislikes
+    <div #center>
+        <div .contentheader>
+            <h1>RANKINGS
+            <ul .headerbuttons>
+                <li>
+                    <a href="" .addbutton>ADD PLAYER
+                <li>
+                    <a href="" .clockbutton>ALL TIME
+        <div #filter>
+            <input type="text" .filter-input>
+            <span .pages>
+                Page 1 of 2370 #
+                <a href="">Next #
+                <a href="">Last
+        <table #players>
+            <tbody>
+                <tr>
+                    <th style="width:50px;">RANK
+                    <th>NAME
+                    <th style="width:50px;">LIKES
+                    <th style="width:50px;">DISLIKES
+                    <th style="width:30px;">%
+                    <th style="width:40px;">vote
+                <tr>
+                    <td>
+                        <div .badgesmallplat>
+                        <div .rankwrapper>
+                            <div .playerrank>1
+                            <div .playerscore>700
+                    <td>
+                        <div .playername>
+                            <a href="javascript:unhide('preview');">
+                    <td .playerlikes>1000
+                    <td .playerdislikes>266
+                    <td .playerpercentage>76%
+                    <td>
+                        <span .listdislike>
+                        <span .listlike>
+                <tr>
+                    <td>
+                        <div .badgesmallplat>
+                        <div .rankwrapper>
+                            <div .playerrank>2
+                            <div .playerscore>600
+                    <td .playername>scarra
+                    <td .playerlikes>1010
+                    <td .playerdislikes>300
+                    <td .playerpercentage>76%
+                    <td>
+                        <span .listdislike>
+                        <span .listlike>
+                <tr>
+                    <td>
+                        <div .badgesmallplat>
+                        <div .rankwrapper>
+                            <div .playerrank>2
+                            <div .playerscore>600
+                    <td .playername>scarra
+                    <td .playerlikes>1010
+                    <td .playerdislikes>300
+                    <td .playerpercentage>76%
+                    <td>
+                        <span .listdislike>
+                        <span .listlike>
+                <tr>
+                    <td>
+                        <div .badgesmallplat>
+                        <div .rankwrapper>
+                            <div .playerrank>2
+                            <div .playerscore>600
+                    <td .playername>scarra
+                    <td .playerlikes>1010
+                    <td .playerdislikes>300
+                    <td .playerpercentage>76%
+                    <td>
+                        <span .listdislike>
+                        <span .listlike>
+                <tr>
+                    <td>
+                        <div .badgesmallplat>
+                        <div .rankwrapper>
+                            <div .playerrank>2
+                            <div .playerscore>600
+                    <td .playername>scarra
+                    <td .playerlikes>1010
+                    <td .playerdislikes>300
+                    <td .playerpercentage>76%
+                    <td>
+                        <span .listdislike>
+                        <span .listlike>
+        <div #filterfooter>
+            <ul .filterbuttons>
+                <li>
+                    <a href="" .addbutton>ADD PLAYER
+                <li>
+                    <a href="" .clockbutton>ALL TIME
+            <div .pages>Page 1 of 2370
+                <a href="">Next
+                <a href="">Last
+
+        <div>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam,
+
+<div #footer>
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+    tempor incididunt ut labore et dolore magna aliqua.

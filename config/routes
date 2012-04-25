@@ -10,3 +10,5 @@
 /downvote/#Text DownvoteR GET
 
 /table TableR GET 
+
+/teemo TeemoR GET 

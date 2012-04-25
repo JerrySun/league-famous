@@ -1,0 +1,414 @@
+
+
+body {
+	font-family:Arial,"Lucida Grande", sans-serif;
+	font-size:12px;
+	background-color: #c3bca8;
+	margin:0px;
+}
+
+#wrapper{
+	position:relative;
+	width:960px;
+	background-image: url('vertdash.png');
+	background-repeat: repeat-y;
+	background-position: 179px 0px;
+	background-color:#cdc8b7; border-bottom:2px solid #beffd2;
+	margin:0px auto 0px auto;
+}
+
+#menu {
+	float:left;
+	position:static;
+	width: 140px; /* sets the width of your left hand bar - if you change this also change the LEFT margin in #content to match */
+	overflow: hidden;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	padding-top: 20px; /* change to match the padding-top in #content if you want them to align */
+	padding-bottom: 25px;
+	padding-left: 20px;
+	padding-right: 20px;
+	/* padding-left & right can be changed in #menu ul - below */
+		font-size: 11px;
+	line-height: 14px;
+	}
+	
+#menu ul{
+	list-style:none;
+	padding:0px;
+	margin:0px;
+}
+
+.menu-item{
+	border-bottom: 1px solid #b2aea1;
+}
+
+li.menu-item a{
+	color:black;
+	display:block;
+	text-decoration: none;
+	padding-top:5px;
+	padding-bottom: 10px
+}
+
+.header{
+	display:block;
+	height:110px;
+	background-image:url('header.png');
+	background-position:center;
+	background-repeat:no-repeat;
+	border-top: 1px solid #b2aea1;
+	border-bottom: 1px solid #b2aea1;
+	padding:30px 0px 20px 0px;
+	margin:0px;
+}
+
+#right{
+	float:right;
+	position:relative;
+	left:-20px;
+	top: 20px;
+	width:260px;
+	padding:0px;
+	z-index:1;
+}
+
+#right .contentheader{
+	background-image:none;
+}
+
+#center{
+	width:440px;
+	position:relative;
+	background-image: url('vertdash.png');
+	background-repeat: repeat-y;
+	background-position: 479px 0px;
+	margin-left:180px;
+	padding:20px 320px 30px 20px;
+}
+
+.contentheader{
+	height:110px;
+	border-top: 1px solid #b2aea1;
+	border-bottom: 1px solid #b2aea1;
+	padding:30px 0px 20px 0px;
+	margin:0px 0px 30px 0px;
+}
+
+#center .contentheader{
+	background-image:url('teemo.png');
+	background-position:right;
+	background-repeat: no-repeat;
+}
+
+.login{
+	position:absolute;
+	right:0;
+	bottom:60px;
+}
+
+.login a{
+	color:black;
+	font-size:12px;
+	font-weight:bold;
+	text-decoration:none;
+}
+
+h1{
+	display:block;
+	font-size:30px;
+	font-weight:bold;
+	color:white;
+	margin-top:-15px;
+	margin-bottom:0px;
+}
+
+h2{
+	display:block;
+	font-size:20px;
+	font-weight:bold;
+	color:white;
+	margin-top:-10px;
+	margin-bottom:0px;
+}
+
+.headerbuttons{
+	margin-top:75px;
+	list-style:none;
+	padding:0px;
+}
+
+.headerbuttons li{
+	float:left
+}
+
+.headerbuttons li a{
+	color:black;
+	text-decoration:none;
+	font-size:10px;
+	padding-top:4px;
+}
+
+
+.filterbuttons{
+	float:left;
+	margin-top:2px;
+	list-style:none;
+	padding:0px;
+}
+
+.filterbuttons li{
+	float:left
+}
+
+.filterbuttons li a{
+	color:black;
+	text-decoration:none;
+	font-size:10px;
+	padding-top:4px;
+}
+
+.addbutton{
+	display:block;
+	position:relative;
+	height:19px;
+	background-image:url('addbutton.png');
+	background-repeat:no-repeat;
+	padding-left:32px;
+	margin-right:20px;
+}
+
+.clockbutton{
+	display:block;
+	position:relative;
+	height:19px;
+	background-image:url('clock.png');
+	background-repeat:no-repeat;
+	padding-left:24px;
+}
+
+#filter{
+	padding: 20px 0px 20px;
+	border-top: 4px solid black;
+}
+
+#filterfooter{
+	padding: 20px 0px 20px;
+	margin-bottom:20px;
+	border-top:4px solid black;
+}
+
+.footerbutton{
+	float:left;
+	width:100px;
+	padding:0px;
+}
+
+.filter-input{
+	margin:0px;
+	width:190px;
+	height:18px;
+	padding:2px 5px;
+	background-color:#d7d3c6;
+	background-image:url('magnifyingglass.png');
+	background-repeat:no-repeat;
+	background-position:180px 3px;
+	border: 1px solid #77684e;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+	-moz-box-shadow: inset 0 1px 4px rgba(0,0,0,.16);
+	box-shadow: inset 0 1px 4px rgba(0,0,0,.16);
+	font-size:14px;
+	font-weight:bold;
+}
+
+.pages{
+	display:block;
+	font-size:12px;
+	font-weight:bold;
+	color:white;
+	text-decoration:none;
+	padding:4px 0px;
+	float:right;
+}
+
+.pages a{color:white;text-decoration:none;}
+
+#players{
+	width:100%;
+	border-spacing:0px;
+	font-family:Tahoma;
+}
+
+#players th{
+	background-color:#beffd2;
+	font-size:11px;
+	font-weight:bold;
+	text-align:left;
+	padding:10px 10px 2px 0px;
+	border-bottom:4px solid black;
+}
+
+#players th:first-child{
+	padding-left:10px;
+}
+
+#players td{
+	padding:10px 0px 10px;
+}
+
+.rankwrapper{
+	float:left;
+	position:relative;
+	left:14px;
+}
+
+.playerrank{
+	font-size:14px;
+	font-weight:bold;
+}
+
+.playerscore{
+	font-size:10px;
+}
+
+.playername, .playername a{
+	color:black;
+	text-decoration:none;
+	font-size:14px;
+	font-weight:bold;
+}
+
+.playerlikes{
+	font-size:12px;
+	color:#00a8ff;
+}
+
+.playerdislikes{
+	font-size:12px;
+	color:#dc0000;
+}
+
+.playerpercentage{
+	font-size:12px;
+}
+
+.listlike{
+	float:right;
+	position:relative;
+	display:block;
+	background-image:url('listthumbs.png');
+	background-position:0px 0px;
+	width:20px;
+	height:20px;
+}
+
+.listlike:hover{
+	background-position:0px 20px;
+}
+
+.listdislike:hover{
+	background-position:20px 20px;
+}
+
+.listdislike{
+	float:right;
+	position:relative;
+	right:0px;
+	display:block;
+	margin-right:10px;
+	background-image:url('listthumbs.png');
+	background-position:20px 0px;
+	width:20px;
+	height:20px;
+}
+
+.listliked{
+	float:left;
+	background-image:url('listthumbs.png');
+	background-position:0px 0px;
+	width:20px;
+	height:20px;
+	margin-left:0px;
+}
+
+.badgesmallplat{
+	float:left;
+	position:relative;
+	left:8px;
+	top:7px;
+	background-image:url('badgesmall.png');
+	width:14px;
+	height:14px;
+}
+
+#preview{
+	display:hidden;
+	position:absolute;
+	right:0px;
+	background-color:#e6e2d8;
+	box-shadow:4px 4px 2px #bcb7aa;
+	width:300px;
+	margin:10px;
+	border:1px solid #bdbaaf;
+	padding:0px;
+	z-index:2;
+}
+.hidden{display:none;pointer-events:none;}
+.unhidden{display:block;}
+
+#previewheader{
+	height:100px;
+	border-bottom:1px solid #c5c2ba;
+	vertical-align:top;
+	padding:10px;
+}
+
+#previewstats{
+	position:absolute;
+	bottom:0;
+	left:0;
+	list-style:none;
+	width:300px;
+	padding:0px;
+	margin:0px;
+	padding:10px;
+}
+
+#previewstats li{
+	width:70px;
+	float:left;
+}
+
+#previewstats li div{
+	position:relative;
+	bottom:0;
+	left:0;
+	font-size:12px;
+	font-weight:bold;
+}
+
+.stat-blue{color:#00a8ff;}
+.stat-red{color:#dc0000;}
+
+h3{
+	display:block;
+	position:relative;
+	top:0;
+	left:0;
+	font-size:20px;
+	font-weight:bold;
+	color:black;
+	margin:0px;
+	padding:0px;
+}
+
+#footer{
+	background-color: #63615b;
+	border-top:2px solid #444;
+	color:#ddd;
+	font-size:12px;
+	padding:30px;
+	margin:20px 0px 0px;
+}
