@@ -72,8 +72,19 @@
                         <td .playerdislikes>#{playerDownvotes player}
                         <td .playerpercentage>#{show $ percent player}
                         <td>
-                            <span .listdislike>
-                            <span .listlike>
+                            $case voteOf player
+                                $of Neutral
+                                    <div .thumbs data-name=#{playerName player}>
+                                        <div .thumbdown>
+                                        <div .thumbup>
+                                $of Up
+                                    <div .thumbs .upvoted data-name=#{playerName player}>
+                                        <div .thumbdown>
+                                        <div .thumbup>
+                                $of Down
+                                    <div .thumbs .downvoted data-name=#{playerName player}>
+                                        <div .thumbdown>
+                                        <div .thumbup>
         <div #filterfooter>
             <ul .filterbuttons>
                 <li>

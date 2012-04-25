@@ -257,7 +257,11 @@
     pointer-events: none;
 }
 
-.listdislike {
+.downvoted .thumbdown {
+    background-position: 20px 20px;
+}
+
+.thumbdown {
     background-image: url('@{StaticR listthumbs_png}');
     background-position: 20px 0;
     display: block;
@@ -269,11 +273,8 @@
     width: 20px;
 }
 
-.listdislike: hover {
-    background-position: 20px 20px;
-}
 
-.listlike {
+.thumbup {
     background-image: url('@{StaticR listthumbs_png}');
     background-position: 0 0;
     display: block;
@@ -283,17 +284,8 @@
     width: 20px;
 }
 
-.listlike: hover {
+.upvoted .thumbup {
     background-position: 0 20px;
-}
-
-.listliked {
-    background-image: url('@{StaticR listthumbs_png}');
-    background-position: 0 0;
-    float: left;
-    height: 20px;
-    margin-left: 0;
-    width: 20px;
 }
 
 .login {
