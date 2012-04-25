@@ -13,7 +13,7 @@ percent p = f u d
                   d = playerDownvotes p
                   f 0 0 = 0
                   f _ 0 = 100
-                  f u d = (u * 100) `div` (u + d)
+                  f _ _ = (u * 100) `div` (u + d)
                 
 
 getTeemoR :: Handler RepHtml
@@ -21,5 +21,5 @@ getTeemoR = do
     acid <- getAcid
     players <- sortBy (flip compare `on` playerScore) <$> query' acid AllPlayers
     let playersAndRank = players `zip` ([1..] :: [Int])
-    defaultLayout $(widgetFile "teemo")
+    defaultLayout $ setTitle "HELLO TEEMO" >> $(widgetFile "teemo") 
 

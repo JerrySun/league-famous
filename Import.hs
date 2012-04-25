@@ -9,6 +9,7 @@ module Import
     , module Data.Acid
     , module Data.Acid.Advanced
     , module Text.Coffee
+    , module Helpers
     , Text
 #if __GLASGOW_HASKELL__ < 704
     , (<>)
@@ -26,6 +27,7 @@ import State
 import Data.Acid
 import Data.Acid.Advanced (update', query')
 import Text.Coffee
+import Helpers 
 
 #if __GLASGOW_HASKELL__ < 704
 infixr 5 <>

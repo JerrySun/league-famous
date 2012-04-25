@@ -33,8 +33,10 @@ library
                      Settings.StaticFiles
                      Handler.Home
                      Handler.Teemo
+                     Handler.Api
                      State
                      Util
+                     Helpers
 
     ghc-options:   -Wall -threaded -O0
     cpp-options:   -DDEVELOPMENT

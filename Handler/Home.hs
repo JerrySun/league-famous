@@ -4,8 +4,6 @@ module Handler.Home where
 import Import
 import Data.Function (on)
 import Data.List (sortBy)
-import Network.Wai (remoteHost)
-import Network.Socket (SockAddr(..))
 import Data.List (elemIndex)
 import Data.Maybe (fromJust)
 
@@ -59,24 +57,8 @@ postHomeR = do
 playerScore ::  Player -> Int
 playerScore p = playerUpvotes p - playerDownvotes p `div` 2
 
-getUpvoteR :: Name -> Handler RepHtml
-getUpvoteR name = do 
-    ip <- requestIP
-    acid <- getAcid
-    _ <- update' acid $ ProcessVote ip name Up
-    defaultLayout $ [whamlet| |]
 
-requestIP = fmap (sockIP . remoteHost . reqWaiRequest) getRequest
-            where sockIP (SockAddrInet _ a) = IPv4 a
-                  sockIP (SockAddrInet6 _ _ a _) = IPv6 a
-                  sockIP _ = IPv4 0 -- Kind of just don't handle unix sockets
 
-getDownvoteR :: Name -> Handler RepHtml
-getDownvoteR name = do 
-    ip <- requestIP
-    acid <- getAcid
-    _ <- update' acid $ ProcessVote ip name Down
-    defaultLayout $ [whamlet| |]
 
 getTableR :: Handler RepHtml
 getTableR = do

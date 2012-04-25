@@ -1,14 +1,15 @@
-/static StaticR Static getStatic
-/auth   AuthR   Auth   getAuth
+/static         StaticR   Static getStatic
+/auth           AuthR     Auth   getAuth
 
-/favicon.ico FaviconR GET
-/robots.txt RobotsR GET
+/favicon.ico    FaviconR  GET
+/robots.txt     RobotsR   GET
 
-/ HomeR GET POST
+/               HomeR     GET POST
 
-/upvote/#Text UpvoteR GET
-/downvote/#Text DownvoteR GET
+/upvote/#Text   UpvoteR   POST
+/downvote/#Text DownvoteR POST
+/novote/#Text   NovoteR   POST
 
-/table TableR GET 
+/table          TableR    GET
 
-/teemo TeemoR GET 
+/teemo          TeemoR    GET
