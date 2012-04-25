@@ -72,7 +72,7 @@
                                     #{playerName player}
                         <td .playerlikes>#{playerUpvotes player}
                         <td .playerdislikes>#{playerDownvotes player}
-                        <td .playerpercentage>#{show $ percent player}
+                        <td .playerpercentage>#{show $ percent player}%
                         <td>
                             $case voteOf player
                                 $of Neutral

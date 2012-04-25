@@ -14,7 +14,7 @@ body, html {
 #wrapper{
 	position:relative;
 	width:960px;
-	background-image: url('vertdash.png');
+	background-image: url('@{StaticR vertdash_png}');
 	background-repeat: repeat-y;
 	background-position: 179px 0px;
 	background-color:transparent;
@@ -59,7 +59,7 @@ li.menu-item a{
 .header{
 	display:block;
 	height:110px;
-	background-image:url('header.png');
+	background-image:url('@{StaticR header_png}');
 	background-position:center;
 	background-repeat:no-repeat;
 	border-top: 1px solid #afa588;
@@ -85,7 +85,7 @@ li.menu-item a{
 #center{
 	width:440px;
 	position:relative;
-	background-image: url('vertdash.png');
+	background-image: url('@{StaticR vertdash_png}');
 	background-repeat: repeat-y;
 	background-position: 479px 0px;
 	margin-left:180px;
@@ -102,7 +102,7 @@ li.menu-item a{
 }
 
 #center .contentheader{
-	background-image:url('teemo.png');
+	background-image:url('@{StaticR teemo_png}');
 	background-position:right;
 	background-repeat: no-repeat;
 }
@@ -180,7 +180,7 @@ h2{
 	display:block;
 	position:relative;
 	height:19px;
-	background-image:url('addbutton.png');
+	background-image:url('@{StaticR addbutton_png}');
 	background-repeat:no-repeat;
 	padding-left:32px;
 	margin-right:20px;
@@ -216,7 +216,7 @@ h2{
 	display:block;
 	height:19px;
 	width:32px;
-	background-image:url('addbutton.png');
+	background-image:url('@{StaticR addbutton_png}');
 	background-repeat:no-repeat;
 	position:relative;
 	top:2px;
@@ -242,7 +242,7 @@ h2{
 	display:block;
 	position:relative;
 	height:19px;
-	background-image:url('clock.png');
+	background-image:url('@{StaticR clock_png}');
 	background-repeat:no-repeat;
 	padding-left:24px;
 }
@@ -270,7 +270,7 @@ h2{
 	height:18px;
 	padding:2px 5px;
 	background-color:#e0d7b8;
-	background-image:url('magnifyingglass.png');
+	background-image:url('@{StaticR magnifyingglass_png}');
 	background-repeat:no-repeat;
 	background-position:180px 3px;
 	border: 1px solid #77684e;
@@ -390,7 +390,7 @@ h2{
 	position:relative;
 	left:8px;
 	top:7px;
-	background-image:url('badgesmall.png');
+	background-image:url('@{StaticR badgesmall_png}');
 	width:14px;
 	height:14px;
 }
