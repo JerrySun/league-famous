@@ -1,414 +1,422 @@
 
-
-body {
-	font-family:Arial,"Lucida Grande", sans-serif;
-	font-size:12px;
-	background-color: #c3bca8;
-	margin:0px;
+#center {
+    background-image: url('@{StaticR vertdash_png}');
+    background-position: 479px 0;
+    background-repeat: repeat-y;
+    margin-left: 180px;
+    padding: 20px 320px 30px 20px;
+    position: relative;
+    width: 440px;
 }
 
-#wrapper{
-	position:relative;
-	width:960px;
-	background-image: url('vertdash.png');
-	background-repeat: repeat-y;
-	background-position: 179px 0px;
-	background-color:#cdc8b7; border-bottom:2px solid #beffd2;
-	margin:0px auto 0px auto;
+#center .contentheader {
+    background-image: url('@{StaticR teemo_png}');
+    background-position: right;
+    background-repeat: no-repeat;
+}
+
+#filter {
+    border-top: 4px solid black;
+    padding: 20px 0;
+}
+
+#filterfooter {
+    border-top: 4px solid black;
+    margin-bottom: 20px;
+    padding: 20px 0;
+}
+
+#footer {
+    background-color: #63615b;
+    border-top: 2px solid #444;
+    color: #ddd;
+    font-size: 12px;
+    margin: 20px 0 0;
+    padding: 30px;
 }
 
 #menu {
-	float:left;
-	position:static;
-	width: 140px; /* sets the width of your left hand bar - if you change this also change the LEFT margin in #content to match */
-	overflow: hidden;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	padding-top: 20px; /* change to match the padding-top in #content if you want them to align */
-	padding-bottom: 25px;
-	padding-left: 20px;
-	padding-right: 20px;
-	/* padding-left & right can be changed in #menu ul - below */
-		font-size: 11px;
-	line-height: 14px;
-	}
-	
-#menu ul{
-	list-style:none;
-	padding:0px;
-	margin:0px;
+    bottom: 0;
+    float: left;
+    font-size: 11px;
+    left: 0;
+    line-height: 14px;
+    overflow: hidden;
+    padding-bottom: 25px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 20px;
+    position: static;
+    top: 0;
+    width: 140px;
 }
 
-.menu-item{
-	border-bottom: 1px solid #b2aea1;
+#menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
-li.menu-item a{
-	color:black;
-	display:block;
-	text-decoration: none;
-	padding-top:5px;
-	padding-bottom: 10px
+#players {
+    border-spacing: 0;
+    font-family: Tahoma;
+    width: 100%;
 }
 
-.header{
-	display:block;
-	height:110px;
-	background-image:url('header.png');
-	background-position:center;
-	background-repeat:no-repeat;
-	border-top: 1px solid #b2aea1;
-	border-bottom: 1px solid #b2aea1;
-	padding:30px 0px 20px 0px;
-	margin:0px;
+#players td {
+    padding: 10px 0;
 }
 
-#right{
-	float:right;
-	position:relative;
-	left:-20px;
-	top: 20px;
-	width:260px;
-	padding:0px;
-	z-index:1;
+#players th {
+    background-color: #beffd2;
+    border-bottom: 4px solid black;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 10px 10px 2px 0;
+    text-align: left;
 }
 
-#right .contentheader{
-	background-image:none;
+#preview {
+    background-color: #e6e2d8;
+    border: 1px solid #bdbaaf;
+    box-shadow: 4px 4px 2px #bcb7aa;
+    display: hidden;
+    margin: 10px;
+    padding: 0;
+    position: absolute;
+    right: 0;
+    width: 300px;
+    z-index: 2;
 }
 
-#center{
-	width:440px;
-	position:relative;
-	background-image: url('vertdash.png');
-	background-repeat: repeat-y;
-	background-position: 479px 0px;
-	margin-left:180px;
-	padding:20px 320px 30px 20px;
+#previewheader {
+    border-bottom: 1px solid #c5c2ba;
+    height: 100px;
+    padding: 10px;
+    vertical-align: top;
 }
 
-.contentheader{
-	height:110px;
-	border-top: 1px solid #b2aea1;
-	border-bottom: 1px solid #b2aea1;
-	padding:30px 0px 20px 0px;
-	margin:0px 0px 30px 0px;
+#previewstats {
+    bottom: 0;
+    left: 0;
+    list-style: none;
+    margin: 0;
+    padding: 10px;
+    position: absolute;
+    width: 300px;
 }
 
-#center .contentheader{
-	background-image:url('teemo.png');
-	background-position:right;
-	background-repeat: no-repeat;
+#previewstats li {
+    float: left;
+    width: 70px;
 }
 
-.login{
-	position:absolute;
-	right:0;
-	bottom:60px;
+#previewstats li div {
+    bottom: 0;
+    font-size: 12px;
+    font-weight: 700;
+    left: 0;
+    position: relative;
 }
 
-.login a{
-	color:black;
-	font-size:12px;
-	font-weight:bold;
-	text-decoration:none;
+#right {
+    float: right;
+    left: -20px;
+    padding: 0;
+    position: relative;
+    top: 20px;
+    width: 260px;
+    z-index: 1;
 }
 
-h1{
-	display:block;
-	font-size:30px;
-	font-weight:bold;
-	color:white;
-	margin-top:-15px;
-	margin-bottom:0px;
+#right .contentheader {
+    background-image: none;
 }
 
-h2{
-	display:block;
-	font-size:20px;
-	font-weight:bold;
-	color:white;
-	margin-top:-10px;
-	margin-bottom:0px;
+#wrapper {
+    background-color: #cdc8b7;
+    background-image: url('@{StaticR vertdash_png}');
+    background-position: 179px 0;
+    background-repeat: repeat-y;
+    border-bottom: 2px solid #beffd2;
+    margin: 0 auto;
+    position: relative;
+    width: 960px;
 }
 
-.headerbuttons{
-	margin-top:75px;
-	list-style:none;
-	padding:0px;
+.addbutton {
+    background-image: url('@{StaticR addbutton_png}');
+    background-repeat: no-repeat;
+    display: block;
+    height: 19px;
+    margin-right: 20px;
+    padding-left: 32px;
+    position: relative;
 }
 
-.headerbuttons li{
-	float:left
+.badgesmallplat {
+    background-image: url('@{StaticR badgesmall_png}');
+    float: left;
+    height: 14px;
+    left: 8px;
+    position: relative;
+    top: 7px;
+    width: 14px;
 }
 
-.headerbuttons li a{
-	color:black;
-	text-decoration:none;
-	font-size:10px;
-	padding-top:4px;
+.clockbutton {
+    background-image: url('@{StaticR clock_png}');
+    background-repeat: no-repeat;
+    display: block;
+    height: 19px;
+    padding-left: 24px;
+    position: relative;
 }
 
-
-.filterbuttons{
-	float:left;
-	margin-top:2px;
-	list-style:none;
-	padding:0px;
+.contentheader {
+    border-bottom: 1px solid #b2aea1;
+    border-top: 1px solid #b2aea1;
+    height: 110px;
+    margin: 0 0 30px;
+    padding: 30px 0 20px;
 }
 
-.filterbuttons li{
-	float:left
-}
-
-.filterbuttons li a{
-	color:black;
-	text-decoration:none;
-	font-size:10px;
-	padding-top:4px;
-}
-
-.addbutton{
-	display:block;
-	position:relative;
-	height:19px;
-	background-image:url('addbutton.png');
-	background-repeat:no-repeat;
-	padding-left:32px;
-	margin-right:20px;
-}
-
-.clockbutton{
-	display:block;
-	position:relative;
-	height:19px;
-	background-image:url('clock.png');
-	background-repeat:no-repeat;
-	padding-left:24px;
-}
-
-#filter{
-	padding: 20px 0px 20px;
-	border-top: 4px solid black;
-}
-
-#filterfooter{
-	padding: 20px 0px 20px;
-	margin-bottom:20px;
-	border-top:4px solid black;
-}
-
-.footerbutton{
-	float:left;
-	width:100px;
-	padding:0px;
-}
-
-.filter-input{
-	margin:0px;
-	width:190px;
-	height:18px;
-	padding:2px 5px;
-	background-color:#d7d3c6;
-	background-image:url('magnifyingglass.png');
-	background-repeat:no-repeat;
-	background-position:180px 3px;
-	border: 1px solid #77684e;
+.filter-input {
     -moz-border-radius: 5px;
+    -moz-box-shadow: inset 0 1px 4px rgba(0,0,0,.16);
     -webkit-border-radius: 5px;
-	-moz-box-shadow: inset 0 1px 4px rgba(0,0,0,.16);
-	box-shadow: inset 0 1px 4px rgba(0,0,0,.16);
-	font-size:14px;
-	font-weight:bold;
+    background-color: #d7d3c6;
+    background-image: url('@{StaticR magnifyingglass_png}');
+    background-position: 180px 3px;
+    background-repeat: no-repeat;
+    border: 1px solid #77684e;
+    box-shadow: inset 0 1px 4px rgba(0,0,0,.16);
+    font-size: 14px;
+    font-weight: 700;
+    height: 18px;
+    margin: 0;
+    padding: 2px 5px;
+    width: 190px;
 }
 
-.pages{
-	display:block;
-	font-size:12px;
-	font-weight:bold;
-	color:white;
-	text-decoration:none;
-	padding:4px 0px;
-	float:right;
+.filterbuttons {
+    float: left;
+    list-style: none;
+    margin-top: 2px;
+    padding: 0;
 }
 
-.pages a{color:white;text-decoration:none;}
-
-#players{
-	width:100%;
-	border-spacing:0px;
-	font-family:Tahoma;
+.filterbuttons li {
+    float: left;
 }
 
-#players th{
-	background-color:#beffd2;
-	font-size:11px;
-	font-weight:bold;
-	text-align:left;
-	padding:10px 10px 2px 0px;
-	border-bottom:4px solid black;
+.filterbuttons li a {
+    color: black;
+    font-size: 10px;
+    padding-top: 4px;
+    text-decoration: none;
 }
 
-#players th:first-child{
-	padding-left:10px;
+.footerbutton {
+    float: left;
+    padding: 0;
+    width: 100px;
 }
 
-#players td{
-	padding:10px 0px 10px;
+.header {
+    background-image: url('@{StaticR header_png}');
+    background-position: center;
+    background-repeat: no-repeat;
+    border-bottom: 1px solid #b2aea1;
+    border-top: 1px solid #b2aea1;
+    display: block;
+    height: 110px;
+    margin: 0;
+    padding: 30px 0 20px;
 }
 
-.rankwrapper{
-	float:left;
-	position:relative;
-	left:14px;
+.headerbuttons {
+    list-style: none;
+    margin-top: 75px;
+    padding: 0;
 }
 
-.playerrank{
-	font-size:14px;
-	font-weight:bold;
+.headerbuttons li {
+    float: left;
 }
 
-.playerscore{
-	font-size:10px;
+.headerbuttons li a {
+    color: black;
+    font-size: 10px;
+    padding-top: 4px;
+    text-decoration: none;
 }
 
-.playername, .playername a{
-	color:black;
-	text-decoration:none;
-	font-size:14px;
-	font-weight:bold;
+.hidden {
+    display: none;
+    pointer-events: none;
 }
 
-.playerlikes{
-	font-size:12px;
-	color:#00a8ff;
+.listdislike {
+    background-image: url('@{StaticR listthumbs_png}');
+    background-position: 20px 0;
+    display: block;
+    float: right;
+    height: 20px;
+    margin-right: 10px;
+    position: relative;
+    right: 0;
+    width: 20px;
 }
 
-.playerdislikes{
-	font-size:12px;
-	color:#dc0000;
+.listdislike: hover {
+    background-position: 20px 20px;
 }
 
-.playerpercentage{
-	font-size:12px;
+.listlike {
+    background-image: url('@{StaticR listthumbs_png}');
+    background-position: 0 0;
+    display: block;
+    float: right;
+    height: 20px;
+    position: relative;
+    width: 20px;
 }
 
-.listlike{
-	float:right;
-	position:relative;
-	display:block;
-	background-image:url('listthumbs.png');
-	background-position:0px 0px;
-	width:20px;
-	height:20px;
+.listlike: hover {
+    background-position: 0 20px;
 }
 
-.listlike:hover{
-	background-position:0px 20px;
+.listliked {
+    background-image: url('@{StaticR listthumbs_png}');
+    background-position: 0 0;
+    float: left;
+    height: 20px;
+    margin-left: 0;
+    width: 20px;
 }
 
-.listdislike:hover{
-	background-position:20px 20px;
+.login {
+    bottom: 60px;
+    position: absolute;
+    right: 0;
 }
 
-.listdislike{
-	float:right;
-	position:relative;
-	right:0px;
-	display:block;
-	margin-right:10px;
-	background-image:url('listthumbs.png');
-	background-position:20px 0px;
-	width:20px;
-	height:20px;
+.login a {
+    color: black;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
 }
 
-.listliked{
-	float:left;
-	background-image:url('listthumbs.png');
-	background-position:0px 0px;
-	width:20px;
-	height:20px;
-	margin-left:0px;
+.menu-item {
+    border-bottom: 1px solid #b2aea1;
 }
 
-.badgesmallplat{
-	float:left;
-	position:relative;
-	left:8px;
-	top:7px;
-	background-image:url('badgesmall.png');
-	width:14px;
-	height:14px;
+.pages {
+    color: white;
+    display: block;
+    float: right;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 0;
+    text-decoration: none;
 }
 
-#preview{
-	display:hidden;
-	position:absolute;
-	right:0px;
-	background-color:#e6e2d8;
-	box-shadow:4px 4px 2px #bcb7aa;
-	width:300px;
-	margin:10px;
-	border:1px solid #bdbaaf;
-	padding:0px;
-	z-index:2;
-}
-.hidden{display:none;pointer-events:none;}
-.unhidden{display:block;}
-
-#previewheader{
-	height:100px;
-	border-bottom:1px solid #c5c2ba;
-	vertical-align:top;
-	padding:10px;
+.pages a {
+    color: white;
+    text-decoration: none;
 }
 
-#previewstats{
-	position:absolute;
-	bottom:0;
-	left:0;
-	list-style:none;
-	width:300px;
-	padding:0px;
-	margin:0px;
-	padding:10px;
+.playerdislikes {
+    color: #dc0000;
+    font-size: 12px;
 }
 
-#previewstats li{
-	width:70px;
-	float:left;
+.playerlikes {
+    color: #00a8ff;
+    font-size: 12px;
 }
 
-#previewstats li div{
-	position:relative;
-	bottom:0;
-	left:0;
-	font-size:12px;
-	font-weight:bold;
+.playername,.playername a {
+    color: black;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
 }
 
-.stat-blue{color:#00a8ff;}
-.stat-red{color:#dc0000;}
-
-h3{
-	display:block;
-	position:relative;
-	top:0;
-	left:0;
-	font-size:20px;
-	font-weight:bold;
-	color:black;
-	margin:0px;
-	padding:0px;
+.playerpercentage {
+    font-size: 12px;
 }
 
-#footer{
-	background-color: #63615b;
-	border-top:2px solid #444;
-	color:#ddd;
-	font-size:12px;
-	padding:30px;
-	margin:20px 0px 0px;
+.playerrank {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.playerscore {
+    font-size: 10px;
+}
+
+.rankwrapper {
+    float: left;
+    left: 14px;
+    position: relative;
+}
+
+.stat-blue {
+    color: #00a8ff;
+}
+
+.stat-red {
+    color: #dc0000;
+}
+
+.unhidden {
+    display: block;
+}
+
+body {
+    background-color: #c3bca8;
+    font-family: Arial,"Lucida Grande", sans-serif;
+    font-size: 12px;
+    margin: 0;
+}
+
+h1 {
+    color: white;
+    display: block;
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 0;
+    margin-top: -15px;
+}
+
+h2 {
+    color: white;
+    display: block;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 0;
+    margin-top: -10px;
+}
+
+h3 {
+    color: black;
+    display: block;
+    font-size: 20px;
+    font-weight: 700;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    top: 0;
+}
+
+li.menu-item a {
+    color: black;
+    display: block;
+    padding-bottom: 10px;
+    padding-top: 5px;
+    text-decoration: none;
 }
