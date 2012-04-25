@@ -66,6 +66,7 @@
                     <td>
                         <div .playername>
                             <a href="javascript:unhide('preview');">
+                                Chris Crumblez
                     <td .playerlikes>1000
                     <td .playerdislikes>266
                     <td .playerpercentage>76%
