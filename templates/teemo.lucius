@@ -369,10 +369,6 @@ h2{
     background-position: 0 20px;
 }
 
-.thumbup:hover{
-	background-position:0px 20px;
-}
-
 .thumbdown {
     background-image: url('@{StaticR listthumbs_png}');
     background-position: 20px 0;
@@ -387,10 +383,6 @@ h2{
 
 .downvoted .thumbdown {
     background-position: 20px 20px;
-}
-
-.thumbdown:hover{
-	background-position:20px 20px;
 }
 
 .badgesmallplat{
