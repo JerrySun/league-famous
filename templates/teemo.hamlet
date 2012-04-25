@@ -57,74 +57,23 @@
                     <th style="width:50px;">DISLIKES
                     <th style="width:30px;">%
                     <th style="width:40px;">vote
-                <tr>
-                    <td>
-                        <div .badgesmallplat>
-                        <div .rankwrapper>
-                            <div .playerrank>1
-                            <div .playerscore>700
-                    <td>
-                        <div .playername>
-                            <a href="javascript:unhide('preview');">
-                                Chris Crumblez
-                    <td .playerlikes>1000
-                    <td .playerdislikes>266
-                    <td .playerpercentage>76%
-                    <td>
-                        <span .listdislike>
-                        <span .listlike>
-                <tr>
-                    <td>
-                        <div .badgesmallplat>
-                        <div .rankwrapper>
-                            <div .playerrank>2
-                            <div .playerscore>600
-                    <td .playername>scarra
-                    <td .playerlikes>1010
-                    <td .playerdislikes>300
-                    <td .playerpercentage>76%
-                    <td>
-                        <span .listdislike>
-                        <span .listlike>
-                <tr>
-                    <td>
-                        <div .badgesmallplat>
-                        <div .rankwrapper>
-                            <div .playerrank>2
-                            <div .playerscore>600
-                    <td .playername>scarra
-                    <td .playerlikes>1010
-                    <td .playerdislikes>300
-                    <td .playerpercentage>76%
-                    <td>
-                        <span .listdislike>
-                        <span .listlike>
-                <tr>
-                    <td>
-                        <div .badgesmallplat>
-                        <div .rankwrapper>
-                            <div .playerrank>2
-                            <div .playerscore>600
-                    <td .playername>scarra
-                    <td .playerlikes>1010
-                    <td .playerdislikes>300
-                    <td .playerpercentage>76%
-                    <td>
-                        <span .listdislike>
-                        <span .listlike>
-                <tr>
-                    <td>
-                        <div .badgesmallplat>
-                        <div .rankwrapper>
-                            <div .playerrank>2
-                            <div .playerscore>600
-                    <td .playername>scarra
-                    <td .playerlikes>1010
-                    <td .playerdislikes>300
-                    <td .playerpercentage>76%
-                    <td>
-                        <span .listdislike>
-                        <span .listlike>
+                $forall (player, rank) <- playersAndRank
+                    <tr>
+                        <td>
+                            <div .badgesmallplat>
+                            <div .rankwrapper>
+                                <div .playerrank>#{show rank}
+                                <div .playerscore>#{playerScore player}
+                        <td>
+                            <div .playername>
+                                <a href="javascript:unhide('preview');">
+                                    #{playerName player}
+                        <td .playerlikes>#{playerUpvotes player}
+                        <td .playerdislikes>#{playerDownvotes player}
+                        <td .playerpercentage>#{show $ percent player}
+                        <td>
+                            <span .listdislike>
+                            <span .listlike>
         <div #filterfooter>
             <ul .filterbuttons>
                 <li>
