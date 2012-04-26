@@ -1,5 +1,5 @@
-name:              leaguesay
-version:           0.0.0
+name:              league-famous
+version:           0.0.1
 license:           BSD3
 license-file:      LICENSE
 author:            Morgan
@@ -10,7 +10,6 @@ category:          Web
 stability:         Experimental
 cabal-version:     >= 1.6
 build-type:        Simple
-homepage:          http://leaguesay.yesodweb.com/
 
 Flag dev
     Description:   Turn on development settings, like auto-reload templates.
@@ -54,7 +53,7 @@ library
                 EmptyDataDecls
                 NoMonomorphismRestriction
 
-executable         leaguesay
+executable         league-famous
     if flag(library-only)
         Buildable: False
 
