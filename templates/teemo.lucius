@@ -3,7 +3,7 @@
 	margin:0;
 	}
 
-body, html {
+body{
 	font-family:Arial,"Lucida Grande", sans-serif;
 	font-size:12px;
 	background-color:#cec2a0;
@@ -110,7 +110,7 @@ li.menu-item a{
 .login{
 	position:absolute;
 	right:0;
-	bottom:60px;
+	bottom:20px;
 }
 
 .login a{
@@ -238,13 +238,26 @@ h2{
 	font-weight:bold;
 }
 
-.clockbutton{
+.clock{
 	display:block;
 	position:relative;
-	height:19px;
+	height:20px;
 	background-image:url('@{StaticR clock_png}');
 	background-repeat:no-repeat;
+	padding-top:2px;
 	padding-left:24px;
+	font-size:10px;
+}
+
+.clock span{display:none;}
+
+.clock:hover span{
+	display:block;
+	width:180px;
+	background-color:#e2d7b9;
+	padding:2px;
+	border:1px solid #bbb29a;
+	box-shadow:4px 4px 2px #afa588;
 }
 
 #filter{
@@ -254,7 +267,7 @@ h2{
 
 #filterfooter{
 	padding: 20px 0px 20px;
-	margin-bottom:20px;
+	margin-bottom:40px;
 	border-top:4px solid black;
 }
 
@@ -385,7 +398,7 @@ h2{
     background-position: 20px 20px;
 }
 
-.badgesmallplat{
+.badgesmall{
 	float:left;
 	position:relative;
 	left:8px;
@@ -393,6 +406,34 @@ h2{
 	background-image:url('@{StaticR badgesmall_png}');
 	width:14px;
 	height:14px;
+}
+
+.platsmall{
+	background-position:0px 0px;
+}
+
+.goldsmall{
+	background-position:0px -14px;
+}
+
+.silversmall{
+	background-position:0px -28px;
+}
+
+.bronzesmall{
+	background-position:0px -42px;
+}
+
+.graysmall{
+	background-position:0px -56px;
+}
+
+.inactivesmall{
+	background-position:0px -70px;
+}
+
+.redsmall{
+	background-position:0px -84px;
 }
 
 #preview{
@@ -415,6 +456,19 @@ h2{
 	border-bottom:1px solid #c5c2ba;
 	vertical-align:top;
 	padding:10px;
+}
+
+.previewclose{
+	display:block;
+	width:20px;
+	height:20px;
+	position:absolute;
+	top:0px;
+	right:0px;
+	background-image:url('@{StaticR close_png}');
+	background-repeat:no-repeat;
+	background-position:top right;
+	margin:10px;
 }
 
 #previewstats{
