@@ -19,21 +19,6 @@
         <div>
             <h2>NEW
     <div #preview .hidden>
-        <div #previewheader>
-            <h3>Crs Crumbzz
-            <ul #previewstats>
-                <li>
-                    <div>1
-                    <div>rank
-                <li>
-                    <div>700
-                    <div>score
-                <li .stat-blue>
-                    <div>1000
-                    <div>likes
-                <li .stat-red>
-                    <div>266
-                    <div>dislikes
     <div #center>
         <div .contentheader>
             <h1>RANKINGS

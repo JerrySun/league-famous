@@ -25,6 +25,7 @@ getHomeR = do
     defaultLayout $ setTitle "HELLO TEEMO" >> $(widgetFile "teemo") 
 
 
+makeTable :: Handler (HtmlUrl (Route App))
 makeTable = do
     acid <- getAcid
     players <- sortBy (flip compare `on` playerScore) <$> query' acid AllPlayers
@@ -38,3 +39,13 @@ getTableR :: Handler RepHtml
 getTableR = do
     table <- makeTable
     hamletToRepHtml table
+
+getPreviewR :: Name -> Handler RepHtml
+getPreviewR name = do
+    acid <- getAcid
+    maybePlayer <- query' acid $ GetPlayer name
+    case maybePlayer of
+        Just player -> hamletToRepHtml $(hamletFile "templates/preview.hamlet")
+        Nothing -> notFound
+
+

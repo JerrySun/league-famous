@@ -11,6 +11,7 @@ module State
     , GetVote (..)
     , ProcessVote (..)
     , NewPlayer (..)
+    , GetPlayer (..)
     ) where
 
 import Data.Acid

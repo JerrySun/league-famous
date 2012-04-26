@@ -1,0 +1,16 @@
+<div #preview .hidden>
+    <div #previewheader>
+        <h3>#{playerName player}
+        <ul #previewstats>
+            <li>
+                <div>1
+                <div>rank
+            <li>
+                <div>700
+                <div>#{playerScore player}
+            <li .stat-blue>
+                <div>#{playerUpvotes player}
+                <div>likes
+            <li .stat-red>
+                <div>#{playerDownvotes player}
+                <div>dislikes
