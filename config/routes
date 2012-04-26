@@ -5,6 +5,7 @@
 /robots.txt      RobotsR    GET
 
 /                HomeR      GET
+/table           TableR     GET
 
 /upvote/#Text    UpvoteR    POST
 /downvote/#Text  DownvoteR  POST

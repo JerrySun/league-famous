@@ -43,50 +43,15 @@
                 <li>
                     <div #addplayer .hidden>
                         <a href="javascript:unhide('addplayer');" .addplayerpopupbutton>
-                        <input type="text" .addplayer-input>
+                        <form .addplayer>
+                            <input type="text" .addplayer-input>
         <div #filter>
             <input type="text" .filter-input>
             <span .pages>
                 Page 1 of 2370 #
                 <a href="">Next #
                 <a href="">Last
-        <table #players>
-            <tbody>
-                <tr>
-                    <th style="width:50px;">RANK
-                    <th>NAME
-                    <th style="width:50px;">LIKES
-                    <th style="width:50px;">DISLIKES
-                    <th style="width:30px;">%
-                    <th style="width:40px;">vote
-                $forall (player, rank) <- playersAndRank
-                    <tr>
-                        <td>
-                            <div .badgesmallplat>
-                            <div .rankwrapper>
-                                <div .playerrank>#{show rank}
-                                <div .playerscore>#{playerScore player}
-                        <td>
-                            <div .playername>
-                                <a href="javascript:unhide('preview');">
-                                    #{playerName player}
-                        <td .playerlikes>#{playerUpvotes player}
-                        <td .playerdislikes>#{playerDownvotes player}
-                        <td .playerpercentage>#{show $ percent player}%
-                        <td>
-                            $case voteOf player
-                                $of Neutral
-                                    <div .thumbs data-name=#{playerName player}>
-                                        <div .thumbdown>
-                                        <div .thumbup>
-                                $of Up
-                                    <div .thumbs .upvoted data-name=#{playerName player}>
-                                        <div .thumbdown>
-                                        <div .thumbup>
-                                $of Down
-                                    <div .thumbs .downvoted data-name=#{playerName player}>
-                                        <div .thumbdown>
-                                        <div .thumbup>
+        ^{playerTable}
         <div #filterfooter>
             <ul .filterbuttons>
                 <li>

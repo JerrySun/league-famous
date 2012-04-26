@@ -3,15 +3,14 @@
     if item
         item.className = if (item.className == 'hidden') then 'unhidden' else 'hidden'
 
-downvote = (name, callback) -> $.post "/downvote/" + name, null, callback
-upvote   = (name, callback) -> $.post "/upvote/" + name, null, callback
-novote   = (name, callback) -> $.post "/novote/" + name, null, callback
+reloadTable = -> $.ajax { url: "/table"
+                        , success: (x) -> $("#players").replaceWith x; attachThumbs() }
 
+downvote = (name, callback) -> $.post "/downvote/" + name, null, reloadTable
+upvote   = (name, callback) -> $.post "/upvote/" + name, null, reloadTable
+novote   = (name, callback) -> $.post "/novote/" + name, null, reloadTable
 
-#$.ajax { url: "/table"
-#       , success: (x) -> $("#votes").replaceWith x }
-
-$(document).ready ->
+attachThumbs = ->
     $(".thumbs").on "click", ".thumbup", ->
         thumbs = $(this).parent()
 
@@ -34,7 +33,12 @@ $(document).ready ->
         else
             novote thumbs.data("name")
     
+
+
+$(document).ready ->
+    attachThumbs()
+
     $("form.addplayer").on "submit", (event) ->
         event.preventDefault()
         name = $(this).children("input").val()
-        $.post "/newplayer/" + name
+        $.post "/newplayer/" + name, null, reloadTable

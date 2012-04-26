@@ -5,6 +5,7 @@ import Data.Function (on)
 import Data.List (sortBy)
 import Data.List (elemIndex)
 import Data.Maybe (fromJust)
+import Text.Hamlet (hamletFile)
 
 playerScore ::  Player -> Int
 playerScore p = playerUpvotes p - playerDownvotes p 
@@ -20,17 +21,20 @@ percent p = f u d
 
 getHomeR :: Handler RepHtml
 getHomeR = do
+    playerTable <- makeTable
+    defaultLayout $ setTitle "HELLO TEEMO" >> $(widgetFile "teemo") 
+
+
+makeTable = do
     acid <- getAcid
     players <- sortBy (flip compare `on` playerScore) <$> query' acid AllPlayers
     let playersAndRank = players `zip` ([1..] :: [Int])
     ip <- requestIP
     votes <- mapM (\x -> query' acid (GetVote ip (playerName x))) players
     let voteOf p = votes !! (fromJust $ elemIndex p players)
-    defaultLayout $ setTitle "HELLO TEEMO" >> $(widgetFile "teemo") 
+    return $(hamletFile "templates/table.hamlet")
 
-
--- For table route:
---    pc <- widgetToPageContent $(widgetFile "table")
---    hamletToRepHtml [hamlet|
---        ^{pageBody pc}
---        |]
+getTableR :: Handler RepHtml
+getTableR = do
+    table <- makeTable
+    hamletToRepHtml table
