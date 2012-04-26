@@ -4,12 +4,8 @@
 /favicon.ico    FaviconR  GET
 /robots.txt     RobotsR   GET
 
-/               HomeR     GET POST
+/               HomeR     GET
 
 /upvote/#Text   UpvoteR   POST
 /downvote/#Text DownvoteR POST
 /novote/#Text   NovoteR   POST
-
-/table          TableR    GET
-
-/teemo          TeemoR    GET

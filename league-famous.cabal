@@ -31,7 +31,6 @@ library
                      Settings
                      Settings.StaticFiles
                      Handler.Home
-                     Handler.Teemo
                      Handler.Api
                      State
                      Util
