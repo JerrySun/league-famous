@@ -94,7 +94,8 @@
                 <li>
                     <div #addplayerbottom .hidden>
                         <a href="javascript:unhide('addplayerbottom');" .addplayerpopupbutton>
-                        <input type="text" .addplayer-input>
+                        <form .addplayer>
+                            <input type="text" .addplayer-input>
             <div .pages>Page 1 of 2370
                 <a href="">Next
                 <a href="">Last

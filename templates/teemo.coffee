@@ -29,3 +29,8 @@ $(document).ready ->
             downvote thumbs.data("name")
         else
             novote thumbs.data("name")
+    
+    $("form.addplayer").on "submit", (event) ->
+        event.preventDefault()
+        name = $(this).children("input").val()
+        $.post "/newplayer/" + name

@@ -10,6 +10,7 @@ module State
     , AllPlayers (..)
     , GetVote (..)
     , ProcessVote (..)
+    , NewPlayer (..)
     ) where
 
 import Data.Acid
@@ -83,6 +84,11 @@ setPlayer' p (PlayerStore s) = (PlayerStore $ M.insert (playerName p) p s, ())
 
 setPlayer :: Player -> Update AppState ()
 setPlayer p = playerUpdater $ setPlayer' p
+
+newPlayer name = playerUpdater $ \ranks ->
+    case M.lookup name (unwrapMap ranks) of
+        Nothing -> setPlayer' (Player name 0 0 ) ranks
+        Just _ -> (ranks, ())
 
 getPlayer :: Name -> Query AppState (Maybe Player)
 getPlayer n = playerQueryer $ M.lookup n . unwrapMap
@@ -169,4 +175,4 @@ processVote ip n v = do
             put $ AppState (PlayerStore players') (IPStore ips')
             return True
 
-$(makeAcidic ''AppState ['setPlayer, 'getPlayer, 'allPlayers, 'upvote, 'downvote, 'updateVote, 'getVote, 'processVote])
+$(makeAcidic ''AppState ['newPlayer, 'setPlayer, 'getPlayer, 'allPlayers, 'upvote, 'downvote, 'updateVote, 'getVote, 'processVote])
