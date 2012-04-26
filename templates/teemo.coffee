@@ -7,6 +7,10 @@ downvote = (name, callback) -> $.post "/downvote/" + name, null, callback
 upvote   = (name, callback) -> $.post "/upvote/" + name, null, callback
 novote   = (name, callback) -> $.post "/novote/" + name, null, callback
 
+
+#$.ajax { url: "/table"
+#       , success: (x) -> $("#votes").replaceWith x }
+
 $(document).ready ->
     $(".thumbs").on "click", ".thumbup", ->
         thumbs = $(this).parent()
