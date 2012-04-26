@@ -15,7 +15,7 @@
                         <div .playerrank>#{show rank}
                         <div .playerscore>#{playerScore player}
                 <td>
-                    <div .playername> #{playerName player}
+                    <span .playername> #{playerName player}
                 <td .playerlikes>#{playerUpvotes player}
                 <td .playerdislikes>#{playerDownvotes player}
                 <td .playerpercentage>#{show $ percent player}%

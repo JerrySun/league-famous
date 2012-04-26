@@ -10,6 +10,12 @@ downvote = (name, callback) -> $.post "/downvote/" + name, null, reloadTable
 upvote   = (name, callback) -> $.post "/upvote/" + name, null, reloadTable
 novote   = (name, callback) -> $.post "/novote/" + name, null, reloadTable
 
+replacePreview = (x) ->
+    $("#preview").replaceWith x
+    $("#preview").show()
+    closeButton = $("#preview").children(".previewclose")
+    closeButton.click(-> $("#preview").hide())
+
 attachRow = ->
     $(".playerrow").on "click", ".thumbup", ->
         thumbs = $(this).parent()
@@ -17,10 +23,12 @@ attachRow = ->
         thumbs.removeClass("downvoted")
         thumbs.toggleClass("upvoted")
 
+        name = $(this).closest(".playerrow").data("name")
+
         if thumbs.hasClass("upvoted")
-            upvote thumbs.data("name")
+            upvote name
         else
-            novote thumbs.data("name")
+            novote name
 
     $(".playerrow").on "click", ".thumbdown", ->
         thumbs = $(this).parent()
@@ -28,14 +36,16 @@ attachRow = ->
         thumbs.removeClass("upvoted")
         thumbs.toggleClass("downvoted")
 
+        name = $(this).closest(".playerrow").data("name")
+
         if thumbs.hasClass("downvoted")
-            downvote thumbs.data("name")
+            downvote name
         else
-            novote thumbs.data("name")
+            novote name
     
     $(".playerrow").on "click", ".playername", ->
         $.ajax { url: "/preview/" + $(this).parent().parent().data("name")
-               , success: (x) -> $("#preview").replaceWith x; $("#preview").show() }
+               , success: (x) -> replacePreview x  }
 
 
 $(document).ready ->
