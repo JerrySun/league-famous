@@ -1,5 +1,16 @@
 {-# LANGUAGE DeriveDataTypeable #-}
-module State where
+module State 
+    ( IP (..)
+    , AppState
+    , Player (..)
+    , Vote (..)
+    , Name
+    , emptyState
+    -- Acidic
+    , AllPlayers (..)
+    , GetVote (..)
+    , ProcessVote (..)
+    ) where
 
 import Data.Acid
 import Data.SafeCopy
@@ -157,10 +168,5 @@ processVote ip n v = do
             let players' = M.insert n player' players
             put $ AppState (PlayerStore players') (IPStore ips')
             return True
-
-            
-
-
-
 
 $(makeAcidic ''AppState ['setPlayer, 'getPlayer, 'allPlayers, 'upvote, 'downvote, 'updateVote, 'getVote, 'processVote])
