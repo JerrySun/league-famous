@@ -1,5 +1,5 @@
 {-# LANGUAGE PackageImports #-}
-import "leaguesay" Application (getApplicationDev)
+import "league-famous" Application (getApplicationDev)
 import Network.Wai.Handler.Warp
     (runSettings, defaultSettings, settingsPort)
 import Control.Concurrent (forkIO)

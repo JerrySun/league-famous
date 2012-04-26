@@ -10,6 +10,7 @@ category:          Web
 stability:         Experimental
 cabal-version:     >= 1.6
 build-type:        Simple
+homepage:          http://league-famous.yesodweb.com/
 
 Flag dev
     Description:   Turn on development settings, like auto-reload templates.
