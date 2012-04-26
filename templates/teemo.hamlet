@@ -49,8 +49,8 @@
             <div .pages>Page 1 of 2370
                 <a href="">Next
                 <a href="">Last
-
-
+        <div .clock>1 hour 3 minutes until reset.<br>
+            <span .clockinfo>After 11:59 PM PST, you will be able to vote on every player once again!
 <div #footer>
     <div .footnote>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod

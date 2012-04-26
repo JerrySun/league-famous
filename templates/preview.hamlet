@@ -1,13 +1,14 @@
 <div #preview .hidden>
     <div #previewheader>
         <h3>#{playerName player}
+        <div .previewclose>
         <ul #previewstats>
             <li>
                 <div>1
                 <div>rank
             <li>
-                <div>700
                 <div>#{playerScore player}
+                <div>score
             <li .stat-blue>
                 <div>#{playerUpvotes player}
                 <div>likes

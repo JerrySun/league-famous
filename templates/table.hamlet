@@ -10,7 +10,7 @@
         $forall (player, rank) <- playersAndRank
             <tr .playerrow data-name=#{playerName player}>
                 <td>
-                    <div .badgesmallplat>
+                    <div .badgesmall>
                     <div .rankwrapper>
                         <div .playerrank>#{show rank}
                         <div .playerscore>#{playerScore player}
