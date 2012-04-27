@@ -36,6 +36,8 @@ library
                      State
                      Util
                      Helpers
+                     Data.Ranks
+                     Data.VoteHistory
 
     ghc-options:   -Wall -threaded -O0
     cpp-options:   -DDEVELOPMENT

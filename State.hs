@@ -24,29 +24,11 @@ import Data.Text (Text)
 import Prelude
 import Data.Word (Word32)
 import Data.Maybe (fromMaybe)
-
-data Player = Player { playerName :: Name
-                     , playerUpvotes :: Int
-                     , playerDownvotes :: Int } deriving (Eq, Typeable)
-
-type Name = Text
-
-data PlayerStore = PlayerStore {unwrapMap :: M.Map Name Player} deriving (Typeable)
-
-$(deriveSafeCopy 0 'base ''Player)
-$(deriveSafeCopy 0 'base ''PlayerStore)
+import Data.Ranks
+import Data.VoteHistory (IPStore, IP, Vote(..))
+import qualified Data.VoteHistory as VH
 
 ----
-data Vote = Up | Down | Neutral deriving (Show, Eq, Typeable)
-
-data IP = IPv4 Word32 | IPv6 (Word32, Word32, Word32, Word32) deriving (Ord, Eq, Typeable)
-
-data IPStore = IPStore (M.Map IP (M.Map Name Vote)) deriving (Typeable)
-
-$(deriveSafeCopy 0 'base ''Vote)
-$(deriveSafeCopy 0 'base ''IP)
-$(deriveSafeCopy 0 'base ''IPStore)
-
 ----
 data AppState = AppState { getPlayerStore :: PlayerStore
                          , getIPStore :: IPStore } deriving (Typeable)
@@ -54,7 +36,7 @@ data AppState = AppState { getPlayerStore :: PlayerStore
 $(deriveSafeCopy 0 'base ''AppState)
 
 emptyState ::  AppState
-emptyState = AppState emptyPlayerS emptyIPS
+emptyState = AppState emptyPlayerS VH.empty
 
 
 emptyPlayerS ::PlayerStore
@@ -117,20 +99,6 @@ downvote n = do
 ----------------
 ----------------
 
-emptyIPS :: IPStore
-emptyIPS = IPStore M.empty
-
-vote :: IP -> Name -> Vote -> IPStore -> (IPStore, Vote)
-vote ip n v (IPStore s) = 
-    case M.lookup ip s of
-        Nothing      -> ( IPStore $ M.insert ip (M.singleton n v) s
-                        , Neutral )
-        Just votemap -> ( IPStore $ M.insert ip (M.insert n v votemap) s
-                        , fromMaybe Neutral (M.lookup n votemap))
-
-updateVote :: IP -> Name -> Vote -> Update AppState Vote
-updateVote ip n v = ipUpdater $ vote ip n v
-
 ipUpdater :: (IPStore -> (IPStore, a)) -> Update AppState a
 ipUpdater f = do AppState players ips <- get
                  let (ips', result) = f ips
@@ -142,9 +110,13 @@ ipQueryer f = do AppState _ ips <- ask
                  let result = f ips
                  return result
 
+---------------
+updateVote :: IP -> Name -> Vote -> Update AppState Vote
+updateVote ip n v = ipUpdater $ VH.vote ip n v
+
+
 getVote :: IP -> Name -> Query AppState Vote
-getVote ip name = ipQueryer f
-                  where f (IPStore s) = fromMaybe Neutral $ M.lookup ip s >>= M.lookup name
+getVote ip name = ipQueryer $ VH.getVote ip name
 ----------------
 ----------------
 
@@ -161,19 +133,15 @@ applyVote new old p@(Player n u d) = f new old
 
 processVote :: IP -> Name -> Vote -> Update AppState Bool
 processVote ip n v = do
-    AppState (PlayerStore players) (IPStore ips) <- get
+    AppState (PlayerStore players) ips <- get
 
     case M.lookup n players of
         Nothing -> return False
         Just player -> do
-            let (ips', prevVote) = case M.lookup ip ips of
-                                    Nothing ->
-                                        (M.insert ip (M.singleton n v) ips, Neutral)
-                                    Just votemap ->
-                                        (M.insert ip (M.insert n v votemap) ips, fromMaybe Neutral (M.lookup n votemap))
+            let (ips', prevVote) = VH.vote ip n v ips
             let player' = applyVote v prevVote player
             let players' = M.insert n player' players
-            put $ AppState (PlayerStore players') (IPStore ips')
+            put $ AppState (PlayerStore players') ips'
             return True
 
 $(makeAcidic ''AppState ['newPlayer, 'setPlayer, 'getPlayer, 'allPlayers, 'upvote, 'downvote, 'updateVote, 'getVote, 'processVote])
