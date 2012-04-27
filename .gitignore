@@ -2,3 +2,5 @@ dist/
 config/client_session_key.aes
 static/tmp/
 state/
+utils/coffee_hack*
+coffee.exe
