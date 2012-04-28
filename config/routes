@@ -6,10 +6,8 @@
 
 /                HomeR      GET
 /table           TableR     GET
-/preview/#Text   PreviewR   GET
+/preview         PreviewR   GET
 
-/upvote/#Text    UpvoteR    POST
-/downvote/#Text  DownvoteR  POST
-/novote/#Text    NovoteR    POST
+/vote            VoteR    POST
 
-/newplayer/#Text NewPlayerR POST
+/newplayer/      NewPlayerR POST

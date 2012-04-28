@@ -40,8 +40,9 @@ getTableR = do
     table <- makeTable
     hamletToRepHtml table
 
-getPreviewR :: Name -> Handler RepHtml
-getPreviewR name = do
+getPreviewR :: Handler RepHtml
+getPreviewR = do
+    (name:_) <- parseJsonParam_
     acid <- getAcid
     maybePlayer <- query' acid $ GetPlayer name
     case maybePlayer of

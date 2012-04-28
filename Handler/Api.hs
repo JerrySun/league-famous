@@ -1,30 +1,29 @@
 module Handler.Api
-    ( postUpvoteR
-    , postDownvoteR
-    , postNovoteR
-    , postNewPlayerR
+    ( postNewPlayerR
+    , postVoteR
     ) where
 
 import Import
+import Data.Aeson
+import Control.Monad (mzero)
 
-postUpvoteR :: Name -> Handler RepJson
-postUpvoteR = postVote Up
+data VoteReq = VoteReq Vote Name
 
-postDownvoteR :: Name -> Handler RepJson
-postDownvoteR = postVote Down
+instance FromJSON VoteReq where
+    parseJSON (Object v) = VoteReq <$> v .: "vote" <*> v .: "name"
+    parseJSON _          = mzero
 
-postNovoteR :: Name -> Handler RepJson
-postNovoteR = postVote Neutral
-
-postVote :: Vote -> Name -> Handler RepJson
-postVote vote name = do 
+postVoteR :: Handler RepJson
+postVoteR = do 
+    VoteReq vote name <- parseJsonBody_
     ip <- requestIP
     acid <- getAcid
     _ <- update' acid $ ProcessVote ip name vote
     jsonToRepJson ()
 
-postNewPlayerR :: Name -> Handler RepJson
-postNewPlayerR name = do 
+postNewPlayerR :: Handler RepJson
+postNewPlayerR = do 
+    (name:_) <- parseJsonBody_
     acid <- getAcid
     _ <- update' acid $ NewPlayer name
     jsonToRepJson ()

@@ -113,6 +113,8 @@ executable         league-famous
                  , transformers
                  , wai
                  , network
+                 , aeson
+                 , attoparsec
 
 test-suite integration-tests
     type: exitcode-stdio-1.0

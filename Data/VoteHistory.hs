@@ -15,6 +15,8 @@ import qualified Data.Map as M
 import Data.Word (Word32)
 import Data.Ranks (Name)
 import Data.Maybe (fromMaybe)
+import Data.Aeson
+import Control.Monad (mzero)
 
 data Vote = Up | Down | Neutral deriving (Show, Eq, Typeable)
 
@@ -26,6 +28,13 @@ $(deriveSafeCopy 0 'base ''Vote)
 $(deriveSafeCopy 0 'base ''IP)
 $(deriveSafeCopy 0 'base ''IPStore)
 
+instance FromJSON Vote where
+    parseJSON (String t) = case t of
+                               "up"      -> return Up
+                               "down"    -> return Down
+                               "neutral" -> return Neutral
+                               _         -> mzero
+    parseJSON _          = mzero
 
 empty :: IPStore
 empty = IPStore M.empty
