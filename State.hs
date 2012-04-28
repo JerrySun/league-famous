@@ -1,10 +1,13 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 module State 
+    -- re-exports
     ( IP (..)
-    , AppState
     , Player (..)
     , Vote (..)
     , Name
+    , R.validName
+    -- The master state
+    , AppState
     , emptyState
     -- Acidic
     , AllPlayers (..)
