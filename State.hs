@@ -24,124 +24,113 @@ import Data.Text (Text)
 import Prelude
 import Data.Word (Word32)
 import Data.Maybe (fromMaybe)
-import Data.Ranks
+import Control.Applicative ((<$>), (<*>))
+import Control.Arrow ((&&&))
+
 import Data.VoteHistory (IPStore, IP, Vote(..))
-import qualified Data.VoteHistory as VH
+import qualified Data.VoteHistory as V
+
+import Data.Ranks (PlayerStore, Player (..), Name)
+import qualified Data.Ranks as R
 
 ----
 ----
-data AppState = AppState { getPlayerStore :: PlayerStore
-                         , getIPStore :: IPStore } deriving (Typeable)
+data AppState = AppState { playerStore :: PlayerStore
+                         , ipStore :: IPStore } deriving (Typeable)
 
 $(deriveSafeCopy 0 'base ''AppState)
 
+setPlayerStore ps  state = state { playerStore = ps}
+setIPStore     ips state = state { ipStore = ips}
+
+queryer ::  (AppState -> s) -> (s -> b) -> Query AppState b
+queryer getter = (flip fmap) (fmap getter ask)
+
+updater :: (AppState -> s) -> (s -> AppState -> AppState) -> (s -> (s, b)) -> Update AppState b
+updater getter setter f = do
+    state <- get
+    let (x', result) = f $ getter state
+    put $ setter x' state
+    return result
+
+updater' :: (AppState -> s) -> (s -> AppState -> AppState) -> (s -> s) -> Update AppState ()
+updater' getter setter f = uncurry setter . ((f . getter) &&& id) <$> get >>= put
+
 emptyState ::  AppState
-emptyState = AppState emptyPlayerS VH.empty
+emptyState = AppState R.empty V.empty
 
+----
 
-emptyPlayerS ::PlayerStore
-emptyPlayerS = PlayerStore M.empty
+playerUpdater = updater playerStore setPlayerStore
+playerUpdater' = updater' playerStore setPlayerStore
+playerQueryer = queryer playerStore
 
-playerRatio :: Player -> Float
-playerRatio p = let up = playerUpvotes p
-                    down = playerDownvotes p
-                    fI = fromIntegral
-                in case up `compare` down of
-                    GT -> fI up / fI down
-                    LT -> fI down / fI up * (-1)
-                    EQ -> 1
-
-playerUpdater :: (PlayerStore -> (PlayerStore, a)) -> Update AppState a
-playerUpdater f = do AppState players ips <- get
-                     let (players', result) = f players
-                     put $ AppState players' ips
-                     return result
-
-playerQueryer :: (PlayerStore -> a) -> Query AppState a
-playerQueryer f = do AppState players _ <- ask
-                     let result = f players
-                     return result
-
-setPlayer' :: Player -> PlayerStore -> (PlayerStore, ())
-setPlayer' p (PlayerStore s) = (PlayerStore $ M.insert (playerName p) p s, ())
+----
 
 setPlayer :: Player -> Update AppState ()
-setPlayer p = playerUpdater $ setPlayer' p
+setPlayer p = playerUpdater' $ R.setPlayer p
 
-newPlayer name = playerUpdater $ \ranks ->
-    case M.lookup name (unwrapMap ranks) of
-        Nothing -> setPlayer' (Player name 0 0 ) ranks
-        Just _ -> (ranks, ())
+newPlayer name = playerUpdater' $ R.newPlayer name
 
 getPlayer :: Name -> Query AppState (Maybe Player)
-getPlayer n = playerQueryer $ M.lookup n . unwrapMap
+getPlayer n = playerQueryer $ R.getPlayer n
 
 allPlayers :: Query AppState [Player]
-allPlayers = playerQueryer $ M.elems . unwrapMap
-
-upvote ::  Name -> Update AppState (Maybe Player)
-upvote n = do
-    player <- runQuery $ getPlayer n
-    case player of
-        Just (Player name up down) -> let new = Player name (up + 1) down
-                                      in setPlayer new >> return (Just new)
-        Nothing -> return Nothing
-                                      
-downvote ::  Name -> Update AppState (Maybe Player)
-downvote n = do
-    player <- runQuery $ getPlayer n
-    case player of
-        Just (Player name up down) -> let new = Player name up (down + 1)
-                                      in setPlayer new >> return (Just new)
-        Nothing -> return Nothing
-                                    
+allPlayers = playerQueryer $ R.allPlayers
 
 ----------------
 ----------------
 
 ipUpdater :: (IPStore -> (IPStore, a)) -> Update AppState a
-ipUpdater f = do AppState players ips <- get
-                 let (ips', result) = f ips
-                 put $ AppState players ips'
-                 return result
+ipUpdater = updater ipStore setIPStore
 
 ipQueryer :: (IPStore -> a) -> Query AppState a
-ipQueryer f = do AppState _ ips <- ask
-                 let result = f ips
-                 return result
+ipQueryer = queryer ipStore
+
+
 
 ---------------
 updateVote :: IP -> Name -> Vote -> Update AppState Vote
-updateVote ip n v = ipUpdater $ VH.vote ip n v
+updateVote ip n v = ipUpdater $ V.vote ip n v
 
 
 getVote :: IP -> Name -> Query AppState Vote
-getVote ip name = ipQueryer $ VH.getVote ip name
+getVote ip name = ipQueryer $ V.getVote ip name
 ----------------
 ----------------
 
-applyVote new old p@(Player n u d) = f new old
-                                       where f Up Up      = p
-                                             f Up Neutral = Player n (u + 1) d
-                                             f Up Down    = Player n (u + 1) (d - 1)
-                                             f Down Down    = p
-                                             f Down Neutral = Player n u (d + 1)
-                                             f Down Up      = Player n (u - 1) (d + 1)
-                                             f Neutral Neutral = p
-                                             f Neutral Up      = Player n (u - 1) d
-                                             f Neutral Down    = Player n u (d - 1)
+applyVote ::  Vote -> Vote -> Player -> Player
+applyVote new old p@(Player n u d) =
+    f new old
+    where f Up Up           = p
+          f Up Neutral      = Player n (u + 1)  d
+          f Up Down         = Player n (u + 1) (d - 1)
+          f Down Down       = p
+          f Down Neutral    = Player n  u      (d + 1)
+          f Down Up         = Player n (u - 1) (d + 1)
+          f Neutral Neutral = p
+          f Neutral Up      = Player n (u - 1)  d
+          f Neutral Down    = Player n  u      (d - 1)
 
 processVote :: IP -> Name -> Vote -> Update AppState Bool
 processVote ip n v = do
-    AppState (PlayerStore players) ips <- get
+    state <- get
+    let players = playerStore state
+    let ips     = ipStore state
 
-    case M.lookup n players of
+    case R.getPlayer n players of
         Nothing -> return False
         Just player -> do
-            let (ips', prevVote) = VH.vote ip n v ips
+            let (ips', prevVote) = V.vote ip n v ips
             let player' = applyVote v prevVote player
-            let players' = M.insert n player' players
-            put $ AppState (PlayerStore players') ips'
+            let players' = R.setPlayer player' players
+            put $ AppState {playerStore = players', ipStore =  ips'}
             return True
 
-$(makeAcidic ''AppState ['newPlayer, 'setPlayer, 'getPlayer, 'allPlayers, 'upvote, 'downvote, 'updateVote, 'getVote, 'processVote])
+$(makeAcidic ''AppState [ 'newPlayer
+                        , 'setPlayer
+                        , 'getPlayer
+                        , 'allPlayers
+                        , 'updateVote
+                        , 'getVote
+                        , 'processVote])
