@@ -7,12 +7,12 @@
             <th style="width:50px;">DISLIKES
             <th style="width:30px;">%
             <th style="width:40px;">vote
-        $forall (player, rank) <- playersAndRank
+        $forall player <- players
             <tr .playerrow data-name=#{playerName player}>
                 <td>
                     <div .badgesmall>
                     <div .rankwrapper>
-                        <div .playerrank>#{show rank}
+                        <div .playerrank>#{playerRank player}
                         <div .playerscore>#{playerScore player}
                 <td>
                     <span .playername> #{playerName player}

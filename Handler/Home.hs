@@ -28,8 +28,7 @@ getHomeR = do
 makeTable :: Handler (HtmlUrl (Route App))
 makeTable = do
     acid <- getAcid
-    players <- sortBy (flip compare `on` playerScore) <$> query' acid AllPlayers
-    let playersAndRank = players `zip` ([1..] :: [Int])
+    players <- take 25 <$> query' acid AllPlayers
     ip <- requestIP
     votes <- mapM (\x -> query' acid (GetVote ip (playerName x))) players
     let voteOf p = votes !! (fromJust $ elemIndex p players)

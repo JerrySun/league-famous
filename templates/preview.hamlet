@@ -4,7 +4,7 @@
         <div .previewclose>
         <ul #previewstats>
             <li>
-                <div>1
+                <div>#{playerRank player}
                 <div>rank
             <li>
                 <div>#{playerScore player}

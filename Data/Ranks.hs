@@ -4,11 +4,12 @@ module Data.Ranks
     , Name
     , PlayerStore 
     , empty
-    --, setPlayer
-    --, newPlayer
-    --, getPlayer
-    --, allPlayers
+    , newPlayer
+    , getPlayer
+    , allPlayers
     , validName
+    , findRank
+    , voteMod
     ) where
 
 import Prelude
@@ -24,7 +25,8 @@ import Data.Maybe (fromMaybe)
 data Player = Player { playerName :: Name
                      , playerUpvotes :: Int
                      , playerDownvotes :: Int
-                     , playerRank :: Int } deriving (Eq, Typeable)
+                     , playerRank :: Int
+                     } deriving (Eq, Typeable)
 
 type Name = Text
 
@@ -64,14 +66,16 @@ voteMod p u d store@(PlayerStore names scores) = fromMaybe store newStore
                             return $ if M.null nameMap'
                                then I.delete (playerScore p) scores
                                else I.insert (playerScore p) nameMap' scores
-              let higherRanked = fst $ I.split (pscore') scores'
-                  rank = 1 + I.foldr' sumSizes 0 higherRanked
-                  sumSizes nameMap total = M.size nameMap + total
-                  p' = (\(Player n up dn _) -> Player n (up + u) (dn + d) rank) p
+              let rank = findRank (playerScore p) scores'
+                  p' = (\(Player n up dn _ ) -> Player n (up + u) (dn + d) (-1)) p
                   scores'' = addScore p' scores'
                   names' = M.insert (playerName p') p' names
               return (names', scores'')
 
+-- rank of a score not in the thing
+findRank score scores = 1 + I.foldr' sumSizes 0 higherRanked
+                        where higherRanked = snd $ I.split (score) scores
+                              sumSizes nameMap total = M.size nameMap + total
 
 addScore p scores = case I.lookup (playerScore p) scores of
                         Nothing -> I.insert (playerScore p) (M.singleton (playerName p) p) scores
@@ -79,13 +83,25 @@ addScore p scores = case I.lookup (playerScore p) scores of
 
 
 
---
---newPlayer name ranks = case validName name of 
---                           True -> case M.lookup name (unwrapMap ranks) of
---                                       Nothing -> setPlayer (Player name 0 0) ranks
---                                       Just _ -> ranks
---                           False -> ranks
---
---getPlayer n = M.lookup n . unwrapMap
---
---allPlayers = M.elems . unwrapMap
+
+newPlayer name ranks = case validName name of 
+                           True -> case M.lookup name (unwrapMap ranks) of
+                                       Nothing -> ranks'
+                                       Just _ -> ranks
+                           False -> ranks
+                       where ranks' = PlayerStore names' scores'
+                             p = Player name 0 0 (-1)
+                             names' = M.insert (playerName p) p $ unwrapMap ranks
+                             scores' = addScore p $ rankMap ranks
+                             
+getPlayer n ranks = do
+    player <- M.lookup n . unwrapMap $ ranks
+    let pRank = findRank (playerScore player) (rankMap ranks)
+    return $ player {playerRank = pRank}
+
+
+refreshRank scores p = let pRank = findRank (playerScore p) scores
+                       in p {playerRank = pRank}
+
+allPlayers ranks = concatMap (map (refreshRank (rankMap ranks) . snd) . M.toAscList . snd) $ reverse $ I.toAscList (rankMap ranks)
+

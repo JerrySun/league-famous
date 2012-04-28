@@ -70,9 +70,6 @@ playerQueryer = queryer playerStore
 
 ----
 
-setPlayer :: Player -> Update AppState ()
-setPlayer p = playerUpdater' $ R.setPlayer p
-
 newPlayer name = playerUpdater' $ R.newPlayer name
 
 getPlayer :: Name -> Query AppState (Maybe Player)
@@ -102,18 +99,17 @@ getVote ip name = ipQueryer $ V.getVote ip name
 ----------------
 ----------------
 
-applyVote ::  Vote -> Vote -> Player -> Player
-applyVote new old p@(Player n u d) =
+applyVote new old p =
     f new old
-    where f Up Up           = p
-          f Up Neutral      = Player n (u + 1)  d
-          f Up Down         = Player n (u + 1) (d - 1)
-          f Down Down       = p
-          f Down Neutral    = Player n  u      (d + 1)
-          f Down Up         = Player n (u - 1) (d + 1)
-          f Neutral Neutral = p
-          f Neutral Up      = Player n (u - 1)  d
-          f Neutral Down    = Player n  u      (d - 1)
+    where f Up      Up      = R.voteMod p 0  0
+          f Up      Neutral = R.voteMod p 1  0
+          f Up      Down    = R.voteMod p 1  (-1)
+          f Down    Down    = R.voteMod p 0  0
+          f Down    Neutral = R.voteMod p 0  1
+          f Down    Up      = R.voteMod p (-1) 1
+          f Neutral Neutral = R.voteMod p 0  0
+          f Neutral Up      = R.voteMod p (-1) 0
+          f Neutral Down    = R.voteMod p 0  (-1)
 
 processVote :: IP -> Name -> Vote -> Update AppState Bool
 processVote ip n v = do
@@ -125,13 +121,12 @@ processVote ip n v = do
         Nothing -> return False
         Just player -> do
             let (ips', prevVote) = V.vote ip n v ips
-            let player' = applyVote v prevVote player
-            let players' = R.setPlayer player' players
+            let thisVoteMod = applyVote v prevVote player
+            let players' = thisVoteMod players
             put $ AppState {playerStore = players', ipStore =  ips'}
             return True
 
 $(makeAcidic ''AppState [ 'newPlayer
-                        , 'setPlayer
                         , 'getPlayer
                         , 'allPlayers
                         , 'updateVote
