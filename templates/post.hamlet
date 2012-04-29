@@ -17,7 +17,7 @@
             <div .login>
                 <a href="">LOGIN / REGISTER
         <div .writesomething>
-            <h2>Write something
+            <h2>Write a reply
             <div>
                 <form>
                     <div .commentingname>NAME
@@ -69,6 +69,8 @@
                 <li .stat-red>
                     <div>266
                     <div>dislikes
+        <div .viewing>
+            You are now viewing all replies to a post by <b>scarra</b>.
         <div .commentwrapper>
             <div .commenttop>
                 <span .commentname>scarra
@@ -140,6 +142,19 @@
                     Does anyone else like these? What are these?!
             <div .replywrapper>
                 <div .commentreply>REPLY | 7 MORE REPLIES
+        <div .writesomething>
+            <h2>Write a reply
+            <div>
+                <form>
+                    <div .commentingname>NAME
+                    <input .commentinginput>
+                    <div .commentingimg>IMAGE URL
+                    <input .commentinginput>
+                    <div .commentingbubble>INTERESTING COMMENT
+                    <textarea .commentingtext>
+                    <div .postarea>
+                        <div .postbutton>SUBMIT
+                        <div .formatting>formatting help
 <div #footer>
     <div .footnote>
         Lorem ipsum dolor sit amet, consectetur adipisicing

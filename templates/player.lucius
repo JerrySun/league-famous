@@ -18,9 +18,11 @@
 
 .writesomething{
 	position:relative;
+    overflow:hidden;
 	background-image:url('@{StaticR nasus_png}');
 	background-position:top right;
 	background-repeat:no-repeat;
+    margin-bottom:20px;
 }
 
 .writesomething h2{
@@ -74,7 +76,7 @@
 }
 
 .commentingtext{
-	width:260px;
+	width:250px;
 	height:60px;
 	font-size:12px;
 	font-family:Helvetica,Arial;
@@ -210,3 +212,25 @@
 	margin-right:10px;
 }
 
+.loadmore{
+    display:block;
+    width:428px;
+    text-align:center;
+    font-size:12px;
+    font-weight:bold;
+    background-color:#dccc9e;
+    margin-bottom:20px;
+    border:1px solid #77684e;
+    padding:5px;
+}
+
+.viewing{
+    display:block;
+    width:418px;
+    text-align:center;
+    background-image:url('@{StaticR votebuttonbg_png}');
+    background-repeat:repeat-x;
+    margin-bottom:20px;
+    border:1px dotted #77684e;
+    padding:10px;
+}
