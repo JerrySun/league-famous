@@ -1,13 +1,15 @@
-/static          StaticR    Static getStatic
-/auth            AuthR      Auth   getAuth
+/static      StaticR    Static getStatic
+/auth        AuthR      Auth   getAuth
 
-/favicon.ico     FaviconR   GET
-/robots.txt      RobotsR    GET
+/favicon.ico FaviconR   GET
+/robots.txt  RobotsR    GET
 
-/                HomeR      GET
-/table           TableR     GET
-/preview         PreviewR   GET
+/            HomeR      GET
+/table       TableR     GET
+/preview     PreviewR   GET
 
-/vote            VoteR    POST
+/vote        VoteR      POST
 
-/newplayer/      NewPlayerR POST
+/newplayer   NewPlayerR POST
+
+/player      PlayerR    GET
