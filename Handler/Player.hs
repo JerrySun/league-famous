@@ -17,7 +17,6 @@ getPlayerR name  = do
     vote <- query' acid $ GetVote ip name
     defaultLayout $ do
         $(widgetFile "player")
-        toWidget $(luciusFile "templates/teemo.lucius")
 
 getPostR :: Int -> Handler RepHtml
 getPostR _ = do
@@ -26,4 +25,3 @@ getPostR _ = do
     defaultLayout $ do
         $(widgetFile "post")
         toWidget $(luciusFile "templates/player.lucius")
-        toWidget $(luciusFile "templates/teemo.lucius")
