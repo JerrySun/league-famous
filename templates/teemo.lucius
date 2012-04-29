@@ -120,7 +120,7 @@ li.menu-item a{
 	width:40px;
 	height:20px;
 	background-color:#ebdfbc;
-	background-image:url('votebuttonbg.png');
+	background-image:url('@{StaticR votebuttonbg_png}');
 	background-repeat:repeat-x;
 	border-top-left-radius:5px;
 	border-bottom-left-radius:5px;
@@ -138,7 +138,7 @@ li.menu-item a{
 	float:left;
 	height:20px;
 	width:20px;
-	background-image:url('listthumbs.png');
+	background-image:url('@{StaticR listthumbs_png}');
 }
 
 .votelike{
@@ -153,7 +153,7 @@ li.menu-item a{
 	right:0px;
 	width:20px;
 	background-color:#ebdfbc;
-	background-image:url('votebuttonbg.png');
+	background-image:url('@{StaticR votebuttonbg_png}');
 	background-repeat:repeat-x;
 	border-top-right-radius:5px;
 	border-bottom-right-radius:5px;
@@ -171,7 +171,7 @@ li.menu-item a{
 	position:relative;
 	height:20px;
 	width:20px;
-	background-image:url('listthumbs.png');
+	background-image:url('@{StaticR listthumbs_png}');
 	background-position:20px 0px;
 }
 
