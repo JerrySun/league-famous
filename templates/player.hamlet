@@ -2,7 +2,7 @@
     <div #menu>
         <ul>
             <li>
-                <a href="" .header>
+                <a href=@{HomeR} .header>
             <li .menu-item>
                 <a href="">BROWSE
             <li .menu-item>
