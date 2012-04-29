@@ -142,6 +142,10 @@ li.menu-item a{
 	background-image:url('@{StaticR listthumbs_png}');
 }
 
+.upvoted .votethumbsup{
+    background-position: 0 20px;
+}
+
 .votelike{
 	position:relative;
 	float:left;
@@ -174,6 +178,10 @@ li.menu-item a{
 	width:20px;
 	background-image:url('@{StaticR listthumbs_png}');
 	background-position:20px 0px;
+}
+
+.downvoted .votethumbsdown{
+    background-position: 20px 20px;
 }
 
 .votethumbsdownbg{
