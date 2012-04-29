@@ -6,6 +6,7 @@ module State
     , Vote (..)
     , Name
     , R.validName
+    , R.playerScore
     -- The master state
     , AppState
     , emptyState

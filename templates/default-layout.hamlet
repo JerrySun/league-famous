@@ -1,3 +1,18 @@
-$maybe msg <- mmsg
-    <div #message>#{msg}
-^{widget}
+<div #wrapper>
+    <div #menu>
+        <ul>
+            <li>
+                <a href=@{HomeR} .header>
+            <li .menu-item>
+                <a href="">BROWSE
+            <li .menu-item>
+                <a href="">FORUMS
+            <li .menu-item>
+                <a href="">BLOG
+            <li .menu-item>
+                <a href="">HELP / FAQ
+    ^{widget}
+<div #footer>
+    <div .footnote>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua.

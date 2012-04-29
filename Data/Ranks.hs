@@ -8,6 +8,7 @@ module Data.Ranks
     , getPlayer
     , allPlayers
     , validName
+    , playerScore
     , findRank
     , voteMod
     ) where

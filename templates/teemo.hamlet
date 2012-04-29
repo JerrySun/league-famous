@@ -1,55 +1,38 @@
-<div #wrapper>
-    <div #menu>
-        <ul>
+<div #right>
+    <div .contentheader>
+        <h2>WELCOME
+        <span .login>
+            <a href="">LOGIN / REGISTER
+    <div .howto>
+        <h2>How to use:
+        <br>1. Find a player using the search.
+        <br>2. Vote on every player once per day.
+        <br>3. Use the "Add Player" button at the bottom of the list to add more players.
+<div #preview .hidden>
+<div #center>
+    <div .contentheader>
+        <h1>RANKINGS
+        <ul .headerbuttons>
             <li>
-                <a href="" .header>
-            <li .menu-item>
-                <a href="">BROWSE
-            <li .menu-item>
-                <a href="">FORUMS
-            <li .menu-item>
-                <a href="">BLOG
-            <li .menu-item>
-                <a href="">HELP / FAQ
-    <div #right>
-        <div .contentheader>
-            <h2>WELCOME
-            <span .login>
-                <a href="">LOGIN / REGISTER
-        <div .howto>
-            <h2>How to use:
-            <br>1. Find a player using the search.
-            <br>2. Vote on every player once per day.
-            <br>3. Use the "Add Player" button at the bottom of the list to add more players.
-    <div #preview .hidden>
-    <div #center>
-        <div .contentheader>
-            <h1>RANKINGS
-            <ul .headerbuttons>
-                <li>
-                    <a href="" .globe>NORTH AMERICA
-        <div #filter>
-            <input type="text" .filter-input>
-            <span .pages>
-                Page 1 of 2370 #
-                <a href="">Next #
-                <a href="">Last
-        ^{playerTable}
-        <div #filterfooter>
-            <ul .filterbuttons>
-                <li>
-                    <a href="javascript:unhide('addplayerbottom');" .addbutton>ADD PLAYER
-                <li>
-                    <div #addplayerbottom .hidden>
-                        <a href="javascript:unhide('addplayerbottom');" .addplayerpopupbutton>
-                        <form .addplayer>
-                            <input type="text" .addplayer-input>
-            <div .pages>Page 1 of 2370
-                <a href="">Next
-                <a href="">Last
-        <div .clock>1 hour 3 minutes until reset.<br>
-            <span .clockinfo>After 11:59 PM PST, you will be able to vote on every player once again!
-<div #footer>
-    <div .footnote>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua.
+                <a href="" .globe>NORTH AMERICA
+    <div #filter>
+        <input type="text" .filter-input>
+        <span .pages>
+            Page 1 of 2370 #
+            <a href="">Next #
+            <a href="">Last
+    ^{playerTable}
+    <div #filterfooter>
+        <ul .filterbuttons>
+            <li>
+                <a href="javascript:unhide('addplayerbottom');" .addbutton>ADD PLAYER
+            <li>
+                <div #addplayerbottom .hidden>
+                    <a href="javascript:unhide('addplayerbottom');" .addplayerpopupbutton>
+                    <form .addplayer>
+                        <input type="text" .addplayer-input>
+        <div .pages>Page 1 of 2370
+            <a href="">Next
+            <a href="">Last
+    <div .clock>1 hour 3 minutes until reset.<br>
+        <span .clockinfo>After 11:59 PM PST, you will be able to vote on every player once again!

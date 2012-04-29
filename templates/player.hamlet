@@ -1,129 +1,130 @@
-<div #wrapper>
-    <div #menu>
-        <ul>
+<div #right>
+    <div .contentheader>
+        <h2>WELCOME
+        <div .login>
+            <a href="">LOGIN / REGISTER
+    <div .writesomething>
+        <h2>Write something
+        <div>
+            <form>
+                <div .commentingname>NAME
+                <input .commentinginput>
+                <div .commentingimg>IMAGE URL
+                <input .commentinginput>
+                <div .commentingbubble>INTERESTING COMMENT
+                <textarea .commentingtext>
+                <div .postarea>
+                    <div .postbutton>SUBMIT
+                    <div .formatting>formatting help
+<div #center>
+    <div .contentheader>
+        <h1>#{name}
+        $case vote
+            $of Neutral
+                <ul .votebuttons>
+                    <li .votethumbsupbg>
+                        <div .votethumbsup>
+                        <div .votelike>like
+                    <li .votethumbsdownbg>
+                        <div .votethumbsdown>
+            $of Up
+                <ul .votebuttons .upvoted>
+                    <li .votethumbsupbg>
+                        <div .votethumbsup>
+                        <div .votelike>like
+                    <li .votethumbsdownbg>
+                        <div .votethumbsdown>
+            $of Down
+                <ul .votebuttons .downvoted>
+                    <li .votethumbsupbg>
+                        <div .votethumbsup>
+                        <div .votelike>like
+                    <li .votethumbsdownbg>
+                        <div .votethumbsdown>
+        <ul #headerstats>
             <li>
-                <a href=@{HomeR} .header>
-            <li .menu-item>
-                <a href="">BROWSE
-            <li .menu-item>
-                <a href="">FORUMS
-            <li .menu-item>
-                <a href="">BLOG
-            <li .menu-item>
-                <a href="">HELP / FAQ
-    <div #right>
-        <div .contentheader>
-            <h2>WELCOME
-            <div .login>
-                <a href="">LOGIN / REGISTER
-        <div .writesomething>
-            <h2>Write something
+                <div>#{playerRank player}
+                <div>rank
+            <li>
+                <div>#{playerScore player}
+                <div>score
+            <li .stat-blue>
+                <div>#{playerUpvotes player}
+                <div>likes
+            <li .stat-red>
+                <div>#{playerDownvotes player}
+                <div>dislikes
+    <div .commentwrapper>
+        <div .commenttop>
+            <span .commentname>scarra
+            <span .commenttime>4/20/2012 @ 4:20 PM
+        <div .commentbody>
             <div>
-                <form>
-                    <div .commentingname>NAME
-                    <input .commentinginput>
-                    <div .commentingimg>IMAGE URL
-                    <input .commentinginput>
-                    <div .commentingbubble>INTERESTING COMMENT
-                    <textarea .commentingtext>
-                    <div .postarea>
-                        <div .postbutton>SUBMIT
-                        <div .formatting>formatting help
-    <div #center>
-        <div .contentheader>
-            <h1>#{name}
-            <ul .votebuttons>
-                <li .votethumbsupbg>
-                    <div .votethumbsup>
-                    <div .votelike>like
-                <li .votethumbsdownbg>
-                    <div .votethumbsdown>
-            <ul #headerstats>
-                <li>
-                    <div>1
-                    <div>rank
-                <li>
-                    <div>700
-                    <div>score
-                <li .stat-blue>
-                    <div>1000
-                    <div>likes
-                <li .stat-red>
-                    <div>266
-                    <div>dislikes
-        <div .commentwrapper>
-            <div .commenttop>
-                <span .commentname>scarra
-                <span .commenttime>4/20/2012 @ 4:20 PM
-            <div .commentbody>
-                <div>
-                    <img src=@{StaticR jellyfish_jpg} .topthumbnail>
-                    I feel like jellyfish are the best creatures in the
-                    \ universe. How about you guys? Sometimes they can poison
-                    \ you, but I find them to be hilarious overall.Jellyfish
-                    \ (also known as jellies or sea jellies or a stage of the
-                    \ life cycle of Medusozoa) are free-swimming members of the
-                    \ phylum Cnidaria. Medusa is another word for jellyfish, and
-                    \ refers to any free-swimming jellyfish life stages among
-                    \ animals in the phylum. Jellyfish have multiple morphologies
-                    \ that represent cnidarian classes including the Scyphozoa
-                    \ (over 200 species), Staurozoa (about 50 species), Cubozoa
-                    \ (about 20 species), and Hydrozoa (about 1000¿1500 species
-                    \ that make jellyfish and many more that do not).
-            <div .replywrapper>
-                <div .replytop>
-                    <span .replyname>HotShotGG
-                    <span .replytime>4/20/2012 @ 4:20 PM
-                <div .replybody>
-                    Dude, Jellyfishes are lame. I think they are about as dumb
-                    \ as potatos and can't even speak English.
-            <div .replywrapper>
-                <div .replytop>
-                    <span .replyname>Elementz
-                    <span .replytime>4/20/2012 @ 4:20 PM
-                <div .replybody>
-                    <img src=@{StaticR okapi_jpg} .replythumbnail>
-                    Dude, Jellyfishes are lame. I think they are about as dumb
-                    \ as potatos and can't even speak English.
-            <div .replywrapper>
-                <div .commentreply>REPLY | 7 MORE REPLIES
-        <div .commentwrapper>
-            <div .commenttop>
-                <span .commentname>scarra
-                <span .commenttime>4/20/2012 @ 4:20 PM
-            <div .commentbody>
-                <div>
-                    <img src=@{StaticR jellyfish_jpg} .topthumbnail>
-                    I feel like jellyfish are the best creatures in the
-                    \ universe. How about you guys? Sometimes they can poison
-                    \ you, but I find them to be hilarious overall.Jellyfish
-                    \ (also known as jellies or sea jellies or a stage of the
-                    \ life cycle of Medusozoa) are free-swimming members of the
-                    \ phylum Cnidaria. Medusa is another word for jellyfish, and
-                    \ refers to any free-swimming jellyfish life stages among
-                    \ animals in the phylum. Jellyfish have multiple morphologies
-                    \ that represent cnidarian classes including the Scyphozoa
-                    \ (over 200 species), Staurozoa (about 50 species), Cubozoa
-                    \ (about 20 species), and Hydrozoa (about 1000¿1500 species
-                    \ that make jellyfish and many more that do not).
-            <div .replywrapper>
-                <div .replytop>
-                    <span .replyname>HotShotGG
-                    <span .replytime>4/20/2012 @ 4:20 PM
-                <div .replybody>
-                    Dude, Jellyfishes are lame. I think they are about as dumb
-                    \ as potatos and can't even speak English.
-            <div .replywrapper>
-                <div .replytop>
-                    <span .replyname>Elementz
-                    <span .replytime>4/20/2012 @ 4:20 PM
-                <div .replybody>
-                    <img src=@{StaticR okapi_jpg} .replythumbnail>
-                    Does anyone else like these? What are these?!
-            <div .replywrapper>
-                <div .commentreply>REPLY | 7 MORE REPLIES
-        <div .loadmore>LOAD MORE
-<div #footer>
-    <div .footnote>
-        Lorem ipsum dolor sit amet, consectetur adipisicing
-        \ elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                <img src=@{StaticR jellyfish_jpg} .topthumbnail>
+                I feel like jellyfish are the best creatures in the
+                \ universe. How about you guys? Sometimes they can poison
+                \ you, but I find them to be hilarious overall.Jellyfish
+                \ (also known as jellies or sea jellies or a stage of the
+                \ life cycle of Medusozoa) are free-swimming members of the
+                \ phylum Cnidaria. Medusa is another word for jellyfish, and
+                \ refers to any free-swimming jellyfish life stages among
+                \ animals in the phylum. Jellyfish have multiple morphologies
+                \ that represent cnidarian classes including the Scyphozoa
+                \ (over 200 species), Staurozoa (about 50 species), Cubozoa
+                \ (about 20 species), and Hydrozoa (about 1000¿1500 species
+                \ that make jellyfish and many more that do not).
+        <div .replywrapper>
+            <div .replytop>
+                <span .replyname>HotShotGG
+                <span .replytime>4/20/2012 @ 4:20 PM
+            <div .replybody>
+                Dude, Jellyfishes are lame. I think they are about as dumb
+                \ as potatos and can't even speak English.
+        <div .replywrapper>
+            <div .replytop>
+                <span .replyname>Elementz
+                <span .replytime>4/20/2012 @ 4:20 PM
+            <div .replybody>
+                <img src=@{StaticR okapi_jpg} .replythumbnail>
+                Dude, Jellyfishes are lame. I think they are about as dumb
+                \ as potatos and can't even speak English.
+        <div .replywrapper>
+            <div .commentreply>
+                <a href=@{PostR 9001}>REPLY | 7 MORE REPLIES
+    <div .commentwrapper>
+        <div .commenttop>
+            <span .commentname>scarra
+            <span .commenttime>4/20/2012 @ 4:20 PM
+        <div .commentbody>
+            <div>
+                <img src=@{StaticR jellyfish_jpg} .topthumbnail>
+                I feel like jellyfish are the best creatures in the
+                \ universe. How about you guys? Sometimes they can poison
+                \ you, but I find them to be hilarious overall.Jellyfish
+                \ (also known as jellies or sea jellies or a stage of the
+                \ life cycle of Medusozoa) are free-swimming members of the
+                \ phylum Cnidaria. Medusa is another word for jellyfish, and
+                \ refers to any free-swimming jellyfish life stages among
+                \ animals in the phylum. Jellyfish have multiple morphologies
+                \ that represent cnidarian classes including the Scyphozoa
+                \ (over 200 species), Staurozoa (about 50 species), Cubozoa
+                \ (about 20 species), and Hydrozoa (about 1000¿1500 species
+                \ that make jellyfish and many more that do not).
+        <div .replywrapper>
+            <div .replytop>
+                <span .replyname>HotShotGG
+                <span .replytime>4/20/2012 @ 4:20 PM
+            <div .replybody>
+                Dude, Jellyfishes are lame. I think they are about as dumb
+                \ as potatos and can't even speak English.
+        <div .replywrapper>
+            <div .replytop>
+                <span .replyname>Elementz
+                <span .replytime>4/20/2012 @ 4:20 PM
+            <div .replybody>
+                <img src=@{StaticR okapi_jpg} .replythumbnail>
+                Does anyone else like these? What are these?!
+        <div .replywrapper>
+            <div .commentreply>
+                <a href=@{PostR 9001}>REPLY | 7 MORE REPLIES
+    <div .loadmore>LOAD MORE

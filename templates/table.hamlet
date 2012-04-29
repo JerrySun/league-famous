@@ -26,10 +26,10 @@
                                 <div .thumbdown>
                                 <div .thumbup>
                         $of Up
-                            <div .thumbs .upvoted data-name=#{playerName player}>
+                            <div .thumbs .upvoted>
                                 <div .thumbdown>
                                 <div .thumbup>
                         $of Down
-                            <div .thumbs .downvoted data-name=#{playerName player}>
+                            <div .thumbs .downvoted>
                                 <div .thumbdown>
                                 <div .thumbup>
