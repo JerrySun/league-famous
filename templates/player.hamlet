@@ -32,7 +32,8 @@
     <div #preview .hidden>
         <div #previewheader>
             <h3>Crs Crumbzz
-            <div><a href="javascript:unhide('preview');" .previewclose>
+            <div>
+                <a href="javascript:unhide('preview');" .previewclose>
             <ul #previewstats>
                 <li>
                     <div>1
@@ -74,7 +75,7 @@
                 <span .commenttime>4/20/2012 @ 4:20 PM
             <div .commentbody>
                 <div>
-                    <img src="jellyfish.jpg" .topthumbnail>
+                    <img src=@{StaticR jellyfish_jpg} .topthumbnail>
                     I feel like jellyfish are the best creatures in the
                     universe. How about you guys? Sometimes they can poison
                     you, but I find them to be hilarious overall.Jellyfish
@@ -99,7 +100,7 @@
                     <span .replyname>Elementz
                     <span .replytime>4/20/2012 @ 4:20 PM
                 <div .replybody>
-                    <img src="okapi.jpg" .replythumbnail>
+                    <img src=@{StaticR okapi_jpg} .replythumbnail>
                     Dude, Jellyfishes are lame. I think they are about as dumb
                     as potatos and can't even speak English.
             <div .replywrapper>
@@ -110,7 +111,7 @@
                 <span .commenttime>4/20/2012 @ 4:20 PM
             <div .commentbody>
                 <div>
-                    <img src="jellyfish.jpg" .topthumbnail>
+                    <img src=@{StaticR jellyfish_jpg} .topthumbnail>
                     I feel like jellyfish are the best creatures in the
                     universe. How about you guys? Sometimes they can poison
                     you, but I find them to be hilarious overall.Jellyfish
@@ -135,7 +136,7 @@
                     <span .replyname>Elementz
                     <span .replytime>4/20/2012 @ 4:20 PM
                 <div .replybody>
-                    <img src="okapi.jpg" .replythumbnail>
+                    <img src=@{StaticR okapi_jpg} .replythumbnail>
                     Does anyone else like these? What are these?!
             <div .replywrapper>
                 <div .commentreply>REPLY | 7 MORE REPLIES
