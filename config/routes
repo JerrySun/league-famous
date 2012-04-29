@@ -13,3 +13,5 @@
 /newplayer   NewPlayerR POST
 
 /player      PlayerR    GET
+
+/post        PostR    GET
