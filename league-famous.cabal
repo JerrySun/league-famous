@@ -107,7 +107,7 @@ executable         league-famous
                  , warp                          >= 1.2        && < 1.3
                  , yesod-test
                  , acid-state
-                 , containers
+                 , containers                    >= 0.4.2      && < 0.5
                  , safecopy
                  , mtl
                  , transformers
