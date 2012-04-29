@@ -16,6 +16,7 @@ getPlayerR name  = do
     ip <- requestIP
     vote <- query' acid $ GetVote ip name
     defaultLayout $ do
+        $(widgetFile "comments")
         $(widgetFile "player")
 
 getPostR :: Int -> Handler RepHtml
@@ -23,5 +24,5 @@ getPostR _ = do
     let player = Player "Seinfeld" 44 17 73
     let vote = Up
     defaultLayout $ do
+        $(widgetFile "comments")
         $(widgetFile "post")
-        toWidget $(luciusFile "templates/player.lucius")
