@@ -29,27 +29,9 @@
                     <div .postarea>
                         <div .postbutton>SUBMIT
                         <div .formatting>formatting help
-    <div #preview .hidden>
-        <div #previewheader>
-            <h3>Crs Crumbzz
-            <div>
-                <a href="javascript:unhide('preview');" .previewclose>
-            <ul #previewstats>
-                <li>
-                    <div>1
-                    <div>rank
-                <li>
-                    <div>700
-                    <div>score
-                <li .stat-blue>
-                    <div>1000
-                    <div>likes
-                <li .stat-red>
-                    <div>266
-                    <div>dislikes
     <div #center>
         <div .contentheader>
-            <h1>Crs Crumbzz
+            <h1>#{name}
             <ul .votebuttons>
                 <li .votethumbsupbg>
                     <div .votethumbsup>

@@ -1,7 +1,7 @@
 <div #preview .hidden>
     <div #previewheader>
         <h3>
-            <a .plain href=@{PlayerR}>#{playerName player}
+            <a .plain href=@{PlayerR $ playerName player}>#{playerName player}
         <div .previewclose>
         <ul #previewstats>
             <li>

@@ -12,6 +12,6 @@
 
 /newplayer   NewPlayerR POST
 
-/player      PlayerR    GET
+/player/#Text      PlayerR    GET
 
-/post        PostR    GET
+/post/#Int        PostR    GET
