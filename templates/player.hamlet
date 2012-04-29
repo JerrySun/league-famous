@@ -140,6 +140,7 @@
                     Does anyone else like these? What are these?!
             <div .replywrapper>
                 <div .commentreply>REPLY | 7 MORE REPLIES
+        <div .loadmore>LOAD MORE
 <div #footer>
     <div .footnote>
         Lorem ipsum dolor sit amet, consectetur adipisicing

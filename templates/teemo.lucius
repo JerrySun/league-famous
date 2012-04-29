@@ -94,10 +94,10 @@ li.menu-item a{
 
 .contentheader{
 	position:relative;
-	height:110px;
+	height:120px;
 	border-top: 1px solid #afa588;
 	border-bottom: 1px solid #afa588;
-	padding:30px 0px 20px 0px;
+	padding:20px 0px 20px 0px;
 	margin:0px 0px 20px 0px;
 }
 
@@ -197,7 +197,7 @@ h1{
 	font-size:30px;
 	font-weight:bold;
 	color:white;
-	margin-top:-15px;
+	margin-top:-5px;
 	margin-bottom:0px;
 }
 
@@ -206,7 +206,6 @@ h2{
 	font-size:20px;
 	font-weight:bold;
 	color:white;
-	margin-top:-10px;
 	margin-bottom:0px;
 }
 
