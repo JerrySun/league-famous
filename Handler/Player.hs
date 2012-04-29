@@ -7,5 +7,5 @@ import Text.Lucius (luciusFile)
 
 getPlayerR :: Handler RepHtml
 getPlayerR = defaultLayout $ do
-    toWidget $(luciusFile "templates/teemo.lucius")
     $(widgetFile "player")
+    toWidget $(luciusFile "templates/teemo.lucius")
