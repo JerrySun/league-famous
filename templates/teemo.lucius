@@ -98,7 +98,7 @@ li.menu-item a{
 	border-top: 1px solid #afa588;
 	border-bottom: 1px solid #afa588;
 	padding:30px 0px 20px 0px;
-	margin:0px 0px 30px 0px;
+	margin:0px 0px 20px 0px;
 }
 
 #center .contentheader{
@@ -107,6 +107,77 @@ li.menu-item a{
 	background-repeat: no-repeat;
 }
 
+.votebuttons{
+	position:relative;
+	width:91px;
+	list-style:none;
+	background-color:#0f0;
+	padding:0px;
+}
+
+.votethumbsupbg{
+	float:left;
+	width:40px;
+	height:20px;
+	background-color:#ebdfbc;
+	background-image:url('votebuttonbg.png');
+	background-repeat:repeat-x;
+	border-top-left-radius:5px;
+	border-bottom-left-radius:5px;
+	border:1px solid #a9a089;
+	padding:2px 6px 2px 8px;
+}
+
+.votethumbsupbg:hover{
+	border:1px solid #716a56;
+	z-index:2;
+}
+
+.votethumbsup{
+	position:relative;
+	float:left;
+	height:20px;
+	width:20px;
+	background-image:url('listthumbs.png');
+}
+
+.votelike{
+	position:relative;
+	float:left;
+	font-size:12px;
+	padding-top:2px;
+}
+
+.votethumbsdownbg{
+	position:absolute;
+	right:0px;
+	width:20px;
+	background-color:#ebdfbc;
+	background-image:url('votebuttonbg.png');
+	background-repeat:repeat-x;
+	border-top-right-radius:5px;
+	border-bottom-right-radius:5px;
+	border-top:1px solid #a9a089;
+	border-right:1px solid #a9a089;
+	border-bottom:1px solid #a9a089;
+	padding:2px 8px 2px 6px;
+}
+
+.votethumbsdownbg:hover{
+	border:1px solid #716a56;
+}
+
+.votethumbsdown{
+	position:relative;
+	height:20px;
+	width:20px;
+	background-image:url('listthumbs.png');
+	background-position:20px 0px;
+}
+
+.votethumbsdownbg{
+
+}
 .login{
 	position:absolute;
 	right:0;
@@ -138,8 +209,13 @@ h2{
 	margin-bottom:0px;
 }
 
+h4{
+	font-size:16px;
+}
+
 .headerbuttons{
-	margin-top:75px;
+	position:absolute;
+	bottom:10px;
 	list-style:none;
 	padding:0px;
 }
@@ -155,6 +231,16 @@ h2{
 	padding-top:4px;
 }
 
+.globe{
+	display:none;
+	display:block;
+	position:relative;
+	height:20px;
+	background-image:url('@{StaticR globe_png}');
+	background-repeat:no-repeat;
+	padding-left:24px;
+	margin-right:20px;
+}
 
 .filterbuttons{
 	position:relative;
@@ -176,7 +262,6 @@ h2{
 }
 
 .addbutton{
-	display:none;
 	display:block;
 	position:relative;
 	height:19px;
@@ -518,12 +603,24 @@ h3{
 	padding:0px;
 }
 
+.howto{
+	position:relative;
+	color:#8c805e;
+	font-size:14px;
+	font-weight:bold;
+}
+
+.howto h2{
+	color:#8c805e;
+}
+
 #footer{
 	position:relative;
+	background-color:#726b57;
 	width:100%;
 	bottom:0px;
-	border-top:1px solid #afa588;
-	color:#555;
+	border-top:2px solid #555;
+	color:#ddd;
 	font-size:12px;
 	margin:0px 0px 0px;
 	padding:0px;

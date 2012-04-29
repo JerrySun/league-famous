@@ -16,20 +16,18 @@
             <h2>WELCOME
             <span .login>
                 <a href="">LOGIN / REGISTER
-        <div>
-            <h2>NEW
+        <div .howto>
+            <h2>How to use:
+            <br>1. Find a player using the search.
+            <br>2. Vote on every player once per day.
+            <br>3. Use the "Add Player" button at the bottom of the list to add more players.
     <div #preview .hidden>
     <div #center>
         <div .contentheader>
             <h1>RANKINGS
             <ul .headerbuttons>
                 <li>
-                    <a href="javascript:unhide('addplayer');" .addbutton>ADD PLAYER
-                <li>
-                    <div #addplayer .hidden>
-                        <a href="javascript:unhide('addplayer');" .addplayerpopupbutton>
-                        <form .addplayer>
-                            <input type="text" .addplayer-input>
+                    <a href="" .globe>NORTH AMERICA
         <div #filter>
             <input type="text" .filter-input>
             <span .pages>

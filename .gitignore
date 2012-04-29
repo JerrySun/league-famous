@@ -4,3 +4,4 @@ static/tmp/
 state/
 utils/coffee_hack*
 coffee.exe
+cabal-dev/
