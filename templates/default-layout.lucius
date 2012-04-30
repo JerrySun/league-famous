@@ -7,6 +7,9 @@ body{
 	font-family:Arial,"Lucida Grande", sans-serif;
 	font-size:12px;
 	background-color:#cec2a0;
+    background-image:url('@{StaticR biggradient_png}');
+    background-repeat:no-repeat;
+    background-position: top;
 	margin:0px;
 	height:100%;
 }
@@ -285,13 +288,13 @@ h3{
 
 .howto{
 	position:relative;
-	color:#8c805e;
+	color:#a19574;
 	font-size:14px;
 	font-weight:bold;
 }
 
 .howto h2{
-	color:#886;
+	color:#a19574;
 }
 
 #footer{
