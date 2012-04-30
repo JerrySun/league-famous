@@ -56,9 +56,9 @@
             <a>10 REPLIES
     <div #quickreply>
         <form>
-            <input #pinput .pinputname>
-            <input #pinput .pinputimage>
-            <textarea #ptext>
+            <input placeholder="Anonymous" #pinput .pinputname>
+            <input placeholder="Image URL" #pinput .pinputimage>
+            <textarea placeholder="Write a comment..." #ptext>
             <div #ppostarea>
-                <div #ppostbutton>SUBMIT
+                <button #ppostbutton>SUBMIT
                 <a href="" #previewfooter>VIEW ALL COMMENTS

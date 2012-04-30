@@ -7,6 +7,9 @@ body{
 	font-family:Arial,"Lucida Grande", sans-serif;
 	font-size:12px;
 	background-color:#cec2a0;
+    background-image:url('@{StaticR biggradient_png}');
+    background-repeat:no-repeat;
+    background-position: top;
 	margin:0px;
 	height:100%;
 }
@@ -53,7 +56,7 @@ li.menu-item a{
 	display:block;
 	text-decoration: none;
 	padding-top:5px;
-	padding-bottom: 10px
+	padding-bottom: 15px
 }
 
 .header{
@@ -215,7 +218,7 @@ li.menu-item a{
 
 h1{
 	display:block;
-	font-size:30px;
+	font-size:34px;
 	font-weight:bold;
 	color:white;
 	margin-top:-5px;
@@ -285,13 +288,13 @@ h3{
 
 .howto{
 	position:relative;
-	color:#8c805e;
+	color:#a19574;
 	font-size:14px;
 	font-weight:bold;
 }
 
 .howto h2{
-	color:#8c805e;
+	color:#a19574;
 }
 
 #footer{
