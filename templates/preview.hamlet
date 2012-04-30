@@ -54,5 +54,11 @@
             Dude, I have the same pic on my hard drive. That is so weird.
         <div .pcommentreply>
             <a>10 REPLIES
-    <div #previewfooter>
-        <a href="">VIEW ALL COMMENTS
+    <div #quickreply>
+        <form>
+            <input #pinput .pinputname>
+            <input #pinput .pinputimage>
+            <textarea #ptext>
+            <div #ppostarea>
+                <div #ppostbutton>SUBMIT
+                <a href="" #previewfooter>VIEW ALL COMMENTS
