@@ -36,10 +36,14 @@ import qualified Data.VoteHistory as V
 import Data.Ranks (PlayerStore, Player (..), Name)
 import qualified Data.Ranks as R
 
+import Data.Posts (Post (..), PostStore)
+import qualified Data.Posts as P
+
 ----
 ----
 data AppState = AppState { playerStore :: PlayerStore
-                         , ipStore :: IPStore } deriving (Typeable)
+                         , ipStore :: IPStore
+                         , postStore :: PostStore } deriving (Typeable)
 
 $(deriveSafeCopy 0 'base ''AppState)
 
@@ -48,6 +52,9 @@ setPlayerStore ps  state = state { playerStore = ps}
 
 setIPStore ::  IPStore -> AppState -> AppState
 setIPStore     ips state = state { ipStore = ips}
+
+setPostStore ::  PostStore -> AppState -> AppState
+setPostStore  posts state = state { postStore = posts }
 
 queryer ::  (AppState -> s) -> (s -> b) -> Query AppState b
 queryer getter = flip fmap $ fmap getter ask
@@ -63,7 +70,7 @@ updater' :: (AppState -> s) -> (s -> AppState -> AppState) -> (s -> s) -> Update
 updater' getter setter f = uncurry setter . ((f . getter) &&& id) <$> get >>= put
 
 emptyState ::  AppState
-emptyState = AppState R.empty V.empty
+emptyState = AppState R.empty V.empty P.empty
 
 ----
 
@@ -139,7 +146,7 @@ processVote ip n v = do
             let (ips', prevVote) = V.vote ip n v ips
             let thisVoteMod = applyVote v prevVote player
             let players' = thisVoteMod players
-            put AppState {playerStore = players', ipStore =  ips'}
+            put state {playerStore = players', ipStore =  ips'}
             return True
 
 $(makeAcidic ''AppState [ 'newPlayer
