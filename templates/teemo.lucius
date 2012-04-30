@@ -19,14 +19,15 @@
 }
 
 .globe{
-	display:none;
 	display:block;
 	position:relative;
 	height:20px;
 	background-image:url('@{StaticR globe_png}');
 	background-repeat:no-repeat;
 	padding-left:24px;
+    padding-top:2px;
 	margin-right:20px;
+    font-size:10px;
 }
 
 .filterbuttons{
@@ -403,4 +404,9 @@
 .pthumbnail{
     float:left;
     margin-right:5px;
+}
+
+#quickreply{
+    border-top:1px solid #eae1cb;
+    border-bottom:1px solid #c1b89f;
 }
