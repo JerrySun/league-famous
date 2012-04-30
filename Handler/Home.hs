@@ -1,14 +1,11 @@
 module Handler.Home where
 
 import Import
-import Data.Function (on)
-import Data.List (sortBy)
 import Data.List (elemIndex)
-import Data.Maybe (fromJust)
+import Data.Maybe (fromMaybe, fromJust)
 import Text.Hamlet (hamletFile)
-import Data.Text (pack, unpack) 
+import Data.Text (unpack) 
 import Safe (readMay)
-import Data.Maybe (fromMaybe)
 
 playerScore ::  Player -> Int
 playerScore p = playerUpvotes p - playerDownvotes p 
@@ -45,8 +42,8 @@ makeTable page n mbSearch = do
                     Just s -> query' acid $ SearchPlayer s
     let players = take n . drop ((page - 1) * n) $ allPlayers
     ip <- requestIP
-    votes <- mapM (\x -> query' acid (GetVote ip (playerName x))) players
-    let voteOf p = votes !! (fromJust $ elemIndex p players)
+    votes <- mapM (query' acid . GetVote ip . playerName) players
+    let voteOf p = votes !! fromJust (elemIndex p players)
     return $(hamletFile "templates/table.hamlet")
 
 getTableR :: Handler RepHtml

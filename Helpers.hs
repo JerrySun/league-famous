@@ -8,21 +8,25 @@ module Helpers
 import Prelude
 import Network.Wai (remoteHost, queryString)
 import Network.Socket (SockAddr(..))
-import Yesod.Handler (notFound, lift, getRequest, GHandler, invalidArgs, waiRequest)
+import Yesod.Handler (notFound, getRequest, GHandler, invalidArgs, waiRequest)
 import Yesod.Request (reqWaiRequest)
 import Data.Text (pack)
 import State (IP(..))
 import qualified Data.Aeson as J
 import Data.Attoparsec.ByteString (parse, maybeResult)
 
+maybe404 ::  GHandler sub master (Maybe b) -> GHandler sub master b
 maybe404 action = action >>= maybe notFound return
 
+requestIP ::  GHandler s m IP
 requestIP = fmap (sockIP . remoteHost . reqWaiRequest) getRequest
             where sockIP (SockAddrInet _ a) = IPv4 a
                   sockIP (SockAddrInet6 _ _ a _) = IPv6 a
                   sockIP _ = IPv4 0 -- Kind of just don't handle unix sockets
 
 
+-- FIXME this should parse the raw string, since not everything is actually
+-- getting put in that first key of the parsed Query
 parseJsonParam :: J.FromJSON a => GHandler sub master (J.Result a)
 parseJsonParam = do
     params <- fmap queryString waiRequest
@@ -34,8 +38,6 @@ parseJsonParam = do
         _ -> invalidArgs []
     
 
--- | Same as 'parseJsonBody', but return an invalid args response on a parse
--- error.
 parseJsonParam_ :: J.FromJSON a => GHandler sub master a
 parseJsonParam_ = do
     ra <- parseJsonParam

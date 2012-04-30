@@ -22,15 +22,12 @@ module State
 
 import Data.Acid
 import Data.SafeCopy
-import qualified Data.Map as M
 import Data.Typeable
-import Control.Monad.State (get, gets, put)
-import Control.Monad.Reader (ask, asks)
+import Control.Monad.State (get, put)
+import Control.Monad.Reader (ask)
 import Data.Text (Text)
 import Prelude
-import Data.Word (Word32)
-import Data.Maybe (fromMaybe)
-import Control.Applicative ((<$>), (<*>))
+import Control.Applicative ((<$>))
 import Control.Arrow ((&&&))
 
 import Data.VoteHistory (IPStore, IP, Vote(..))
@@ -46,11 +43,14 @@ data AppState = AppState { playerStore :: PlayerStore
 
 $(deriveSafeCopy 0 'base ''AppState)
 
+setPlayerStore ::  PlayerStore -> AppState -> AppState
 setPlayerStore ps  state = state { playerStore = ps}
+
+setIPStore ::  IPStore -> AppState -> AppState
 setIPStore     ips state = state { ipStore = ips}
 
 queryer ::  (AppState -> s) -> (s -> b) -> Query AppState b
-queryer getter = (flip fmap) (fmap getter ask)
+queryer getter = flip fmap $ fmap getter ask
 
 updater :: (AppState -> s) -> (s -> AppState -> AppState) -> (s -> (s, b)) -> Update AppState b
 updater getter setter f = do
@@ -67,21 +67,28 @@ emptyState = AppState R.empty V.empty
 
 ----
 
+playerUpdater :: (PlayerStore -> (PlayerStore, b)) -> Update AppState b
 playerUpdater = updater playerStore setPlayerStore
+
+playerUpdater' :: (PlayerStore -> PlayerStore) -> Update AppState ()
 playerUpdater' = updater' playerStore setPlayerStore
+
+playerQueryer ::  (PlayerStore -> b) -> Query AppState b
 playerQueryer = queryer playerStore
 
 ----
 
+newPlayer ::  Name -> Update AppState ()
 newPlayer name = playerUpdater' $ R.newPlayer name
 
 getPlayer :: Name -> Query AppState (Maybe Player)
 getPlayer n = playerQueryer $ R.getPlayer n
 
 allPlayers :: Query AppState [Player]
-allPlayers = playerQueryer $ R.allPlayers
+allPlayers = playerQueryer R.allPlayers
 
-playerCount = playerQueryer $ R.playerCount
+playerCount ::  Query AppState Int
+playerCount = playerQueryer R.playerCount
 
 searchPlayer :: Text -> Query AppState [Player]
 searchPlayer name = playerQueryer $ R.searchPlayer name
@@ -107,6 +114,7 @@ getVote ip name = ipQueryer $ V.getVote ip name
 ----------------
 ----------------
 
+applyVote ::  Vote -> Vote -> Player -> PlayerStore -> PlayerStore
 applyVote new old p =
     f new old
     where f Up      Up      = R.voteMod p 0  0
@@ -131,7 +139,7 @@ processVote ip n v = do
             let (ips', prevVote) = V.vote ip n v ips
             let thisVoteMod = applyVote v prevVote player
             let players' = thisVoteMod players
-            put $ AppState {playerStore = players', ipStore =  ips'}
+            put AppState {playerStore = players', ipStore =  ips'}
             return True
 
 $(makeAcidic ''AppState [ 'newPlayer

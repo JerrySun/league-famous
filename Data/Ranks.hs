@@ -38,6 +38,7 @@ data Player = Player { playerName :: Name
 newtype Name = Name { unName :: Text }
 
 
+normalize ::  Text -> Text
 normalize = T.toLower . T.filter (not . C.isSpace)
 
 instance Eq Name where
@@ -68,7 +69,7 @@ instance PathPiece Name where
 $(deriveSafeCopy 0 'base ''Name)
 
 validName :: Text -> Bool
-validName n = conditions n
+validName = conditions
               where conditions = (<= 16) . T.length
                                  &&* (>= 3) . T.length . T.filter (/= ' ')
                                  &&* T.all (C.isAlphaNum ||* (== ' '))
@@ -96,25 +97,25 @@ empty = PlayerStore M.empty I.empty
 voteMod :: Player -> Int -> Int -> PlayerStore -> PlayerStore
 voteMod _ 0 0 store                      = store
 voteMod p u d store@(PlayerStore names scores) = fromMaybe store newStore
-    where pscore' = playerScore p + u - d
-          newStore = fmap (\x -> PlayerStore (fst x) (snd x)) result
+    where newStore = fmap (uncurry PlayerStore) result
           result = do
               scores' <- do nameMap <- I.lookup (playerScore p) scores
                             let nameMap' = M.delete (playerName p) nameMap
                             return $ if M.null nameMap'
                                then I.delete (playerScore p) scores
                                else I.insert (playerScore p) nameMap' scores
-              let rank = findRank (playerScore p) scores'
-                  p' = (\(Player n up dn _ ) -> Player n (up + u) (dn + d) (-1)) p
+              let p' = (\(Player n up dn _ ) -> Player n (up + u) (dn + d) (-1)) p
                   scores'' = addScore p' scores'
                   names' = M.insert (playerName p') p' names
               return (names', scores'')
 
 -- rank of a score not in the thing
+findRank ::  I.Key -> I.IntMap (M.Map k a) -> Int
 findRank score scores = 1 + I.foldr' sumSizes 0 higherRanked
-                        where higherRanked = snd $ I.split (score) scores
+                        where higherRanked = snd $ I.split score scores
                               sumSizes nameMap total = M.size nameMap + total
 
+addScore :: Player-> I.IntMap (M.Map Name Player) -> I.IntMap (M.Map Name Player)
 addScore p scores = case I.lookup (playerScore p) scores of
                         Nothing -> I.insert (playerScore p) (M.singleton (playerName p) p) scores
                         Just nameMap -> I.insert (playerScore p) (M.insert (playerName p) p nameMap) scores
@@ -122,25 +123,32 @@ addScore p scores = case I.lookup (playerScore p) scores of
 
 
 
-newPlayer name ranks = case validName (unName name) of 
-                           True -> case M.lookup name (unwrapMap ranks) of
-                                       Nothing -> ranks'
-                                       Just _ -> ranks
-                           False -> ranks
+newPlayer ::  Name -> PlayerStore -> PlayerStore
+newPlayer name ranks = if validName (unName name) then 
+                           case M.lookup name (unwrapMap ranks) of
+                               Nothing -> ranks'
+                               Just _ -> ranks
+                       else ranks
                        where ranks' = PlayerStore names' scores'
                              p = Player name 0 0 (-1)
                              names' = M.insert (playerName p) p $ unwrapMap ranks
                              scores' = addScore p $ rankMap ranks
                              
+getPlayer ::  Name -> PlayerStore -> Maybe Player
 getPlayer n ranks = do
     player <- M.lookup n . unwrapMap $ ranks
     let pRank = findRank (playerScore player) (rankMap ranks)
     return $ player {playerRank = pRank}
 
+refreshRank ::  I.IntMap (M.Map k a) -> Player -> Player
 refreshRank scores p = let pRank = findRank (playerScore p) scores
                        in p {playerRank = pRank}
 
+allPlayers ::  PlayerStore -> [Player]
 allPlayers ranks = concatMap (map (refreshRank (rankMap ranks) . snd) . M.toAscList . snd) $ reverse $ I.toAscList (rankMap ranks)
 
+searchPlayer ::  Text -> PlayerStore -> [Player]
 searchPlayer x ranks = filter (T.isInfixOf (normalize x) . normalize . unName . playerName) $ allPlayers ranks
+
+playerCount ::  PlayerStore -> Int
 playerCount = M.size . unwrapMap

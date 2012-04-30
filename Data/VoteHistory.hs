@@ -49,4 +49,5 @@ vote ip n v (IPStore s) =
         Just votemap -> ( IPStore $ M.insert ip (M.insert n v votemap) s
                         , fromMaybe Neutral (M.lookup n votemap))
 
+getVote :: IP -> Name -> IPStore -> Vote
 getVote ip name (IPStore s) = fromMaybe Neutral $ M.lookup ip s >>= M.lookup name

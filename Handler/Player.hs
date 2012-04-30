@@ -4,8 +4,6 @@ module Handler.Player
     ) where
 
 import Import
-import Text.Lucius (luciusFile)
-import Data.Maybe (fromMaybe)
 
 getPlayerR :: Name -> Handler RepHtml
 getPlayerR name  = do
@@ -42,4 +40,5 @@ getPostR _ = do
         $(widgetFile "comments")
         $(widgetFile "post")
 
+jellies ::  Text
 jellies = "I feel like jellyfish are the best creatures in the universe. How about you guys? Sometimes they can poison you, but I find them to be hilarious overall.Jellyfish (also known as jellies or sea jellies or a stage of the life cycle of Medusozoa) are free-swimming members of the phylum Cnidaria. Medusa is another word for jellyfish, and refers to any free-swimming jellyfish life stages among animals in the phylum. Jellyfish have multiple morphologies that represent cnidarian classes including the Scyphozoa (over 200 species), Staurozoa (about 50 species), Cubozoa (about 20 species), and Hydrozoa (about 1000¿1500 species that make jellyfish and many more that do not)."
