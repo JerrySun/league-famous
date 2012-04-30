@@ -16,6 +16,7 @@ module State
     , ProcessVote (..)
     , NewPlayer (..)
     , GetPlayer (..)
+    , PlayerCount (..)
     ) where
 
 import Data.Acid
@@ -79,6 +80,8 @@ getPlayer n = playerQueryer $ R.getPlayer n
 allPlayers :: Query AppState [Player]
 allPlayers = playerQueryer $ R.allPlayers
 
+playerCount = playerQueryer $ R.playerCount
+
 ----------------
 ----------------
 
@@ -132,4 +135,6 @@ $(makeAcidic ''AppState [ 'newPlayer
                         , 'allPlayers
                         , 'updateVote
                         , 'getVote
-                        , 'processVote])
+                        , 'processVote
+                        , 'playerCount
+                        ])

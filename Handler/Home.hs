@@ -6,7 +6,8 @@ import Data.List (sortBy)
 import Data.List (elemIndex)
 import Data.Maybe (fromJust)
 import Text.Hamlet (hamletFile)
-import Data.Text (pack) 
+import Data.Text (pack, unpack) 
+import Safe (readMay)
 
 playerScore ::  Player -> Int
 playerScore p = playerUpvotes p - playerDownvotes p 
@@ -21,20 +22,25 @@ percent p = f u d
                 
 
 getHomeR :: Handler RepHtml
-getHomeR = do
-    playerTable <- makeTable
-    let pageNum = 1 :: Int
-    let maxPageNum = 200 :: Int
+getHomeR = getHomePageR 1
+
+tablePage n = makeTable (20 * (n - 1)) 20
+
+getHomePageR :: Int -> Handler RepHtml
+getHomePageR pn = do
+    acid <- getAcid
+    maxPageNum <- (+ 1) . (`div` 20) <$> query' acid PlayerCount
+    let pageNum = min (abs pn) maxPageNum
+    playerTable <- tablePage pageNum
     let untilReset = "1 hour 3 minutes" :: Text
     urlRenderParams <- getUrlRenderParams
-    let pageRoute n = urlRenderParams HomeR [("page", pack . show $ n)]
+    let pageRoute n = urlRenderParams (HomePageR n) []
     defaultLayout $ setTitle "HELLO TEEMO" >> $(widgetFile "teemo") 
 
-
-makeTable :: Handler (HtmlUrl (Route App))
-makeTable = do
+makeTable :: Int -> Int -> Handler (HtmlUrl (Route App))
+makeTable first n = do
     acid <- getAcid
-    players <- take 25 <$> query' acid AllPlayers
+    players <- take n . drop (max 0 (first - 1)) <$> query' acid AllPlayers
     ip <- requestIP
     votes <- mapM (\x -> query' acid (GetVote ip (playerName x))) players
     let voteOf p = votes !! (fromJust $ elemIndex p players)
@@ -42,7 +48,9 @@ makeTable = do
 
 getTableR :: Handler RepHtml
 getTableR = do
-    table <- makeTable
+    params <- reqGetParams <$> getRequest
+    pageNum <- maybe404 . return $ lookup "page" params >>= readMay . unpack
+    table <- tablePage pageNum
     hamletToRepHtml table
 
 getPreviewR :: Handler RepHtml

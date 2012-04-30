@@ -63,9 +63,10 @@ attachAdd = ->
     $("form.addplayer").on "submit", (event) ->
         event.preventDefault()
         name = $(this).children("input").val()
-        jsonName = JSON.stringify [name]
-        $.post "/newplayer", jsonName, reloadTable
-        $("#addplayerbottom").fadeOut()
+        if (name.length >= 3 && name.length <= 16)
+            jsonName = JSON.stringify [name]
+            $.post "/newplayer", jsonName, reloadTable
+            $("#addplayerbottom").fadeOut()
 
 $(document).ready ->
     attachRow()

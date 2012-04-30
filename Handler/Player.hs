@@ -7,8 +7,6 @@ import Import
 import Text.Lucius (luciusFile)
 import Data.Maybe (fromMaybe)
 
-maybe404 action = action >>= maybe notFound return
-
 getPlayerR :: Name -> Handler RepHtml
 getPlayerR name  = do
     acid <- getAcid

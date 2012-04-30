@@ -11,6 +11,7 @@ module Data.Ranks
     , playerScore
     , findRank
     , voteMod
+    , playerCount
     ) where
 
 import Prelude
@@ -34,6 +35,7 @@ type Name = Text
 validName :: Text -> Bool
 validName n = conditions n
               where conditions = (<= 16) . T.length
+                                 &&* (>= 3) . T.length
                                  &&* T.all C.isAlphaNum
 
 playerScore ::  Player -> Int
@@ -106,3 +108,4 @@ refreshRank scores p = let pRank = findRank (playerScore p) scores
 
 allPlayers ranks = concatMap (map (refreshRank (rankMap ranks) . snd) . M.toAscList . snd) $ reverse $ I.toAscList (rankMap ranks)
 
+playerCount = M.size . unwrapMap

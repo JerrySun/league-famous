@@ -117,6 +117,7 @@ executable         league-famous
                  , network
                  , aeson
                  , attoparsec
+                 , safe
 
 test-suite integration-tests
     type: exitcode-stdio-1.0
