@@ -110,5 +110,6 @@ refreshRank scores p = let pRank = findRank (playerScore p) scores
 
 allPlayers ranks = concatMap (map (refreshRank (rankMap ranks) . snd) . M.toAscList . snd) $ reverse $ I.toAscList (rankMap ranks)
 
-searchPlayer x ranks = filter (T.isInfixOf x . playerName) $ allPlayers ranks
+searchPlayer x ranks = filter (T.isInfixOf (normalize x) . normalize . playerName) $ allPlayers ranks
+                       where normalize = T.toLower . T.filter (not . C.isSpace)
 playerCount = M.size . unwrapMap
