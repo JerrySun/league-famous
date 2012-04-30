@@ -1,3 +1,8 @@
+state = { pageNum : %{show pageNum}
+        , origPage : %{show pageNum}
+        , currentSearch : null
+        }
+
 partial = (func, a...) ->
   (b...) -> func a..., b...
 
@@ -6,14 +11,26 @@ partial = (func, a...) ->
     if item
         item.className = if (item.className == 'hidden') then 'unhidden' else 'hidden'
 
-reloadTable = -> $.ajax { url: "/table"
-                        , success: (x) -> $("#players").replaceWith x; attachRow() }
+reloadTable = ->
+    searchTerm = state.currentSearch
+    params = if searchTerm == null
+                 {page: state.pageNum}
+             else
+                 {search: searchTerm}
+    $.ajax { url: "/table"
+           , data: params
+           , success: (x) -> $("#players").replaceWith x; attachRow() }
 
 vote = (dir, name, callback) -> $.post "/vote", JSON.stringify({name:name,vote:dir}), reloadTable
 downvote = partial vote, "down"
 upvote   = partial vote, "up"
 novote   = partial vote, "neutral"
 
+attachSearch = ->
+    $("#searchinput").on "keyup", ->
+        state.pageNum = 1
+        state.currentSearch = $(this).val()
+        reloadTable()
 
 replacePreview = (x) ->
     $("#preview").replaceWith x
@@ -71,3 +88,4 @@ attachAdd = ->
 $(document).ready ->
     attachRow()
     attachAdd()
+    attachSearch()

@@ -12,6 +12,7 @@ module Data.Ranks
     , findRank
     , voteMod
     , playerCount
+    , searchPlayer
     ) where
 
 import Prelude
@@ -102,10 +103,12 @@ getPlayer n ranks = do
     let pRank = findRank (playerScore player) (rankMap ranks)
     return $ player {playerRank = pRank}
 
+--searchPlayer x ranks = allPlayers $ ranks { unwrapMap = M.filterWithKey (\k _ -> x `T.isInfixOf` k) (unwrapMap ranks) }
 
 refreshRank scores p = let pRank = findRank (playerScore p) scores
                        in p {playerRank = pRank}
 
 allPlayers ranks = concatMap (map (refreshRank (rankMap ranks) . snd) . M.toAscList . snd) $ reverse $ I.toAscList (rankMap ranks)
 
+searchPlayer x ranks = filter (T.isInfixOf x . playerName) $ allPlayers ranks
 playerCount = M.size . unwrapMap
