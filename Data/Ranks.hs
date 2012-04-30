@@ -86,7 +86,8 @@ infixr 3 ||*
 (||*) g h x = g x || h x
 
 data PlayerStore = PlayerStore { unwrapMap :: M.Map Name Player
-                               , rankMap :: I.IntMap (M.Map Name Player) } deriving (Typeable)
+                               , rankMap :: I.IntMap (M.Map Name Player) }
+                               deriving (Typeable)
 
 $(deriveSafeCopy 0 'base ''Player)
 $(deriveSafeCopy 0 'base ''PlayerStore)
@@ -115,10 +116,12 @@ findRank score scores = 1 + I.foldr' sumSizes 0 higherRanked
                         where higherRanked = snd $ I.split score scores
                               sumSizes nameMap total = M.size nameMap + total
 
-addScore :: Player-> I.IntMap (M.Map Name Player) -> I.IntMap (M.Map Name Player)
-addScore p scores = case I.lookup (playerScore p) scores of
-                        Nothing -> I.insert (playerScore p) (M.singleton (playerName p) p) scores
-                        Just nameMap -> I.insert (playerScore p) (M.insert (playerName p) p nameMap) scores
+addScore :: Player-> I.IntMap (M.Map Name Player)
+            -> I.IntMap (M.Map Name Player)
+addScore p scores = I.insert (playerScore p) nameMap scores
+                    where nameMap = case I.lookup (playerScore p) scores of
+                                        Nothing -> M.singleton (playerName p) p
+                                        Just nm -> M.insert (playerName p) p nm
 
 
 
@@ -145,10 +148,15 @@ refreshRank scores p = let pRank = findRank (playerScore p) scores
                        in p {playerRank = pRank}
 
 allPlayers ::  PlayerStore -> [Player]
-allPlayers ranks = concatMap (map (refreshRank (rankMap ranks) . snd) . M.toAscList . snd) $ reverse $ I.toAscList (rankMap ranks)
+allPlayers ranks = concatMap extractPlayer sortedResults
+                   where extractPlayer = map (refreshRank (rankMap ranks) . snd)
+                                         . M.toAscList . snd
+                         sortedResults = reverse . I.toAscList . rankMap $ ranks
 
 searchPlayer ::  Text -> PlayerStore -> [Player]
-searchPlayer x ranks = filter (T.isInfixOf (normalize x) . normalize . unName . playerName) $ allPlayers ranks
+searchPlayer x ranks = filter match $ allPlayers ranks
+                       where match = T.isInfixOf (normalize x) . normalize
+                                     . unName . playerName
 
 playerCount ::  PlayerStore -> Int
 playerCount = M.size . unwrapMap
