@@ -16,3 +16,43 @@
             <li .stat-red>
                 <div>#{playerDownvotes player}
                 <div>dislikes
+    <div .pcommentwrapper>
+        <div .pcommenttop>
+            <span .pcommentname>scarra
+            <span .pcommenttime>4/20/2012 @ 4:20PM
+        <div .pcommentbody>
+            <div>
+            <img src=@{StaticR jellyfishsmall_jpg} .pthumbnail>
+            I just think jellyfish are very nice creatures. They can poison you, but it's not like they mean it. Just sayin'.
+        <div .pcommentreply>
+            <a>10 REPLIES
+    <div .pcommentwrapper>
+        <div .pcommenttop>
+            <span .pcommentname>HotShotGG
+            <span .pcommenttime>4/20/2012 @ 4:20PM
+        <div .pcommentbody>
+            <div>
+            The only reason you like jellyfish is because they have no spine just like you.
+        <div .pcommentreply>
+            <a>9 REPLIES
+    <div .pcommentwrapper>
+        <div .pcommenttop>
+            <span .pcommentname>Elementz
+            <span .pcommenttime>4/20/2012 @ 4:20PM
+        <div .pcommentbody>
+            <div>
+            Wow pwnd.
+        <div .pcommentreply>
+            <a>10 REPLIES
+    <div .pcommentwrapper>
+        <div .pcommenttop>
+            <span .pcommentname>scarra
+            <span .pcommenttime>4/20/2012 @ 4:20PM
+        <div .pcommentbody>
+            <div>
+            <img src=@{StaticR jellyfishsmall_jpg} .pthumbnail>
+            Dude, I have the same pic on my hard drive. That is so weird.
+        <div .pcommentreply>
+            <a>10 REPLIES
+    <div #previewfooter>
+        <a href="">VIEW ALL COMMENTS

@@ -4,18 +4,6 @@
         <div .login>
             <a href="">LOGIN / REGISTER
     <div .writesomething>
-        <h2>Write a reply
-        <div>
-            <form>
-                <div .commentingname>NAME
-                <input .commentinginput>
-                <div .commentingimg>IMAGE URL
-                <input .commentinginput>
-                <div .commentingbubble>INTERESTING COMMENT
-                <textarea .commentingtext>
-                <div .postarea>
-                    <div .postbutton>SUBMIT
-                    <div .formatting>formatting help
 <div #preview .hidden>
 <div #center>
     <div .contentheader>
