@@ -107,6 +107,99 @@ li.menu-item a{
 	background-repeat: no-repeat;
 }
 
+.votebuttons{
+	position:relative;
+	width:91px;
+	list-style:none;
+	background-color:#0f0;
+	padding:0px;
+    margin:0px;
+}
+
+.votethumbsupbg{
+	float:left;
+	width:40px;
+	height:20px;
+	background-color:#ebdfbc;
+	background-image:url('@{StaticR votebuttonbg_png}');
+	background-repeat:repeat-x;
+	border-top-left-radius:5px;
+	border-bottom-left-radius:5px;
+	border:1px solid #a9a089;
+	padding:2px 6px 2px 8px;
+}
+
+.votethumbsupbg:hover{
+	background-color:#f0e6c8;
+	border:1px solid #716a56;
+	z-index:2;
+}
+
+.votethumbsupbg:active{
+    -moz-box-shadow: inset 3px 5px #888;
+    -webkit-box-shadow: inset 0px 0px 0px #888;
+    box-shadow: inset 0px 1px 2px #888;
+    background-image:none;
+}
+
+.votethumbsup{
+	position:relative;
+	float:left;
+	height:20px;
+	width:20px;
+	background-image:url('@{StaticR listthumbs_png}');
+}
+
+.upvoted .votethumbsup{
+    background-position: 0 20px;
+}
+
+.votelike{
+	position:relative;
+	float:left;
+	font-size:12px;
+	padding-top:2px;
+}
+
+.votethumbsdownbg{
+	position:absolute;
+	right:0px;
+	width:20px;
+	background-color:#ebdfbc;
+	background-image:url('@{StaticR votebuttonbg_png}');
+	background-repeat:repeat-x;
+	border-top-right-radius:5px;
+	border-bottom-right-radius:5px;
+	border-top:1px solid #a9a089;
+	border-right:1px solid #a9a089;
+	border-bottom:1px solid #a9a089;
+	padding:2px 8px 2px 6px;
+}
+
+.votethumbsdownbg:hover{
+	background-color:#f0e6c8;
+	border:1px solid #716a56;
+}
+
+.votethumbsdownbg:active{
+    -moz-box-shadow: inset 3px 5px #888;
+    -webkit-box-shadow: inset 0px 0px 0px #888;
+    box-shadow: inset 0px 1px 2px #888;
+    background-image:none;
+}
+
+.votethumbsdown{
+	position:relative;
+	height:20px;
+	width:20px;
+	background-image:url('@{StaticR listthumbs_png}');
+	background-position:20px 0px;
+}
+
+.downvoted .votethumbsdown{
+    background-position: 20px 20px;
+}
+
 .login{
 	position:absolute;
 	right:0;
