@@ -24,6 +24,10 @@ import Data.Text (Text)
 import qualified Data.Text as T 
 import qualified Data.Char as C
 import Data.Maybe (fromMaybe)
+import Data.String (IsString(..))
+import Data.Aeson (FromJSON (..))
+import Text.Blaze (ToHtml (..))
+import Yesod.Dispatch (PathPiece (..))
 
 data Player = Player { playerName :: Name
                      , playerUpvotes :: Int
@@ -31,13 +35,43 @@ data Player = Player { playerName :: Name
                      , playerRank :: Int
                      } deriving (Eq, Typeable)
 
-type Name = Text
+newtype Name = Name { unName :: Text }
+
+
+normalize = T.toLower . T.filter (not . C.isSpace)
+
+instance Eq Name where
+    Name x == Name y = normalize x == normalize y
+
+instance Ord Name where
+    Name x <= Name y = normalize x <= normalize y
+
+instance IsString Name where
+    fromString = Name . T.pack
+
+instance FromJSON Name where
+    parseJSON = fmap Name . parseJSON
+
+instance ToHtml Name where
+    toHtml = toHtml . unName
+    
+instance Show Name where
+    show = show . unName
+
+instance Read Name where
+    readsPrec p str = [(Name . T.pack $ x,y) | (x,y) <- readsPrec p str]
+
+instance PathPiece Name where
+    fromPathPiece = fmap Name . fromPathPiece
+    toPathPiece = unName
+
+$(deriveSafeCopy 0 'base ''Name)
 
 validName :: Text -> Bool
 validName n = conditions n
               where conditions = (<= 16) . T.length
-                                 &&* (>= 3) . T.length
-                                 &&* T.all C.isAlphaNum
+                                 &&* (>= 3) . T.length . T.filter (/= ' ')
+                                 &&* T.all (C.isAlphaNum ||* (== ' '))
 
 playerScore ::  Player -> Int
 playerScore p = playerUpvotes p - playerDownvotes p 
@@ -88,7 +122,7 @@ addScore p scores = case I.lookup (playerScore p) scores of
 
 
 
-newPlayer name ranks = case validName name of 
+newPlayer name ranks = case validName (unName name) of 
                            True -> case M.lookup name (unwrapMap ranks) of
                                        Nothing -> ranks'
                                        Just _ -> ranks
@@ -103,13 +137,10 @@ getPlayer n ranks = do
     let pRank = findRank (playerScore player) (rankMap ranks)
     return $ player {playerRank = pRank}
 
---searchPlayer x ranks = allPlayers $ ranks { unwrapMap = M.filterWithKey (\k _ -> x `T.isInfixOf` k) (unwrapMap ranks) }
-
 refreshRank scores p = let pRank = findRank (playerScore p) scores
                        in p {playerRank = pRank}
 
 allPlayers ranks = concatMap (map (refreshRank (rankMap ranks) . snd) . M.toAscList . snd) $ reverse $ I.toAscList (rankMap ranks)
 
-searchPlayer x ranks = filter (T.isInfixOf (normalize x) . normalize . playerName) $ allPlayers ranks
-                       where normalize = T.toLower . T.filter (not . C.isSpace)
+searchPlayer x ranks = filter (T.isInfixOf (normalize x) . normalize . unName . playerName) $ allPlayers ranks
 playerCount = M.size . unwrapMap

@@ -83,7 +83,7 @@ allPlayers = playerQueryer $ R.allPlayers
 
 playerCount = playerQueryer $ R.playerCount
 
-searchPlayer :: Name -> Query AppState [Player]
+searchPlayer :: Text -> Query AppState [Player]
 searchPlayer name = playerQueryer $ R.searchPlayer name
 
 ----------------

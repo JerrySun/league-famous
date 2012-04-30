@@ -118,6 +118,7 @@ executable         league-famous
                  , aeson
                  , attoparsec
                  , safe
+                 , blaze-html
 
 test-suite integration-tests
     type: exitcode-stdio-1.0
