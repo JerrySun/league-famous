@@ -141,6 +141,11 @@ h4{
 	font-size:16px;
 }
 
+a{
+    text-decoration:none;
+    color:#0088cc;
+}
+
 .clock{
 	display:block;
 	position:relative;
@@ -163,69 +168,12 @@ h4{
 	box-shadow:4px 4px 2px #afa588;
 }
 
-#preview{
-	display:hidden;
-	position:absolute;
-	right:0px;
-	background-color:#e2d7b9;
-	box-shadow:4px 4px 2px #afa588;
-	width:300px;
-	margin:10px;
-	border:1px solid #bbb29a;
-	padding:0px;
-	z-index:2;
-}
 .hidden{
     display:none;
     /*pointer-events:none;*/
 }
 
 .unhidden{display:block;}
-
-#previewheader{
-	height:100px;
-	border-bottom:1px solid #c5c2ba;
-	vertical-align:top;
-	padding:10px;
-}
-
-#previewclose{
-    cursor: pointer;
-	display:block;
-	width:20px;
-	height:20px;
-	position:absolute;
-	top:0px;
-	right:0px;
-	background-image:url('@{StaticR close_png}');
-	background-repeat:no-repeat;
-	background-position:top right;
-	margin:10px;
-}
-
-#previewstats{
-	position:absolute;
-	bottom:0;
-	left:0;
-	list-style:none;
-	width:300px;
-	padding:0px;
-	margin:0px;
-	padding:10px;
-}
-
-#previewstats li{
-	width:70px;
-	float:left;
-}
-
-#previewstats li div{
-	position:relative;
-	bottom:0;
-	left:0;
-	font-size:12px;
-	font-weight:bold;
-}
 
 .stat-blue{color:#00a8ff;}
 .stat-red{color:#dc0000;}
