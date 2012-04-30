@@ -60,5 +60,5 @@
             <input #pinput .pinputimage>
             <textarea #ptext>
             <div #ppostarea>
-                <div #ppostbutton>SUBMIT
+                <button #ppostbutton>SUBMIT
                 <a href="" #previewfooter>VIEW ALL COMMENTS
