@@ -18,8 +18,7 @@ novote   = partial vote, "neutral"
 replacePreview = (x) ->
     $("#preview").replaceWith x
     $("#preview").show()
-    closeButton = $("#preview").children(".previewclose")
-    closeButton.click(-> $("#preview").hide())
+    $("#previewclose").click(-> $("#preview").hide())
 
 attachRow = ->
     $(".playerrow").on "click", ".thumbup", ->
@@ -55,11 +54,19 @@ attachRow = ->
                , success: (x) -> replacePreview x  }
 
 
-$(document).ready ->
-    attachRow()
-
+attachAdd = ->
+    $("#addplayerbottom").hide()
+    $(".addbutton").on "click", ->
+        $("#addplayerbottom").show()
+    $(".addplayerpopupbutton").on "click", ->
+        $("#addplayerbottom").hide()
     $("form.addplayer").on "submit", (event) ->
         event.preventDefault()
         name = $(this).children("input").val()
         jsonName = JSON.stringify [name]
         $.post "/newplayer", jsonName, reloadTable
+        $("#addplayerbottom").fadeOut()
+
+$(document).ready ->
+    attachRow()
+    attachAdd()

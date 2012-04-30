@@ -2,7 +2,7 @@
     <div #previewheader>
         <h3>
             <a .plain href=@{PlayerR $ playerName player}>#{playerName player}
-        <div .previewclose>
+        <div #previewclose>
         <ul #previewstats>
             <li>
                 <div>#{playerRank player}

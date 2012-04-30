@@ -14,25 +14,25 @@
         <h1>RANKINGS
         <ul .headerbuttons>
             <li>
-                <a href="" .globe>NORTH AMERICA
+                <span .globe>NORTH AMERICA
     <div #filter>
-        <input type="text" .filter-input>
-        <span .pages>
-            Page 1 of 2370 #
-            <a href="">Next #
-            <a href="">Last
+        <form #searchform>
+            <input type="text" #searchinput .filter-input>
+        <span .pages>Page #{show pageNum} of #{show maxPageNum} #
+            <a href=#{pageRoute $ succ pageNum}>Next #
+            <a href=#{pageRoute maxPageNum}>Last
     ^{playerTable}
     <div #filterfooter>
         <ul .filterbuttons>
             <li>
-                <a href="javascript:unhide('addplayerbottom');" .addbutton>ADD PLAYER
+                <div .addbutton>ADD PLAYER
             <li>
-                <div #addplayerbottom .hidden>
-                    <a href="javascript:unhide('addplayerbottom');" .addplayerpopupbutton>
+                <div #addplayerbottom>
+                    <div .addplayerpopupbutton>
                     <form .addplayer>
                         <input type="text" .addplayer-input>
-        <div .pages>Page 1 of 2370
-            <a href="">Next
-            <a href="">Last
-    <div .clock>1 hour 3 minutes until reset.<br>
+        <span .pages>Page #{show pageNum} of #{show maxPageNum} #
+            <a href=#{pageRoute $ succ pageNum}>Next #
+            <a href=#{pageRoute maxPageNum}>Last
+    <div .clock>#{untilReset} until reset.<br>
         <span .clockinfo>After 11:59 PM PST, you will be able to vote on every player once again!

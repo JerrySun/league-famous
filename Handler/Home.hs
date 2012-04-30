@@ -6,6 +6,7 @@ import Data.List (sortBy)
 import Data.List (elemIndex)
 import Data.Maybe (fromJust)
 import Text.Hamlet (hamletFile)
+import Data.Text (pack) 
 
 playerScore ::  Player -> Int
 playerScore p = playerUpvotes p - playerDownvotes p 
@@ -22,6 +23,11 @@ percent p = f u d
 getHomeR :: Handler RepHtml
 getHomeR = do
     playerTable <- makeTable
+    let pageNum = 1 :: Int
+    let maxPageNum = 200 :: Int
+    let untilReset = "1 hour 3 minutes" :: Text
+    urlRenderParams <- getUrlRenderParams
+    let pageRoute n = urlRenderParams HomeR [("page", pack . show $ n)]
     defaultLayout $ setTitle "HELLO TEEMO" >> $(widgetFile "teemo") 
 
 

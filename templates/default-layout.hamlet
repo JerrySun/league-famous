@@ -4,13 +4,13 @@
             <li>
                 <a href=@{HomeR} .header>
             <li .menu-item>
-                <a href="">BROWSE
+                <a href=@{HomeR}>BROWSE
             <li .menu-item>
-                <a href="">FORUMS
+                <a href=@{HomeR}>FORUMS
             <li .menu-item>
-                <a href="">BLOG
+                <a href=@{HomeR}>BLOG
             <li .menu-item>
-                <a href="">HELP / FAQ
+                <a href=@{HomeR}>HELP / FAQ
     ^{widget}
 <div #footer>
     <div .footnote>
