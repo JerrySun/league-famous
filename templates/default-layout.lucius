@@ -13,14 +13,61 @@ body{
 	height:100%;
 }
 
+#headerwrapper{
+    width:100%;
+    overflow:hidden;
+}
+
+#headercenter{
+    position:relative;
+    width:950px;
+    margin:0px auto;
+    padding:40px 0px 40px 10px;
+}
+
+#toplogo{
+	display:block;
+    width:270px;
+	height:77px;
+	background-image:url('@{StaticR headerlogo_png}');
+	background-repeat:no-repeat;
+	padding:0px;
+	margin:0px;
+}
+
 #wrapper{
 	position:relative;
 	width:960px;
-	background-image: url('@{StaticR vertdash_png}');
-	background-repeat: repeat-y;
-	background-position: 163px 0px;
 	background-color:transparent;
 	margin:0px auto 0px;
+}
+
+#topmenu{
+    position:absolute;
+    top:0px;
+    right:0px;
+}
+
+#topmenu ul{
+    list-style:none;
+    padding:0px;
+    margin:0px;
+}
+
+#topmenu ul li{
+    float:left;
+}
+
+#topmenu ul li a{
+    color:black;
+    display:block;
+    padding:30px 20px 30px;
+    font-weight:bold;
+}
+
+#topmenu ul li a:hover{
+    color:white;
+    background:#555;
 }
 
 #menu {
@@ -73,9 +120,8 @@ li.menu-item a{
 #right{
 	float:right;
 	position:relative;
-	left:-4px;
-	top: 20px;
-	width:260px;
+	top:0px;
+	width:300px;
 	padding:0px;
 	z-index:1;
 }
@@ -85,14 +131,10 @@ li.menu-item a{
 }
 
 #center{
-	width:472px;
+	width:600px;
     min-height:600px;
 	position:relative;
-	background-image: url('@{StaticR vertdash_png}');
-	background-repeat: repeat-y;
-	background-position: 511px 0px;
-	margin-left:164px;
-	padding:20px 304px 30px 20px;
+	padding:0px 304px 30px 10px;
 }
 
 .contentheader{
@@ -100,7 +142,7 @@ li.menu-item a{
 	height:120px;
 	border-top: 1px solid #afa588;
 	border-bottom: 1px solid #afa588;
-	padding:20px 0px 20px 0px;
+	padding:25px 0px 25px 0px;
 	margin:0px 0px 20px 0px;
 }
 
@@ -218,7 +260,7 @@ li.menu-item a{
 
 h1{
 	display:block;
-	font-size:34px;
+	font-size:50px;
 	font-weight:bold;
 	color:white;
 	margin-top:-5px;

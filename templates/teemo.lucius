@@ -184,9 +184,9 @@
 
 #players .thrank{width:45px;}
 #players .thname{width:auto;}
-#players .thlikes{width:30px;}
-#players .dislikes{width:40px;}
-#players .thpercentage{width:25px;}
+#players .thlikes{width:50px;}
+#players .dislikes{width:50px;}
+#players .thpercentage{width:30px;}
 #players .thvote{width:50px;}
 
 #players .firstrow{
@@ -196,6 +196,7 @@
 
 #players th:hover{
     background-color:#a69a80;
+    transition:1s;
 }
 
 #players td{
@@ -324,9 +325,10 @@
     display:hidden;
     position:absolute;
     right:0px;
+    top:159px;
     background-color:#e2dab9;
     box-shadow:0px 10px 20px -6px #afa588;
-    width:295px;
+    width:300px;
     margin:10px 0px;
     border:1px solid #bbb29a;
     padding:0px;
