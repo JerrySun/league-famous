@@ -142,7 +142,7 @@
 
 .commenttop{
 	position:relative;
-	width:420px;
+	width:452px;
 	font-size:16px;
 	background-color:#dccc9e;
 	padding:5px 10px 5px;
@@ -187,7 +187,7 @@
 }
 
 .replywrapper{
-	width:420px;
+	width:452px;
 	margin-left:20px;
 	margin-bottom:30px;
 	overflow:hidden;
