@@ -58,9 +58,8 @@ getPreviewR :: Handler RepHtml
 getPreviewR = do
     (name:_) <- parseJsonParam_
     acid <- getAcid
-    maybePlayer <- query' acid $ GetPlayer name
-    case maybePlayer of
-        Just player -> hamletToRepHtml $(hamletFile "templates/preview.hamlet")
-        Nothing -> notFound
+    player <- maybe404 $ query' acid $ GetPlayer name
+    posts <- fmap (fromMaybe []) $ fmap (fmap (take 4)) $ query' acid $ RecentTopPosts name
+    hamletToRepHtml $(hamletFile "templates/preview.hamlet")
 
 

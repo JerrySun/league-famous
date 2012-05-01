@@ -5,6 +5,7 @@ module Data.Posts
     , empty
     , newTopPost
     , getThread
+    , recentTopPosts 
     ) where
 
 import Prelude
@@ -74,3 +75,4 @@ getThread number store = parentThread <$> (I.lookup number . essence) store
            parentThread (CLPost _ pnum) = parentThread . fromJust . byNumber store $ pnum
 
 
+recentTopPosts name store = fmap (map (id &&& extractPost . fromJust . byNumber store)) . M.lookup name . nameMap $ store

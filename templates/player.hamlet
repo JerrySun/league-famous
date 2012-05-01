@@ -6,7 +6,7 @@
     <div .writesomething>
         <h2>Write something
         <div>
-            <form>
+            <form #newcomment>
                 <div .commentingname>NAME
                 <input .commentinginput>
                 <div .commentingimg>IMAGE URL
@@ -14,7 +14,7 @@
                 <div .commentingbubble>INTERESTING COMMENT
                 <textarea .commentingtext>
                 <div .postarea>
-                    <div .postbutton>SUBMIT
+                    <input #postsubmit type="submit" value="SUBMIT">
                     <div .formatting>formatting help
 <div #center>
     <div .contentheader>

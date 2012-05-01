@@ -21,6 +21,7 @@ module State
     , SearchPlayer (..)
     , GetThread (..)
     , NewTopPost (..)
+    , RecentTopPosts (..)
     ) where
 
 import Data.Acid
@@ -160,6 +161,8 @@ getThread num = queryer postStore $ P.getThread num
 newTopPost ::  Name -> Post -> Update AppState ()
 newTopPost name post = updater' postStore setPostStore $ P.newTopPost name post
 
+recentTopPosts name = queryer postStore $ P.recentTopPosts name
+
 $(makeAcidic ''AppState [ 'newPlayer
                         , 'getPlayer
                         , 'allPlayers
@@ -170,4 +173,5 @@ $(makeAcidic ''AppState [ 'newPlayer
                         , 'searchPlayer
                         , 'getThread
                         , 'newTopPost
+                        , 'recentTopPosts
                         ])

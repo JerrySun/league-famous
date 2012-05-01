@@ -240,8 +240,7 @@
     padding:5px;
 }
 
-.viewing{
-    display:block;
+.viewing{ display:block;
     width:418px;
     text-align:center;
     background-image:url('@{StaticR votebuttonbg_png}');
@@ -249,4 +248,34 @@
     margin-bottom:20px;
     border:1px dotted #77684e;
     padding:10px;
+}
+
+#postsubmit{
+    width: 76px;
+    height: 31px;
+    padding: 6px;
+	float:left;
+	font-size:12px;
+	font-family:Helvetica,Arial;
+	font-weight:bold;
+	text-align:center;
+	background-color:#cca;
+	background-image:url('@{StaticR votebuttonbg_png}');
+	background-repeat:repeat-x;
+	border: 2px solid #77684e;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+	padding:6px;
+    display: block;
+}
+
+#postsubmit:hover{
+    background-color:#d4d4b4;
+}
+
+#postsubmit:active{
+    -moz-box-shadow: inset 3px 5px #888;
+    -webkit-box-shadow: inset 0px 0px 0px #888;
+    box-shadow: inset 0px 2px 6px #888;
+    background-image:none;
 }
