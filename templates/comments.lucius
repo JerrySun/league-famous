@@ -229,19 +229,18 @@
 
 .loadmore{
     display:block;
-    width:460px;
+    width:450px;
     text-align:center;
-    font-size:12px;
-    font-weight:bold;
-    background-color:#dccc9e;
+    background-image:url('@{StaticR votebuttonbg_png}');
+    background-repeat:repeat-x;
     margin-bottom:20px;
-    border:1px solid #77684e;
-    padding:5px;
+    border:1px dotted #77684e;
+    padding:10px;
 }
 
 .viewing{
     display:block;
-    width:418px;
+    width:450px;
     text-align:center;
     background-image:url('@{StaticR votebuttonbg_png}');
     background-repeat:repeat-x;
