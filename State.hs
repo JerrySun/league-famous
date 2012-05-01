@@ -18,6 +18,8 @@ module State
     , GetPlayer (..)
     , PlayerCount (..)
     , SearchPlayer (..)
+    , GetThread (..)
+    , NewTopPost (..)
     ) where
 
 import Data.Acid
@@ -149,6 +151,14 @@ processVote ip n v = do
             put state {playerStore = players', ipStore =  ips'}
             return True
 
+------
+
+getThread :: Int -> Query AppState (Maybe [(Int, Post)])
+getThread num = queryer postStore $ P.getThread num
+
+newTopPost ::  Name -> Post -> Update AppState ()
+newTopPost name post = updater' postStore setPostStore $ P.newTopPost name post
+
 $(makeAcidic ''AppState [ 'newPlayer
                         , 'getPlayer
                         , 'allPlayers
@@ -157,4 +167,6 @@ $(makeAcidic ''AppState [ 'newPlayer
                         , 'processVote
                         , 'playerCount
                         , 'searchPlayer
+                        , 'getThread
+                        , 'newTopPost
                         ])
