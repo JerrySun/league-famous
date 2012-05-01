@@ -173,26 +173,39 @@
 }
 
 #players th{
-	background-color:#beffd2;
+    color:white;
+    height:24px;
 	font-size:11px;
 	font-weight:bold;
 	text-align:left;
-	padding:10px 10px 2px 0px;
+	padding:10px 10px 0px 10px;
 	border-bottom:2px solid black;
 }
 
-#players th:first-child{
-	padding-left:10px;
+#players .thrank{width:45px;}
+#players .thname{width:auto;}
+#players .thlikes{width:30px;}
+#players .dislikes{width:40px;}
+#players .thpercentage{width:25px;}
+#players .thvote{width:50px;}
+
+#players .firstrow{
+	background-color:#ada282;
+    background-image:url('@{StaticR diagonal_png}');
+}
+
+#players th:hover{
+    background-color:#a69a80;
 }
 
 #players td{
-	padding:15px 0px 15px;
+	padding:15px 10px 15px;
 }
 
 .rankwrapper{
 	float:left;
 	position:relative;
-	left:14px;
+	left:10px;
 }
 
 .playerrank{
@@ -268,7 +281,7 @@
 .badgesmall{
 	float:left;
 	position:relative;
-	left:8px;
+	left:0px;
 	top:7px;
 	background-image:url('@{StaticR badgesmall_png}');
 	width:14px;
