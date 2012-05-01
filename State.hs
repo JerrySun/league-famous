@@ -4,7 +4,8 @@ module State
     ( IP (..)
     , Player (..)
     , Vote (..)
-    , Name
+    , Name (..)
+    , Post (..)
     , R.validName
     , R.playerScore
     -- The master state

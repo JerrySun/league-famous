@@ -6,6 +6,7 @@ module Handler.Api
 import Import
 import Data.Aeson
 import Control.Monad (mzero)
+import Data.Time (getCurrentTime)
 
 data VoteReq = VoteReq Vote Name
 
@@ -27,3 +28,20 @@ postNewPlayerR = do
     acid <- getAcid
     _ <- update' acid $ NewPlayer name
     jsonToRepJson ()
+
+data PostInput = PostInput Text Text Text Text
+
+instance FromJSON PostInput where
+    parseJSON (Object v) = PostInput <$> v .: "player" <*> v .: "name" <*> v .: "url" <*> v .: "text"
+    parseJSON _          = mzero
+
+
+postMakePostR :: Handler RepJson
+postMakePostR = do
+    (PostInput player name text url) <- parseJsonBody_
+    time <- liftIO getCurrentTime
+    let post = Post name text url time
+    acid <- getAcid
+    _ <- update' acid $ NewTopPost (Name player) post
+    jsonToRepJson ()
+    

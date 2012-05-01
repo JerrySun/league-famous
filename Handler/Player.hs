@@ -3,7 +3,7 @@ module Handler.Player
     , getPostR
     ) where
 
-import Import
+import Import hiding (Post(..))
 
 getPlayerR :: Name -> Handler RepHtml
 getPlayerR name  = do

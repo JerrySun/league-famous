@@ -1,7 +1,7 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 module Data.Ranks
     ( Player (..)
-    , Name
+    , Name (..)
     , PlayerStore 
     , empty
     , newPlayer
