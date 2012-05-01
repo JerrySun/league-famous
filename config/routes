@@ -12,8 +12,10 @@
 
 /newplayer    NewPlayerR POST
 
-/player/#Text PlayerR    GET
+/player/#Name PlayerR    GET
 
 /post/#Int    PostR      GET
 
 /#Int         HomePageR  GET
+
+/newpost      MakePostR  POST

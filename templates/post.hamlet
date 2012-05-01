@@ -45,26 +45,26 @@
                 <div>dislikes
     <div .viewing>
         You are now viewing all replies to a post by <b>scarra</b>.
-    <div .commentwrapper>
+    <div .commentwrapper data-post=#{show parN}>
         <div .commenttop>
-            <span .commentname>#{posterName parent}
-            <span .commenttime>#{postTime parent}
+            <span .commentname>#{poster parent}
+            <span .commenttime>#{show $ postTime parent}
         <div .commentbody>
             <div>
-                $maybe image <- postImage parent
-                    <a href=#{image}>
-                        <img src=#{image} .topthumbnail>
-                #{postText parent}
-        $forall child <- children
-            <div .replywrapper>
+                $maybe img <- imageUrl parent
+                    <a href=#{img}>
+                        <img src=#{img} .topthumbnail>
+                #{message parent}
+        $forall (pnum, child) <- children
+            <div .replywrapper data-post=#{show pnum}>
                 <div .replytop>
-                    <span .replyname>#{posterName child}
-                    <span .replytime>#{postTime child}
+                    <span .replyname>#{poster child}
+                    <span .replytime>#{show $ postTime child}
                 <div .replybody>
-                    $maybe image <- postImage child
-                        <a href=#{image}>
-                            <img src=#{image} .replythumbnail>
-                    #{postText child}
+                    $maybe img <- imageUrl child
+                        <a href=#{img}>
+                            <img src=#{img} .replythumbnail>
+                    #{message child}
 
     <div .writesomething>
         <h2>Write a reply

@@ -6,19 +6,19 @@
     <div .writesomething>
         <h2>Write something
         <div>
-            <form>
+            <form #newcomment>
                 <div .commentingname>NAME
-                <input .commentinginput>
+                <input #commentName .commentinginput>
                 <div .commentingimg>IMAGE URL
-                <input .commentinginput>
+                <input #commentUrl .commentinginput>
                 <div .commentingbubble>INTERESTING COMMENT
-                <textarea .commentingtext>
+                <textarea #commentText .commentingtext>
                 <div .postarea>
-                    <div .postbutton>SUBMIT
+                    <input #postsubmit type="submit" value="SUBMIT">
                     <div .formatting>formatting help
 <div #center>
     <div .contentheader>
-        <h1>#{name}
+        <h1>#{playerName player}
         $case vote
             $of Neutral
                 <ul .votebuttons>

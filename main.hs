@@ -1,4 +1,4 @@
-import Prelude              (IO)
+import Prelude              (IO, (.))
 import Yesod.Default.Config (fromArgs)
 import Yesod.Default.Main   (defaultMain)
 import Settings             (parseExtra)
@@ -8,6 +8,6 @@ import State                (emptyState)
 import Control.Exception    (bracket)
 
 main :: IO ()
-main = do bracket (openLocalState emptyState)
-                  (\acid -> defaultMain (fromArgs parseExtra) (makeApplication acid))
-                  (createCheckpoint)
+main = bracket (openLocalState emptyState)
+               (defaultMain (fromArgs parseExtra) . makeApplication)
+               createCheckpoint

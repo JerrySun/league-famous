@@ -4,7 +4,8 @@ module State
     ( IP (..)
     , Player (..)
     , Vote (..)
-    , Name
+    , Name (..)
+    , Post (..)
     , R.validName
     , R.playerScore
     -- The master state
@@ -18,19 +19,19 @@ module State
     , GetPlayer (..)
     , PlayerCount (..)
     , SearchPlayer (..)
+    , GetThread (..)
+    , NewTopPost (..)
+    , RecentTopPosts (..)
     ) where
 
 import Data.Acid
 import Data.SafeCopy
-import qualified Data.Map as M
 import Data.Typeable
-import Control.Monad.State (get, gets, put)
-import Control.Monad.Reader (ask, asks)
+import Control.Monad.State (get, put)
+import Control.Monad.Reader (ask)
 import Data.Text (Text)
 import Prelude
-import Data.Word (Word32)
-import Data.Maybe (fromMaybe)
-import Control.Applicative ((<$>), (<*>))
+import Control.Applicative ((<$>))
 import Control.Arrow ((&&&))
 
 import Data.VoteHistory (IPStore, IP, Vote(..))
@@ -39,18 +40,28 @@ import qualified Data.VoteHistory as V
 import Data.Ranks (PlayerStore, Player (..), Name)
 import qualified Data.Ranks as R
 
+import Data.Posts (Post (..), PostStore)
+import qualified Data.Posts as P
+
 ----
 ----
 data AppState = AppState { playerStore :: PlayerStore
-                         , ipStore :: IPStore } deriving (Typeable)
+                         , ipStore :: IPStore
+                         , postStore :: PostStore } deriving (Typeable)
 
 $(deriveSafeCopy 0 'base ''AppState)
 
+setPlayerStore ::  PlayerStore -> AppState -> AppState
 setPlayerStore ps  state = state { playerStore = ps}
+
+setIPStore ::  IPStore -> AppState -> AppState
 setIPStore     ips state = state { ipStore = ips}
 
+setPostStore ::  PostStore -> AppState -> AppState
+setPostStore  posts state = state { postStore = posts }
+
 queryer ::  (AppState -> s) -> (s -> b) -> Query AppState b
-queryer getter = (flip fmap) (fmap getter ask)
+queryer getter = flip fmap $ fmap getter ask
 
 updater :: (AppState -> s) -> (s -> AppState -> AppState) -> (s -> (s, b)) -> Update AppState b
 updater getter setter f = do
@@ -63,27 +74,34 @@ updater' :: (AppState -> s) -> (s -> AppState -> AppState) -> (s -> s) -> Update
 updater' getter setter f = uncurry setter . ((f . getter) &&& id) <$> get >>= put
 
 emptyState ::  AppState
-emptyState = AppState R.empty V.empty
+emptyState = AppState R.empty V.empty P.empty
 
 ----
 
+playerUpdater :: (PlayerStore -> (PlayerStore, b)) -> Update AppState b
 playerUpdater = updater playerStore setPlayerStore
+
+playerUpdater' :: (PlayerStore -> PlayerStore) -> Update AppState ()
 playerUpdater' = updater' playerStore setPlayerStore
+
+playerQueryer ::  (PlayerStore -> b) -> Query AppState b
 playerQueryer = queryer playerStore
 
 ----
 
+newPlayer ::  Name -> Update AppState ()
 newPlayer name = playerUpdater' $ R.newPlayer name
 
 getPlayer :: Name -> Query AppState (Maybe Player)
 getPlayer n = playerQueryer $ R.getPlayer n
 
 allPlayers :: Query AppState [Player]
-allPlayers = playerQueryer $ R.allPlayers
+allPlayers = playerQueryer R.allPlayers
 
-playerCount = playerQueryer $ R.playerCount
+playerCount ::  Query AppState Int
+playerCount = playerQueryer R.playerCount
 
-searchPlayer :: Name -> Query AppState [Player]
+searchPlayer :: Text -> Query AppState [Player]
 searchPlayer name = playerQueryer $ R.searchPlayer name
 
 ----------------
@@ -107,6 +125,7 @@ getVote ip name = ipQueryer $ V.getVote ip name
 ----------------
 ----------------
 
+applyVote ::  Vote -> Vote -> Player -> PlayerStore -> PlayerStore
 applyVote new old p =
     f new old
     where f Up      Up      = R.voteMod p 0  0
@@ -131,8 +150,18 @@ processVote ip n v = do
             let (ips', prevVote) = V.vote ip n v ips
             let thisVoteMod = applyVote v prevVote player
             let players' = thisVoteMod players
-            put $ AppState {playerStore = players', ipStore =  ips'}
+            put state {playerStore = players', ipStore =  ips'}
             return True
+
+------
+
+getThread :: Int -> Query AppState (Maybe [(Int, Post)])
+getThread num = queryer postStore $ P.getThread num
+
+newTopPost ::  Name -> Post -> Update AppState ()
+newTopPost name post = updater' postStore setPostStore $ P.newTopPost name post
+
+recentTopPosts name = queryer postStore $ P.recentTopPosts name
 
 $(makeAcidic ''AppState [ 'newPlayer
                         , 'getPlayer
@@ -142,4 +171,7 @@ $(makeAcidic ''AppState [ 'newPlayer
                         , 'processVote
                         , 'playerCount
                         , 'searchPlayer
+                        , 'getThread
+                        , 'newTopPost
+                        , 'recentTopPosts
                         ])

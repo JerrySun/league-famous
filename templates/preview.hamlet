@@ -16,49 +16,23 @@
             <li .stat-red>
                 <div>#{playerDownvotes player}
                 <div>dislikes
-    <div .pcommentwrapper>
-        <div .pcommenttop>
-            <span .pcommentname>scarra
-            <span .pcommenttime>4/20/2012 @ 4:20PM
-        <div .pcommentbody>
-            <div>
-            <img src=@{StaticR jellyfishsmall_jpg} .pthumbnail>
-            I just think jellyfish are very nice creatures. They can poison you, but it's not like they mean it. Just sayin'.
-        <div .pcommentreply>
-            <a>10 REPLIES
-    <div .pcommentwrapper>
-        <div .pcommenttop>
-            <span .pcommentname>HotShotGG
-            <span .pcommenttime>4/20/2012 @ 4:20PM
-        <div .pcommentbody>
-            <div>
-            The only reason you like jellyfish is because they have no spine just like you.
-        <div .pcommentreply>
-            <a>9 REPLIES
-    <div .pcommentwrapper>
-        <div .pcommenttop>
-            <span .pcommentname>Elementz
-            <span .pcommenttime>4/20/2012 @ 4:20PM
-        <div .pcommentbody>
-            <div>
-            Wow pwnd.
-        <div .pcommentreply>
-            <a>10 REPLIES
-    <div .pcommentwrapper>
-        <div .pcommenttop>
-            <span .pcommentname>scarra
-            <span .pcommenttime>4/20/2012 @ 4:20PM
-        <div .pcommentbody>
-            <div>
-            <img src=@{StaticR jellyfishsmall_jpg} .pthumbnail>
-            Dude, I have the same pic on my hard drive. That is so weird.
-        <div .pcommentreply>
-            <a>10 REPLIES
+    $forall (pnum, post) <- posts
+        <div .pcommentwrapper>
+            <div .pcommenttop>
+                <span .pcommentname>#{poster post}
+                <span .pcommenttime>#{show $ postTime post}
+            <div .pcommentbody>
+                <div>
+                $maybe img <- imageUrl post
+                    <img src=#{img} .pthumbnail>
+                #{message post}
+            <div .pcommentreply>
+                <a href=@{PostR pnum}>10 REPLIES
     <div #quickreply>
-        <form>
-            <input placeholder="Anonymous" #pinput .pinputname>
-            <input placeholder="Image URL" #pinput .pinputimage>
-            <textarea placeholder="Write a comment..." #ptext>
+        <form #previewPost data-player=#{playerName player}>
+            <input #prevPostName placeholder="Anonymous" .pinput .pinputname>
+            <input #prevPostUrl placeholder="Image URL" .pinput .pinputimage>
+            <textarea #ptext placeholder="Write a comment...">
             <div #ppostarea>
-                <button #ppostbutton>SUBMIT
-                <a href="" #previewfooter>VIEW ALL COMMENTS
+                <button #ppostbutton type=submit>SUBMIT
+                <a #previewfooter href=@{PlayerR $ playerName player}>VIEW ALL COMMENTS

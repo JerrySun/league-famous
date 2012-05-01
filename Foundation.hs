@@ -29,7 +29,7 @@ import Text.Jasmine (minifym)
 import Web.ClientSession (getKey)
 import Text.Hamlet (hamletFile)
 import Data.Text (Text)
-import State (AppState)
+import State (AppState, Name)
 import Data.Acid (AcidState)
 
 -- | The site argument for your application. This can be a good place to

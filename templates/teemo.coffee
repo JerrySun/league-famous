@@ -32,10 +32,27 @@ attachSearch = ->
         state.currentSearch = $(this).val()
         reloadTable()
 
-replacePreview = (x) ->
-    $("#preview").replaceWith x
-    $("#preview").show()
-    $("#previewclose").click(-> $("#preview").hide())
+loadPreview = (name, callback) ->
+        $.ajax { url: "/preview"
+               , data: JSON.stringify([name])
+               , type: "GET"
+               , success: callback  }
+
+replacePreview = (name) ->
+    action = (x) ->
+        $("#preview").replaceWith x
+        $("#preview").show()
+        $("#previewclose").click(-> $("#preview").hide())
+        $("#previewPost").on "click submit", "#ppostbutton", (event) ->
+            event.preventDefault()
+            post = { player: $("#previewPost").data("player")
+                   , name: $("#prevPostName").val()
+                   , url: $("#prevPostUrl").val()
+                   , text: $("#ptext").val()
+                   }
+            $.post "/newpost", JSON.stringify(post), -> replacePreview name
+    loadPreview(name, action)
+
 
 attachRow = ->
     $(".playerrow").on "click", ".thumbup", ->
@@ -65,16 +82,15 @@ attachRow = ->
             novote name
     
     $(".playerrow").on "click", ".playername", ->
-        $.ajax { url: "/preview"
-               , data: JSON.stringify([$(this).parent().parent().data("name")])
-               , type: "GET"
-               , success: (x) -> replacePreview x  }
+        name = $(this).parent().parent().data("name")
+        replacePreview name
 
 
 attachAdd = ->
     $("#addplayerbottom").hide()
     $(".addbutton").on "click", ->
         $("#addplayerbottom").show()
+        $("#addplayerbottom").children("input").focus()
     $(".addplayerpopupbutton").on "click", ->
         $("#addplayerbottom").hide()
     $("form.addplayer").on "submit", (event) ->
@@ -84,6 +100,10 @@ attachAdd = ->
             jsonName = JSON.stringify [name]
             $.post "/newplayer", jsonName, reloadTable
             $("#addplayerbottom").fadeOut()
+
+    $("form.addplayer").on "focusout", ->
+            $("#addplayerbottom").fadeOut()
+        
 
 $(document).ready ->
     attachRow()
