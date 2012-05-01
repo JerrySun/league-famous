@@ -190,12 +190,12 @@
 #players .thvote{width:50px;}
 
 #players .firstrow{
-	background-color:#ada282;
+	background-color:#9e8f66;
     background-image:url('@{StaticR diagonal_png}');
 }
 
 #players th:hover{
-    background-color:#a69a80;
+    background-color:#8c7f5c;
     transition:1s;
 }
 
@@ -324,7 +324,7 @@
 #preview{
     display:hidden;
     position:absolute;
-    right:0px;
+    right:10px;
     top:159px;
     background-color:#e2dab9;
     box-shadow:0px 10px 20px -6px #afa588;
@@ -337,7 +337,7 @@
 
 #previewheader{
     position:relative;
-	height:80px;
+	height:90px;
 	border-bottom:1px solid #cec5a2;
 	vertical-align:top;
 	padding:10px;

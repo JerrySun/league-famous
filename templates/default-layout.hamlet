@@ -4,16 +4,16 @@
         <div #topmenu>
             <ul>
                 <li>
-                    <a href=@{HomeR}>BROWSE
+                    <a href=@{HomeR} .menubrowse>BROWSE
                 <li>
-                    <a href=@{HomeR}>FORUMS
+                    <a href=@{HomeR} .menuforums>FORUMS
                 <li>
-                    <a href=@{HomeR}>BLOG
+                    <a href=@{HomeR} .menublog>BLOG
                 <li>
-                    <a href=@{HomeR}>HELP / FAQ
+                    <a href=@{HomeR} .menuhelp>HELP / FAQ
 <div #wrapper>
     ^{widget}
-<div #footer>
-    <div .footnote>
+<div #footer-wrapper>
+    <div #footer-center>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua.

@@ -1,6 +1,6 @@
 #headerstats{
 	position:absolute;
-	bottom:15px;
+	bottom:25px;
 	list-style:none;
 	padding:0px;
 	font-weight:bold;
@@ -30,7 +30,7 @@
 }
 
 .commentinginput{
-	width:160px;
+	width:180px;
 	height:20px;
 	font-size:14px;
 	font-weight:bold;
@@ -76,7 +76,7 @@
 }
 
 .commentingtext{
-	width:250px;
+	width:290px;
 	height:60px;
 	font-size:12px;
 	font-family:Helvetica,Arial;
@@ -142,11 +142,11 @@
 
 .commenttop{
 	position:relative;
-	width:452px;
+	width:580px;
     color:white;
 	font-size:16px;
-	background-color:#768074;
-    background-image:url('@{StaticR diagonal_png}');
+	background-color:#4a4946;
+    background-image:url('@{StaticR diagonallight_png}');
 	padding:5px 10px 5px;
 	margin-bottom:10px;
 }
@@ -188,17 +188,17 @@
 }
 
 .replywrapper{
-	width:452px;
-	margin-left:20px;
+	width:560px;
 	margin-bottom:30px;
+    padding-left:40px;
 	overflow:hidden;
 }
 
 .replytop{
 	font-size:14px;
     color:white;
-	background-color:#768074;
-    background-image:url('@{StaticR diagonal_png}');
+	background-color:#4a4946;
+    background-image:url('@{StaticR diagonallight_png}');
 	padding:5px 10px 5px;
 	margin-bottom:10px;
 }
@@ -230,7 +230,7 @@
 
 .loadmore{
     display:block;
-    width:450px;
+    width:580px;
     text-align:center;
     background-image:url('@{StaticR votebuttonbg_png}');
     background-repeat:repeat-x;
