@@ -23,15 +23,16 @@
                 <span .pcommenttime>#{show $ postTime post}
             <div .pcommentbody>
                 <div>
-                <img src=@{StaticR jellyfishsmall_jpg} .pthumbnail>
+                $maybe img <- imageUrl post
+                    <img src=#{img} .pthumbnail>
                 #{message post}
             <div .pcommentreply>
                 <a href=@{PostR pnum}>10 REPLIES
     <div #quickreply>
-        <form>
-            <input placeholder="Anonymous" #pinput .pinputname>
-            <input placeholder="Image URL" #pinput .pinputimage>
-            <textarea placeholder="Write a comment..." #ptext>
+        <form #previewPost data-player=#{playerName player}>
+            <input #prevPostName placeholder="Anonymous" .pinput .pinputname>
+            <input #prevPostUrl placeholder="Image URL" .pinput .pinputimage>
+            <textarea #ptext placeholder="Write a comment...">
             <div #ppostarea>
-                <button #ppostbutton>SUBMIT
-                <a href="" #previewfooter>VIEW ALL COMMENTS
+                <button #ppostbutton type=submit>SUBMIT
+                <a #previewfooter href=@{PlayerR $ playerName player}>VIEW ALL COMMENTS

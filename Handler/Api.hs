@@ -30,7 +30,7 @@ postNewPlayerR = do
     _ <- update' acid $ NewPlayer name
     jsonToRepJson ()
 
-data PostInput = PostInput Text Text Text Text
+data PostInput = PostInput Text Text (Maybe Text) Text
 
 instance FromJSON PostInput where
     parseJSON (Object v) = PostInput <$> v .: "player" <*> v .: "name" <*> v .: "url" <*> v .: "text"
@@ -39,7 +39,8 @@ instance FromJSON PostInput where
 
 postMakePostR :: Handler RepJson
 postMakePostR = do
-    PostInput player name url text <- parseJsonBody_
+    PostInput player name1 url text <- parseJsonBody_
+    let name = if name1 == "" then "Anonymous" else name1
     time <- liftIO getCurrentTime
     let post = Post name text url time
     acid <- getAcid

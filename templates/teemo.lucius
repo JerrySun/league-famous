@@ -432,6 +432,7 @@
 }
 
 .pthumbnail{
+    width:100px;
     float:left;
     margin-right:5px;
     -moz-border-radius: 5px;
@@ -445,7 +446,7 @@
     padding:10px;
 }
 
-#pinput{
+.pinput{
 	width:112px;
 	height:16px;
 	font-size:11px;

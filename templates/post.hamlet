@@ -51,8 +51,9 @@
             <span .commenttime>#{show $ postTime parent}
         <div .commentbody>
             <div>
-                <a href=#{imageUrl parent}>
-                    <img src=#{imageUrl parent} .topthumbnail>
+                $maybe img <- imageUrl parent
+                    <a href=#{img}>
+                        <img src=#{img} .topthumbnail>
                 #{message parent}
         $forall (pnum, child) <- children
             <div .replywrapper data-post=#{show pnum}>
@@ -60,8 +61,9 @@
                     <span .replyname>#{poster child}
                     <span .replytime>#{show $ postTime child}
                 <div .replybody>
-                    <a href=#{imageUrl child}>
-                        <img src=#{imageUrl child} .replythumbnail>
+                    $maybe img <- imageUrl child
+                        <a href=#{img}>
+                            <img src=#{img} .replythumbnail>
                     #{message child}
 
     <div .writesomething>
