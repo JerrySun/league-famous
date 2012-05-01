@@ -1,6 +1,7 @@
 module Handler.Api
     ( postNewPlayerR
     , postVoteR
+    , postMakePostR
     ) where
 
 import Import
@@ -38,7 +39,7 @@ instance FromJSON PostInput where
 
 postMakePostR :: Handler RepJson
 postMakePostR = do
-    (PostInput player name text url) <- parseJsonBody_
+    PostInput player name url text <- parseJsonBody_
     time <- liftIO getCurrentTime
     let post = Post name text url time
     acid <- getAcid

@@ -22,7 +22,7 @@ import Control.Arrow ((&&&))
 
 data Post = Post { poster :: Text
                  , message :: Text
-                 , imageURL :: Text
+                 , imageUrl :: Text
                  , postTime :: UTCTime
                  } deriving (Typeable)
 

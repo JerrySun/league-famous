@@ -184,6 +184,7 @@
 	margin-right:10px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
+    width: 200px;
 }
 
 .replywrapper{
