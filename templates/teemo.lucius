@@ -25,7 +25,7 @@
 	background-image:url('@{StaticR globe_png}');
 	background-repeat:no-repeat;
 	padding-left:24px;
-    padding-top:2px;
+    padding-top:4px;
 	margin-right:20px;
     font-size:10px;
 }
@@ -33,7 +33,7 @@
 .filterbuttons{
 	position:relative;
 	float:left;
-	margin-top:2px;
+	margin-top:0px;
 	list-style:none;
 	padding:0px;
 }
@@ -69,20 +69,20 @@
 	background-color:#e2d7b9;
 	padding:10px;
 	border:1px solid #bbb29a;
-	box-shadow:4px 4px 2px #afa588;
+    box-shadow:0px 6px 20px -6px #afa588;
 }
 
 #addplayerbottom{
 	display:hidden;
 	position:absolute;
 	left:-11px;
-	bottom:-8px;
+	bottom:-12px;
 	width:200px;
 	height:22px;
 	background-color:#e2d7b9;
 	padding:10px;
 	border:1px solid #bbb29a;
-	box-shadow:4px 4px 2px #afa588;
+    box-shadow:0px 6px 20px -6px #afa588;
 }
 
 .addplayerpopupbutton{
@@ -169,7 +169,7 @@
 #players{
 	width:100%;
 	border-spacing:0px;
-	font-family:Tahoma;
+	font-family:Tahoma,Arial;
 }
 
 #players th{
@@ -213,7 +213,7 @@
 }
 
 .playerextra{
-    color:#886;
+    color:#82775a;
 	font-size:11px;
 }
 
@@ -311,8 +311,8 @@
     display:hidden;
     position:absolute;
     right:0px;
-    background-color:#e2d7b9;
-    box-shadow:4px 4px 2px #afa588;
+    background-color:#e2dab9;
+    box-shadow:0px 10px 20px -6px #afa588;
     width:300px;
     margin:10px;
     border:1px solid #bbb29a;
@@ -322,8 +322,8 @@
 
 #previewheader{
     position:relative;
-	height:100px;
-	border-bottom:1px solid #c1b89f;
+	height:80px;
+	border-bottom:1px solid #cec5a2;
 	vertical-align:top;
 	padding:10px;
 }
@@ -366,6 +366,10 @@
 	font-weight:bold;
 }
 
+#previewstats li div:last-child{
+    font-size:10px;
+}
+
 #previewfooter{
     position:absolute;
     bottom:10px;
@@ -381,8 +385,8 @@
     position:relative;
     overflow:hidden;
     padding:10px;
-    border-top:1px solid #eae1cb;
-    border-bottom:1px solid #c1b89f;
+    border-top:1px solid #ede7ce;
+    border-bottom:1px solid #cec5a2;
 }
 
 .pcommenttop{

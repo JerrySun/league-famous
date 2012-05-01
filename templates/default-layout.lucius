@@ -6,10 +6,9 @@
 body{
 	font-family:Arial,"Lucida Grande", sans-serif;
 	font-size:12px;
-	background-color:#cec2a0;
-    background-image:url('@{StaticR biggradient_png}');
-    background-repeat:no-repeat;
-    background-position: top;
+	background-color:#cac09b;
+    background-image:url('@{StaticR bgdots_png}');
+    background-position:top;
 	margin:0px;
 	height:100%;
 }
@@ -63,7 +62,7 @@ li.menu-item a{
 	display:block;
 	height:110px;
 	background-image:url('@{StaticR header_png}');
-	background-position:center;
+	background-position:4px 20px;
 	background-repeat:no-repeat;
 	border-top: 1px solid #afa588;
 	border-bottom: 1px solid #afa588;
@@ -87,6 +86,7 @@ li.menu-item a{
 
 #center{
 	width:440px;
+    min-height:600px;
 	position:relative;
 	background-image: url('@{StaticR vertdash_png}');
 	background-repeat: repeat-y;
@@ -261,7 +261,7 @@ a{
 	background-color:#e2d7b9;
 	padding:2px;
 	border:1px solid #bbb29a;
-	box-shadow:4px 4px 2px #afa588;
+    box-shadow:0px 10px 20px -6px #afa588;
 }
 
 .hidden{
@@ -288,13 +288,13 @@ h3{
 
 .howto{
 	position:relative;
-	color:#a19574;
+	color:#9d9170;
 	font-size:14px;
 	font-weight:bold;
 }
 
 .howto h2{
-	color:#a19574;
+	color:#9d9170;
 }
 
 #footer{
