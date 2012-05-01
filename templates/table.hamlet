@@ -1,12 +1,12 @@
 <table #players>
     <tbody>
-        <tr>
-            <th style="width:50px;">RANK
-            <th>NAME
-            <th style="width:50px;">LIKES
-            <th style="width:50px;">DISLIKES
-            <th style="width:30px;">%
-            <th style="width:40px;">vote
+        <tr .firstrow>
+            <th .thrank>RANK
+            <th .thname>NAME
+            <th .thlikes>LIKES
+            <th .thlikes>DISLIKES
+            <th .thpercentage>%
+            <th .thvote>vote
         $forall player <- players
             <tr .playerrow data-name=#{playerName player}>
                 <td>

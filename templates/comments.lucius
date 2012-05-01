@@ -142,13 +142,13 @@
 
 .commenttop{
 	position:relative;
-	width:420px;
+	width:452px;
+    color:white;
 	font-size:16px;
-	background-color:#dccc9e;
+	background-color:#768074;
+    background-image:url('@{StaticR diagonal_png}');
 	padding:5px 10px 5px;
 	margin-bottom:10px;
-	border-top:1px solid #e9dbb2;
-	border-bottom:1px solid #ccbb8a;
 }
 
 .commentname{
@@ -159,7 +159,7 @@
 
 .commenttime{
 	position:relative;
-	color:#665;
+	color:#ddd;
 	font-size:12px;
 }
 
@@ -188,7 +188,7 @@
 }
 
 .replywrapper{
-	width:420px;
+	width:452px;
 	margin-left:20px;
 	margin-bottom:30px;
 	overflow:hidden;
@@ -196,11 +196,11 @@
 
 .replytop{
 	font-size:14px;
-	background-color:#dccc9e;
+    color:white;
+	background-color:#768074;
+    background-image:url('@{StaticR diagonal_png}');
 	padding:5px 10px 5px;
 	margin-bottom:10px;
-	border-top:1px solid #e9dbb2;
-	border-bottom:1px solid #ccbb8a;
 }
 
 .replyname{
@@ -210,7 +210,7 @@
 
 .replytime{
 	position:relative;
-	color:#665;
+	color:#ddd;
 	font-size:12px;
 }
 
@@ -230,7 +230,7 @@
 
 .loadmore{
     display:block;
-    width:428px;
+    width:460px;
     text-align:center;
     font-size:12px;
     font-weight:bold;
