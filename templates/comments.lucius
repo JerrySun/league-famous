@@ -142,7 +142,7 @@
 
 .commenttop{
 	position:relative;
-	width:580px;
+	max-width:620px;
     color:white;
 	font-size:16px;
 	background-color:#4a4946;
@@ -188,14 +188,24 @@
 }
 
 .replywrapper{
-	width:560px;
+	max-width:610px;
+	margin-bottom:30px;
+    padding-left:30px;
+	overflow:hidden;
+    background-image:url('@{StaticR doublegreaterthan_png}');
+    background-repeat:no-repeat;
+    background-position:0px 3px;
+}
+
+.replyfooter{
+	max-width:600px;
 	margin-bottom:30px;
     padding-left:40px;
 	overflow:hidden;
 }
 
 .replytop{
-	font-size:14px;
+	font-size:16px;
     color:white;
 	background-color:#4a4946;
     background-image:url('@{StaticR diagonallight_png}');
@@ -230,7 +240,7 @@
 
 .loadmore{
     display:block;
-    width:580px;
+    max-width:618px;
     text-align:center;
     background-image:url('@{StaticR votebuttonbg_png}');
     background-repeat:repeat-x;
@@ -241,13 +251,13 @@
 
 .viewing{
     display:block;
-    width:450px;
+    max-width:628px;
     text-align:center;
     background-image:url('@{StaticR votebuttonbg_png}');
     background-repeat:repeat-x;
     margin-bottom:20px;
     border:1px dotted #77684e;
-    padding:10px;
+    padding:10px 5px 10px;
 }
 
 #postsubmit{
@@ -265,6 +275,10 @@
 	border: 2px solid #77684e;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
+    -moz-transition:all 0.2s ease-out;
+    -webkit-transition:all 0.2s ease-out;
+    -o-transition: all 0.2s ease-out;
+    transition:all 0.2s ease-out;
 	padding:6px;
     display: block;
 }

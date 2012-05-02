@@ -4,13 +4,13 @@
 	}
 
 body{
+    min-width:880px;
 	font-family:Arial,"Lucida Grande", sans-serif;
 	font-size:12px;
-	background-color:#cac09b;
+	background-color:#c6b996;
     background-image:url('@{StaticR bgdots_png}');
     background-position:top;
 	margin:0px;
-	height:100%;
 }
 
 #headerwrapper{
@@ -24,10 +24,11 @@ body{
 
 #headercenter{
     position:relative;
-    width:940px;
+    min-width:840px;
+    max-width:980px;
     height:80px;
     margin:0px auto 0px;
-    padding:10px 0px 10px 0px;
+    padding:10px 0px 10px 20px;
 }
 
 #toplogo{
@@ -37,13 +38,13 @@ body{
 	background-image:url('@{StaticR headerlogo_png}');
 	background-repeat:no-repeat;
 	padding:0px;
-	margin:0px 0px 30px;
+	margin:0px;
 }
 
 #topmenu{
     position:absolute;
     top:0px;
-    right:0px;
+    right:20px;
 }
 
 #topmenu ul{
@@ -57,7 +58,7 @@ body{
 }
 
 #topmenu ul li a{
-    color:white;
+    color:#eee;
     display:block;
     height:40px;
     padding:39px 20px;
@@ -69,15 +70,47 @@ body{
     background-image:url('@{StaticR diagonallight_png}');
 }
 
-#topmenu ul li a.menubrowse{border-top:3px solid #0032d6;}
-#topmenu ul li a.menuforums{border-top:3px solid #67a84a;}
-#topmenu ul li a.menublog{border-top:3px solid #d4942f;}
-#topmenu ul li a.menuhelp{border-top:3px solid #df002a;}
+#topmenu ul li a.menubrowse{
+    border-top:3px solid #0032d6;
+    -moz-transition:all 0.1s ease-out;
+    -webkit-transition:all 0.1s ease-out;
+    -o-transition: all 0.1s ease-out;
+    transition:all 0.1s ease-out;
+}
+#topmenu ul li a.menuforums{
+    border-top:3px solid #67a84a;
+    -moz-transition:all 0.1s ease-out;
+    -webkit-transition:all 0.1s ease-out;
+    -o-transition: all 0.1s ease-out;
+    transition:all 0.1s ease-out;
+}
+#topmenu ul li a.menublog{
+    border-top:3px solid #d4942f;
+    -moz-transition:all 0.1s ease-out;
+    -webkit-transition:all 0.1s ease-out;
+    -o-transition: all 0.1s ease-out;
+    transition:all 0.1s ease-out;
+}
+#topmenu ul li a.menuhelp{
+    border-top:3px solid #df002a;
+    -moz-transition:all 0.1s ease-out;
+    -webkit-transition:all 0.1s ease-out;
+    -o-transition: all 0.1s ease-out;
+    transition:all 0.1s ease-out;
+}
 
-#topmenu ul li a.menubrowse:hover{background-color:#0032d6;}
-#topmenu ul li a.menuforums:hover{background-color:#67a84a;}
-#topmenu ul li a.menublog:hover{background-color:#d4942f;}
-#topmenu ul li a.menuhelp:hover{background-color:#df002a;}
+#topmenu ul li a.menubrowse:hover{
+    background-color:#0032d6;
+}
+#topmenu ul li a.menuforums:hover{
+    background-color:#67a84a;
+}
+#topmenu ul li a.menublog:hover{
+    background-color:#d4942f;
+}
+#topmenu ul li a.menuhelp:hover{
+    background-color:#df002a;
+}
 
 #menu {
 	float:left;
@@ -131,8 +164,8 @@ li.menu-item a{
 	position:relative;
 	top:0px;
 	width:300px;
-	padding:0px;
-    margin-right:10px;
+	padding-right:0px;
+    margin-right:20px;
 	z-index:1;
 }
 
@@ -142,23 +175,27 @@ li.menu-item a{
 
 #wrapper{
 	position:relative;
-	width:960px;
-	background-color:transparent;
+    overflow-x:hidden;
+    min-width:880px;
+	max-width:1000px;
 	margin:0px auto 0px;
 }
 
 #center{
-	width:600px;
+    min-width:520px;
+	max-width:660px;
     min-height:600px;
+    margin-right:340px;
+    margin-left:20px;
 	position:relative;
-	padding:0px 304px 30px 10px;
+	padding:0px 0px 30px 0px;
 }
 
 .contentheader{
 	position:relative;
 	height:120px;
-	border-top: 1px solid #afa588;
-	border-bottom: 1px solid #afa588;
+	border-top: 1px solid #a0977d;
+	border-bottom: 1px solid #a0977d;
 	padding:25px 0px 25px 0px;
 	margin:0px 0px 20px 0px;
 }
@@ -328,7 +365,9 @@ a{
     /*pointer-events:none;*/
 }
 
-.unhidden{display:block;}
+.unhidden{
+    display:block;
+}
 
 .stat-blue{color:#00a8ff;}
 .stat-red{color:#dc0000;}
@@ -358,6 +397,7 @@ h3{
 
 #footer-wrapper{
 	position:relative;
+    min-height:150px;
     background-color:#111112;
     background-image:url('@{StaticR diagonallight_png}');
 	width:100%;
@@ -365,14 +405,20 @@ h3{
 	border-top:1px solid #000;
 	color:#ddd;
 	font-size:12px;
-	margin:0px 0px 0px;
+	margin:0px;
 	padding:0px;
 }
 
 #footer-center{
-    width:950px;
-    margin:0px auto 0px auto;
-    padding:20px 0px 20px;
+    min-width:840px;
+    max-width:960px;
+    margin:0px auto 0px;
+    padding:20px;
+}
+
+#footer-center img{
+    float:left;
+    margin-right:20px;
 }
 
 .footnote{

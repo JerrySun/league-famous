@@ -44,7 +44,7 @@
                 <div>#{playerDownvotes player}
                 <div>dislikes
     <div .viewing>
-        You are now viewing all replies to a post by <b>scarra</b>.
+        You are now viewing all replies to a comment by <b>scarra</b> about <b>Crs Crumbzz</b>.
     <div .commentwrapper data-post=#{show parN}>
         <div .commenttop>
             <span .commentname>#{poster parent}

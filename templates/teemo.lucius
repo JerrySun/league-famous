@@ -51,6 +51,7 @@
 
 .addbutton{
 	display:block;
+    cursor:pointer;
 	position:relative;
 	height:19px;
 	background-image:url('@{StaticR addbutton_png}');
@@ -89,6 +90,7 @@
 	display:block;
 	height:19px;
 	width:32px;
+    cursor:pointer;
 	background-image:url('@{StaticR addbutton_png}');
 	background-repeat:no-repeat;
 	position:relative;
@@ -119,7 +121,7 @@
 #filterfooter{
 	padding: 20px 0px 20px;
 	margin-bottom:40px;
-	border-top:4px solid black;
+	border-top:2px solid black;
 }
 
 .footerbutton{
@@ -182,7 +184,7 @@
 	border-bottom:2px solid black;
 }
 
-#players .thrank{width:45px;}
+#players .thrank{width:50px;}
 #players .thname{width:auto;}
 #players .thlikes{width:50px;}
 #players .dislikes{width:50px;}
@@ -203,6 +205,14 @@
 	padding:15px 10px 15px;
 }
 
+#players tr:nth-child(2n+2){
+    background:#c6b996 url('@{StaticR bgdots_png}');
+}
+
+#players tr:nth-child(2n+3){
+    background:#d0c3a2 url('@{StaticR bgdots_png}');
+}
+
 .rankwrapper{
 	float:left;
 	position:relative;
@@ -210,39 +220,39 @@
 }
 
 .playerrank{
-	font-size:14px;
+	font-size:15px;
 	font-weight:bold;
 }
 
 .playerscore{
-	font-size:11px;
+	font-size:12px;
 }
 
 .playername {
     cursor: pointer;
 	color:black;
 	text-decoration:none;
-	font-size:14px;
+	font-size:15px;
 	font-weight:bold;
 }
 
 .playerextra{
-    color:#82775a;
-	font-size:11px;
+    color:#766c51;
+	font-size:12px;
 }
 
 .playerlikes{
-	font-size:12px;
+	font-size:15px;
 	color:#00a8ff;
 }
 
 .playerdislikes{
-	font-size:12px;
+	font-size:15px;
 	color:#dc0000;
 }
 
 .playerpercentage{
-	font-size:12px;
+	font-size:15px;
 }
 
 
@@ -324,15 +334,15 @@
 #preview{
     display:hidden;
     position:absolute;
-    right:10px;
+    right:0px;
     top:159px;
     background-color:#e2dab9;
     box-shadow:0px 10px 20px -6px #afa588;
     width:300px;
-    margin:10px 0px;
+    margin:10px 20px;
     border:1px solid #bbb29a;
     padding:0px;
-    z-index:2;
+    z-index:1;
 }
 
 #previewheader{
@@ -503,6 +513,10 @@
 	border: 2px solid #c1b89f;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
+    -moz-transition:all 0.2s ease-out;
+    -webkit-transition:all 0.2s ease-out;
+    -o-transition: all 0.2s ease-out;
+    transition:all 0.2s ease-out;
 	padding:4px;
 }
 

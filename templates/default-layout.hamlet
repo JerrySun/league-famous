@@ -15,5 +15,6 @@
     ^{widget}
 <div #footer-wrapper>
     <div #footer-center>
+        <img src=@{StaticR logo_png}>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua.

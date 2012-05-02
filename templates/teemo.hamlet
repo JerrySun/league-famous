@@ -11,7 +11,7 @@
 <div #preview .hidden>
 <div #center>
     <div .contentheader>
-        <h1>RANKINGS
+        <h1>PLAYER RANKINGS
         <ul .headerbuttons>
             <li>
                 <span .globe>NORTH AMERICA
