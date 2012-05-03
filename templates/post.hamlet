@@ -10,21 +10,21 @@
         <h1>#{playerName player}
         $case vote
             $of Neutral
-                <ul .votebuttons>
+                <ul .votebuttons .votebuttons-playerpage>
                     <li .votethumbsupbg>
                         <div .votethumbsup>
                         <div .votelike>like
                     <li .votethumbsdownbg>
                         <div .votethumbsdown>
             $of Up
-                <ul .votebuttons .upvoted>
+                <ul .votebuttons .upvoted .votebuttons-playerpage>
                     <li .votethumbsupbg>
                         <div .votethumbsup>
                         <div .votelike>like
                     <li .votethumbsdownbg>
                         <div .votethumbsdown>
             $of Down
-                <ul .votebuttons .downvoted>
+                <ul .votebuttons .downvoted .votebuttons-playerpage>
                     <li .votethumbsupbg>
                         <div .votethumbsup>
                         <div .votelike>like

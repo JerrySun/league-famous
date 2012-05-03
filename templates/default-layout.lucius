@@ -1,4 +1,3 @@
-
 *{
 	margin:0;
 	}
@@ -6,7 +5,6 @@
 body{
     min-width:880px;
 	font-family:Arial,"Lucida Grande", sans-serif;
-	font-size:12px;
 	background-color:#c6b996;
     background-image:url('@{StaticR bgdots_png}');
     background-position:top;
@@ -27,6 +25,9 @@ body{
     min-width:840px;
     max-width:980px;
     height:80px;
+    background-image:url('@{StaticR headerlogohover_png}');
+    background-position:-1000px -1000px;
+    background-repeat:no-repeat;
     margin:0px auto 0px;
     padding:10px 0px 10px 20px;
 }
@@ -39,6 +40,14 @@ body{
 	background-repeat:no-repeat;
 	padding:0px;
 	margin:0px;
+}
+
+#toplogo:hover{
+    background-image:url('@{StaticR headerlogohover_png}');
+    -moz-transition:all 8s ease-out;
+    -webkit-transition:all 8s ease-out;
+    -o-transition: all 8s ease-out;
+    transition:all 8s ease-out;
 }
 
 #topmenu{
@@ -207,12 +216,16 @@ li.menu-item a{
 }
 
 .votebuttons{
-	position:relative;
+	position:absolute;
 	width:91px;
 	list-style:none;
-	background-color:#0f0;
 	padding:0px;
     margin:0px;
+}
+
+.votebuttons-playerpage{
+    top:70px;
+    left:0px;
 }
 
 .votethumbsupbg{
@@ -315,10 +328,9 @@ li.menu-item a{
 h1{
 	display:block;
 	font-size:45px;
-	font-weight:bold;
+    font-family:Quantico,Arial;
 	color:white;
-	margin-top:-5px;
-	margin-bottom:0px;
+    line-height:30px;
 }
 
 h2{

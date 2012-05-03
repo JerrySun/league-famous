@@ -3,6 +3,7 @@
 	bottom:25px;
 	list-style:none;
 	padding:0px;
+    font-size:12px;
 	font-weight:bold;
     margin:0px;
 }
@@ -166,6 +167,8 @@
 .commentbody{
 	overflow:hidden;
 	margin-bottom:20px;
+    font-size:14px;
+    line-height:150%;
 }
 
 .commentreply{
@@ -227,6 +230,8 @@
 .replybody{
 	padding-left:0px;
 	overflow:hidden;
+    font-size:14px;
+    line-height:150%;
 }
 
 .replythumbnail{
@@ -242,6 +247,7 @@
     display:block;
     max-width:618px;
     text-align:center;
+    font-size:14px;
     background-image:url('@{StaticR votebuttonbg_png}');
     background-repeat:repeat-x;
     margin-bottom:20px;
@@ -253,6 +259,7 @@
     display:block;
     max-width:628px;
     text-align:center;
+    font-size:14px;
     background-image:url('@{StaticR votebuttonbg_png}');
     background-repeat:repeat-x;
     margin-bottom:20px;

@@ -171,7 +171,7 @@
 #players{
 	width:100%;
 	border-spacing:0px;
-	font-family:Tahoma,Arial;
+    font-family:'PT Sans Caption',Arial,Verdana;
 }
 
 #players th{
@@ -433,6 +433,7 @@
 
 .pcommentbody{
     overflow:hidden;
+    font-size:14px;
 }
 
 .pcommentreply{

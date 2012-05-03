@@ -32,7 +32,7 @@ getHomePageR pn = do
     let untilReset = "1 hour 3 minutes" :: Text
     urlRenderParams <- getUrlRenderParams
     let pageRoute n = urlRenderParams (HomePageR n) []
-    defaultLayout $ setTitle "HELLO TEEMO" >> $(widgetFile "teemo") 
+    defaultLayout $ setTitle "League Famous" >> $(widgetFile "teemo") 
 
 makeTable :: Int -> Int -> Maybe Text -> Handler (HtmlUrl (Route App))
 makeTable page n mbSearch = do
