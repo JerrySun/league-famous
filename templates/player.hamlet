@@ -54,77 +54,26 @@
             <li .stat-red>
                 <div>#{playerDownvotes player}
                 <div>dislikes
-    <div .commentwrapper>
-        <div .commenttop>
-            <span .commentname>scarra
-            <span .commenttime>4/20/2012 @ 4:20 PM
-        <div .commentbody>
-            <div>
-                <img src=@{StaticR jellyfish_jpg} .topthumbnail>
-                I feel like jellyfish are the best creatures in the
-                \ universe. How about you guys? Sometimes they can poison
-                \ you, but I find them to be hilarious overall.Jellyfish
-                \ (also known as jellies or sea jellies or a stage of the
-                \ life cycle of Medusozoa) are free-swimming members of the
-                \ phylum Cnidaria. Medusa is another word for jellyfish, and
-                \ refers to any free-swimming jellyfish life stages among
-                \ animals in the phylum. Jellyfish have multiple morphologies
-                \ that represent cnidarian classes including the Scyphozoa
-                \ (over 200 species), Staurozoa (about 50 species), Cubozoa
-                \ (about 20 species), and Hydrozoa (about 1000¿1500 species
-                \ that make jellyfish and many more that do not).
-        <div .replywrapper>
-            <div .replytop>
-                <span .replyname>HotShotGG
-                <span .replytime>4/20/2012 @ 4:20 PM
-            <div .replybody>
-                Dude, Jellyfishes are lame. I think they are about as dumb
-                \ as potatos and can't even speak English.
-        <div .replywrapper>
-            <div .replytop>
-                <span .replyname>Elementz
-                <span .replytime>4/20/2012 @ 4:20 PM
-            <div .replybody>
-                <img src=@{StaticR okapi_jpg} .replythumbnail>
-                Does anyone else like these?
-                \ What are these?!
-        <div .replyfooter>
-            <div .commentreply>
-                <a href=@{PostR 9001}>REPLY | 7 MORE REPLIES
-    <div .commentwrapper>
-        <div .commenttop>
-            <span .commentname>scarra
-            <span .commenttime>4/20/2012 @ 4:20 PM
-        <div .commentbody>
-            <div>
-                <img src=@{StaticR jellyfish_jpg} .topthumbnail>
-                I feel like jellyfish are the best creatures in the
-                \ universe. How about you guys? Sometimes they can poison
-                \ you, but I find them to be hilarious overall.Jellyfish
-                \ (also known as jellies or sea jellies or a stage of the
-                \ life cycle of Medusozoa) are free-swimming members of the
-                \ phylum Cnidaria. Medusa is another word for jellyfish, and
-                \ refers to any free-swimming jellyfish life stages among
-                \ animals in the phylum. Jellyfish have multiple morphologies
-                \ that represent cnidarian classes including the Scyphozoa
-                \ (over 200 species), Staurozoa (about 50 species), Cubozoa
-                \ (about 20 species), and Hydrozoa (about 1000¿1500 species
-                \ that make jellyfish and many more that do not).
-        <div .replywrapper>
-            <div .replytop>
-                <span .replyname>HotShotGG
-                <span .replytime>4/20/2012 @ 4:20 PM
-            <div .replybody>
-                Dude, Jellyfishes are lame. I think they are about as dumb
-                \ as potatos and can't even speak English.
-        <div .replywrapper>
-            <div .replytop>
-                <span .replyname>Elementz
-                <span .replytime>4/20/2012 @ 4:20 PM
-            <div .replybody>
-                <img src=@{StaticR okapi_jpg} .replythumbnail>
-                Does anyone else like these? What are these?!
-        <div .replyfooter>
-            <div .commentreply>
-                <a href=@{PostR 9001}>REPLY | 7 MORE REPLIES
+    $forall (parent, children) <- posts
+        <div .commentwrapper>
+            <div .commenttop>
+                <span .commentname>#{poster parent}
+                <span .commenttime>#{show $ postTime parent}
+            <div .commentbody>
+                <div>
+                    $maybe url <- imageUrl parent
+                        <img src=#{url} .topthumbnail>
+                    #{message parent}
+            $forall child <- children
+                <div .replywrapper>
+                    <div .replytop>
+                        <span .replyname>#{poster child}
+                        <span .replytime>#{show $ postTime child}
+                    <div .replybody>
+                        $maybe url <- imageUrl child
+                            <img src=#{url} .replythumbnail>
+                        #{message child}
+            <div .replyfooter>
+                <div .commentreply>
+                    <a href=@{PostR 9001}>REPLY | 7 MORE REPLIES
     <div .loadmore>LOAD MORE

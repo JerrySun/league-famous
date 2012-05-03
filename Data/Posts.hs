@@ -9,6 +9,7 @@ module Data.Posts
     , replyCount
     , newReply
     , getPost
+    , recentSummaries
     ) where
 
 import Prelude
@@ -100,6 +101,12 @@ recentTopPosts name store = fmap (map infoTriple . filter (isTop . snd) . map nu
           isTop _ = False
 
 
+recentSummaries name store = fmap (map miniThread . filter (isTop . snd) . map numAndPost) namePosts
+    where namePosts = M.lookup name . nameMap $ store
+          miniThread (n, x) = (n, extractPost x) :  map (id &&& extractPost . fromJust . byNumber store) ((reverse . take 2 . \(TLPost _ nums) -> nums) x)
+          numAndPost n = (n, fromJust . byNumber store $ n)
+          isTop (TLPost _ _) = True
+          isTop _ = False
 
 children :: Int -> PostStore -> [(Int, Post)]
 children num store = case byNumber store num of

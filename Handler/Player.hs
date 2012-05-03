@@ -4,6 +4,9 @@ module Handler.Player
     ) where
 
 import Import
+import Control.Arrow ((&&&))
+import Prelude (head, tail)
+import Data.Maybe (fromMaybe)
 
 getPlayerR :: Name -> Handler RepHtml
 getPlayerR name  = do
@@ -11,6 +14,9 @@ getPlayerR name  = do
     player <- maybe404 $ query' acid (GetPlayer name)
     ip <- requestIP
     vote <- query' acid $ GetVote ip name
+    postsx <- fmap (fromMaybe [])  $ query' acid $ RecentSummaries name
+    let posts = map (snd . head &&& map snd . tail) postsx
+    
     defaultLayout $ do
         $(widgetFile "comments")
         $(widgetFile "player")
