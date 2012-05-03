@@ -54,6 +54,9 @@
     cursor:pointer;
 	position:relative;
 	height:19px;
+    font-size:10px;
+    font-weight:bold;
+    line-height:20px;
 	background-image:url('@{StaticR addbutton_png}');
 	background-repeat:no-repeat;
 	padding-left:32px;

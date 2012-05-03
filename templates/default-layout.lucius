@@ -409,13 +409,13 @@ h3{
 
 #footer-wrapper{
 	position:relative;
-    min-height:150px;
+    min-height:200px;
     background-color:#111112;
     background-image:url('@{StaticR diagonallight_png}');
 	width:100%;
 	bottom:0px;
 	border-top:1px solid #000;
-	color:#ddd;
+	color:#ccc;
 	font-size:12px;
 	margin:0px;
 	padding:0px;
@@ -433,8 +433,20 @@ h3{
     margin-right:20px;
 }
 
-.footnote{
-	padding:20px;
+#footer-logo{
+    position:relative;
+    float:left;
+    width:76px;
+    height:76px;
+    background-image:url('@{StaticR logo_png}');
+    margin-right:20px;
+}
+
+#footer-about{
+    display:block;
+    float:left;
+    width:200px;
+    font-size:12px;
 }
 
 a.plain{

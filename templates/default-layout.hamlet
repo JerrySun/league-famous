@@ -15,6 +15,5 @@
     ^{widget}
 <div #footer-wrapper>
     <div #footer-center>
-        <img src=@{StaticR logo_png}>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua.
+        <div #footer-logo>
+        <div #footer-about><b>About</b><br>League Famous is a place for League of Legends players to rate and talk about each other.
