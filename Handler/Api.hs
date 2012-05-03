@@ -2,6 +2,7 @@ module Handler.Api
     ( postNewPlayerR
     , postVoteR
     , postMakePostR
+    , postMakeReplyR
     ) where
 
 import Import
@@ -47,3 +48,19 @@ postMakePostR = do
     _ <- update' acid $ NewTopPost (Name player) post
     jsonToRepJson ()
     
+data ReplyInput = ReplyInput Int Text (Maybe Text) Text
+
+instance FromJSON ReplyInput where
+    parseJSON (Object v) = ReplyInput <$> v .: "parent" <*> v .: "name" <*> v .: "url" <*> v .: "text"
+    parseJSON _          = mzero
+
+postMakeReplyR :: Handler RepJson
+postMakeReplyR = do
+    ReplyInput parNum name1 url text <- parseJsonBody_
+    let name = if name1 == "" then "Anonymous" else name1
+    acid <- getAcid
+    parent <- maybe404 $ query' acid $ GetPost parNum
+    time <- liftIO getCurrentTime
+    let post = Post name text url time (postPlayer parent)
+    _ <- update' acid $ NewReply parNum post
+    jsonToRepJson ()

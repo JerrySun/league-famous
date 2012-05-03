@@ -69,13 +69,13 @@
     <div .writesomething>
         <h2>Write a reply
         <div>
-            <form>
+            <form #replyForm>
                 <div .commentingname>NAME
-                <input .commentinginput>
+                <input #replyName .commentinginput>
                 <div .commentingimg>IMAGE URL
-                <input .commentinginput>
+                <input #replyUrl .commentinginput>
                 <div .commentingbubble>INTERESTING COMMENT
-                <textarea .commentingtext>
+                <textarea #replyText .commentingtext>
                 <div .postarea>
-                    <div .postbutton>SUBMIT
+                    <input #postsubmit type="submit" value="SUBMIT">
                     <div .formatting>formatting help

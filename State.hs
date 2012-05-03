@@ -23,7 +23,8 @@ module State
     , NewTopPost (..)
     , RecentTopPosts (..)
     , ReplyCount (..)
-    , Children (..)
+    , NewReply (..)
+    , GetPost (..)
     ) where
 
 import Data.Acid
@@ -165,9 +166,12 @@ newTopPost name post = updater' postStore setPostStore $ P.newTopPost name post
 
 recentTopPosts name = queryer postStore $ P.recentTopPosts name
 
-children num = queryer postStore $ P.children num
-
 replyCount num = queryer postStore $ P.replyCount num
+
+newReply parNum post = updater' postStore setPostStore $ P.newReply parNum post
+
+getPost num = queryer postStore $ P.getPost num
+
 
 $(makeAcidic ''AppState [ 'newPlayer
                         , 'getPlayer
@@ -180,6 +184,7 @@ $(makeAcidic ''AppState [ 'newPlayer
                         , 'getThread
                         , 'newTopPost
                         , 'recentTopPosts
-                        , 'children
                         , 'replyCount
+                        , 'newReply
+                        , 'getPost
                         ])

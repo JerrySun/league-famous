@@ -19,3 +19,4 @@
 /#Int         HomePageR  GET
 
 /newpost      MakePostR  POST
+/reply        MakeReplyR  POST

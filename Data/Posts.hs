@@ -6,8 +6,9 @@ module Data.Posts
     , newTopPost
     , getThread
     , recentTopPosts 
-    , children
     , replyCount
+    , newReply
+    , getPost
     ) where
 
 import Prelude
@@ -69,16 +70,35 @@ newTopPost name post store = incIndex . setNameMap names . inject posts $ store
           names = M.insert name (index : newList) $ nameMap store
           newList = fromMaybe [] $ M.lookup name (nameMap store)
 
+newReply ::  Int -> Post -> PostStore -> PostStore
+newReply parNum post store = incIndex . setNameMap names . inject posts $ store
+    where name = postPlayer . extractPost $ parent
+          parent = fromJust . byNumber store $ parNum
+          parent' = (\(TLPost p children) -> TLPost p (index:children)) parent
+          posts = I.insert parNum parent' $ I.insert index entry $ essence store
+          index = nextIndex store
+          entry = CLPost post parNum
+
+          names = M.insert name (index : newList) $ nameMap store
+          newList = fromMaybe [] $ M.lookup name (nameMap store)
+
 byNumber ::  PostStore -> I.Key -> Maybe PostEntry
 byNumber store number = I.lookup number . essence $ store
 
 getThread ::  I.Key -> PostStore -> Maybe [(Int, Post)]
-getThread number store = parentThread <$> (I.lookup number . essence) store
-     where parentThread (TLPost tpost pnums) = (number, tpost) : map (id &&& extractPost . fromJust . byNumber store) (reverse pnums)
-           parentThread (CLPost _ pnum) = parentThread . fromJust . byNumber store $ pnum
+getThread number store = case byNumber store number of
+                            Nothing -> Nothing
+                            Just (TLPost post pnums) -> Just $ (number, post) : map (id &&& extractPost . fromJust . byNumber store) (reverse pnums)
+                            Just (CLPost _ pnum) -> getThread pnum store
 
 
-recentTopPosts name store = fmap (map (\x -> (x, extractPost . fromJust . byNumber store $ x, replyCount x store))) . M.lookup name . nameMap $ store
+recentTopPosts name store = fmap (map infoTriple . filter (isTop . snd) . map numAndPost) namePosts
+    where namePosts = M.lookup name . nameMap $ store
+          infoTriple (n, x) = (n, extractPost x, replyCount n store)
+          numAndPost n = (n, fromJust . byNumber store $ n)
+          isTop (TLPost _ _) = True
+          isTop _ = False
+
 
 
 children :: Int -> PostStore -> [(Int, Post)]
@@ -90,3 +110,5 @@ replyCount :: Int -> PostStore -> Int
 replyCount num store = case byNumber store num of
                          Just (TLPost _ xs) -> length xs
                          _ -> 0
+
+getPost num store = fmap extractPost . byNumber store $ num
