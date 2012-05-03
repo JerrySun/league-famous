@@ -16,7 +16,7 @@
             <li .stat-red>
                 <div>#{playerDownvotes player}
                 <div>dislikes
-    $forall (pnum, post) <- posts
+    $forall (pnum, post, replyCount) <- posts
         <div .pcommentwrapper>
             <div .pcommenttop>
                 <span .pcommentname>#{poster post}
@@ -27,7 +27,7 @@
                     <img src=#{img} .pthumbnail>
                 #{message post}
             <div .pcommentreply>
-                <a href=@{PostR pnum}>10 REPLIES
+                <a href=@{PostR pnum}>#{show replyCount} REPLIES
     <div #quickreply>
         <form #previewPost data-player=#{playerName player}>
             <input #prevPostName placeholder="Anonymous" .pinput .pinputname>

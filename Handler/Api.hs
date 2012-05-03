@@ -42,7 +42,7 @@ postMakePostR = do
     PostInput player name1 url text <- parseJsonBody_
     let name = if name1 == "" then "Anonymous" else name1
     time <- liftIO getCurrentTime
-    let post = Post name text url time
+    let post = Post name text url time (Name player)
     acid <- getAcid
     _ <- update' acid $ NewTopPost (Name player) post
     jsonToRepJson ()

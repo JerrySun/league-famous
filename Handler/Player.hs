@@ -19,8 +19,10 @@ getPostR :: Int -> Handler RepHtml
 getPostR num = do
     acid <- getAcid
     ((parN, parent):children) <- maybe404 $ query' acid $ GetThread num
-    let player = Player "Seinfeld" 44 17 73
-    let vote = Up
+    let name = postPlayer parent
+    player <- maybe404 $ query' acid $ GetPlayer name
+    ip <- requestIP
+    vote <- query' acid $ GetVote ip name
     render <- getUrlRender
     defaultLayout $ do
         $(widgetFile "comments")

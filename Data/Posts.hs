@@ -6,6 +6,8 @@ module Data.Posts
     , newTopPost
     , getThread
     , recentTopPosts 
+    , children
+    , replyCount
     ) where
 
 import Prelude
@@ -25,6 +27,7 @@ data Post = Post { poster :: Text
                  , message :: Text
                  , imageUrl :: Maybe Text
                  , postTime :: UTCTime
+                 , postPlayer :: Name
                  } deriving (Typeable)
 
 $(deriveSafeCopy 0 'base ''Post)
@@ -75,4 +78,15 @@ getThread number store = parentThread <$> (I.lookup number . essence) store
            parentThread (CLPost _ pnum) = parentThread . fromJust . byNumber store $ pnum
 
 
-recentTopPosts name store = fmap (map (id &&& extractPost . fromJust . byNumber store)) . M.lookup name . nameMap $ store
+recentTopPosts name store = fmap (map (\x -> (x, extractPost . fromJust . byNumber store $ x, replyCount x store))) . M.lookup name . nameMap $ store
+
+
+children :: Int -> PostStore -> [(Int, Post)]
+children num store = case byNumber store num of
+                         Just (TLPost _ xs) -> map (id &&& extractPost . fromJust . byNumber store) $ reverse xs
+                         _ -> []
+
+replyCount :: Int -> PostStore -> Int
+replyCount num store = case byNumber store num of
+                         Just (TLPost _ xs) -> length xs
+                         _ -> 0
