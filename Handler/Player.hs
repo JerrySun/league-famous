@@ -15,7 +15,7 @@ getPlayerR name  = do
     ip <- requestIP
     vote <- query' acid $ GetVote ip name
     postsx <- fmap (fromMaybe [])  $ query' acid $ RecentSummaries name
-    let posts = map (snd . head &&& map snd . tail) postsx
+    let posts = map (\x -> (fst (head x), snd (head x), map snd (tail x))) postsx
     
     defaultLayout $ do
         $(widgetFile "comments")

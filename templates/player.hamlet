@@ -54,7 +54,7 @@
             <li .stat-red>
                 <div>#{playerDownvotes player}
                 <div>dislikes
-    $forall (parent, children) <- posts
+    $forall (parN, parent, children) <- posts
         <div .commentwrapper>
             <div .commenttop>
                 <span .commentname>#{poster parent}
@@ -75,5 +75,5 @@
                         #{message child}
             <div .replyfooter>
                 <div .commentreply>
-                    <a href=@{PostR 9001}>REPLY | 7 MORE REPLIES
+                    <a href=@{PostR parN}>REPLY | 7 MORE REPLIES
     <div .loadmore>LOAD MORE
