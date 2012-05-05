@@ -4,11 +4,11 @@ module Data.Ranks
     , PlayerStore 
     , empty
     , newPlayer
-    , getPlayer
-    , allPlayers
     , voteMod
+    , getStats
+    , allStats
+    , searchStats
     , playerCount
-    , searchPlayer
     ) where
 
 import Prelude
@@ -20,13 +20,15 @@ import Data.Maybe (fromMaybe)
 import Data.Name
 import qualified Data.Text as T
 
---TODO: remove all the stored rank, abstract stats out (into State module?)
-
 data StoredPlayer = StoredPlayer { playerName :: Name
                                  , playerUpvotes :: Int
                                  , playerDownvotes :: Int
                                  } deriving (Eq, Typeable)
 
+$(deriveSafeCopy 0 'base ''StoredPlayer)
+
+playerScore :: PlayerStats -> Int
+playerScore p = playerUpvotes p - playerDownvotes p 
 
 data PlayerStore = PlayerStore { nameMap :: M.Map Name StoredPlayer
                                , scoreMap :: I.IntMap (M.Map Name StoredPlayer) }
@@ -35,16 +37,25 @@ data PlayerStore = PlayerStore { nameMap :: M.Map Name StoredPlayer
 setNameMap nm store = store { nameMap = nm }
 setScoreMap sm store = store { scoreMap = sm }
 
-$(deriveSafeCopy 0 'base ''StoredPlayer)
 $(deriveSafeCopy 0 'base ''PlayerStore)
 
 empty :: PlayerStore
 empty = PlayerStore M.empty I.empty
 
+newPlayer ::  Name -> PlayerStore -> PlayerStore
+newPlayer name ranks = if validName (unName name) then 
+                             case M.lookup name (unwrapMap ranks) of
+                                 Nothing -> ranks'
+                                 Just _ -> ranks
+                       else ranks
+                       where ranks' = PlayerStore names' scores'
+                             p = StoredPlayer name 0 0
+                             names' = M.insert name p $ unwrapMap ranks
+                             scores' = addScore p $ rankMap ranks
 
 voteMod :: Name -> Int -> Int -> PlayerStore -> Maybe PlayerStore
 voteMod _    0 0 store = Nothing
-voteMod name u d store = fmap (voteModStats u d store) $ getStats name store
+voteMod name u d store = fmap (voteModStored u d store) $ getStats name store
 
 voteModStored :: Int -> Int -> PlayerStore -> PlayerStats -> PlayerStore
 voteModStored u d store stored = setNameMap names . setScoreMap scores $ store
@@ -62,55 +73,38 @@ voteModStored u d store stored = setNameMap names . setScoreMap scores $ store
           newScore = playerScore newPlayer
           
 
--- rank of a score not in the thing
-findRank ::  I.Key -> I.IntMap (M.Map k a) -> Int
-findRank score scores = 1 + I.foldr' sumSizes 0 higherRanked
-                        where higherRanked = snd $ I.split score scores
-                              sumSizes nameMap total = M.size nameMap + total
+playerCount ::  PlayerStore -> Int
+playerCount = M.size . unwrapMap
 
-addScore :: StoredPlayer-> I.IntMap (M.Map Name StoredPlayer)
+data RankStats = RankStats { rankName :: Name
+                           , upvotes :: Int
+                           , downvotes :: Int
+                           , rank :: Int
+                           }
+
+getStats name store = fmap playerStats . M.lookup name . nameMap $ store
+
+allStats store = map playerStats . concatMap (extractPlayers) . sortedResults $ store
+    where sortedResults = reverse . I.toAscList . scoreMap 
+          extractPlayers = map snd . M.toAscList . snd
+
+searchStats x store = map playerStats . filter match . concatMap (extractPlayers) . sortedResults $ store
+    where match = T.isInfixOf (normalize x) . normalize . unName . playerName
+          sortedResults = reverse . I.toAscList . scoreMap 
+          extractPlayers = map snd . M.toAscList . snd
+
+playerStats p@(StoredPlayer n u d) store = RankStats n u d (fr . playerScore $ p) 
+    where fr = findRank (scoreMap store)
+
+findRank :: I.IntMap (M.Map k a) -> Int -> Int
+findRank scores score  = 1 + I.foldr' sumSizes 0 higherRanked
+    where higherRanked = snd $ I.split score scores
+          sumSizes nameMap total = M.size nameMap + total
+
+addScore :: StoredPlayer -> I.IntMap (M.Map Name StoredPlayer)
             -> I.IntMap (M.Map Name StoredPlayer)
 addScore p scores = I.insert (playerScore p) nameMap scores
                     where nameMap = case I.lookup (playerScore p) scores of
                                         Nothing -> M.singleton (playerName p) p
                                         Just nm -> M.insert (playerName p) p nm
 
-
-
-
-newPlayer ::  Name -> PlayerStore -> PlayerStore
-newPlayer name ranks = if validName (unName name) then 
-                           case M.lookup name (unwrapMap ranks) of
-                               Nothing -> ranks'
-                               Just _ -> ranks
-                       else ranks
-                       where ranks' = PlayerStore names' scores'
-                             p = Player name 0 0 (-1)
-                             names' = M.insert (playerName p) p $ unwrapMap ranks
-                             scores' = addScore p $ rankMap ranks
-                             
-getPlayer ::  Name -> PlayerStore -> Maybe StoredPlayer
-getPlayer n ranks = do
-    player <- M.lookup n . unwrapMap $ ranks
-    let pRank = findRank (playerScore player) (rankMap ranks)
-    return $ player {playerRank = pRank}
-
-refreshRank ::  I.IntMap (M.Map k a) -> StoredPlayer -> StoredPlayer
-refreshRank scores p = let pRank = findRank (playerScore p) scores
-                       in p {playerRank = pRank}
-
-allPlayers ::  PlayerStore -> [StoredPlayer]
-allPlayers ranks = concatMap extractPlayer sortedResults
-                   where extractPlayer = map (refreshRank (rankMap ranks) . snd)
-                                         . M.toAscList . snd
-                         sortedResults = reverse . I.toAscList . rankMap $ ranks
-
-searchPlayer ::  Text -> PlayerStore -> [StoredPlayer]
-searchPlayer x ranks = filter match $ allPlayers ranks
-    where match = T.isInfixOf (normalize x) . normalize . unName . playerName
-
-playerCount ::  PlayerStore -> Int
-playerCount = M.size . unwrapMap
-
-playerScore :: PlayerStats -> Int
-playerScore p = playerUpvotes p - playerDownvotes p 
