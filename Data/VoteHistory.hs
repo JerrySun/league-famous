@@ -13,7 +13,7 @@ import Data.Typeable (Typeable)
 import Data.SafeCopy (base, deriveSafeCopy)
 import qualified Data.Map as M
 import Data.Word (Word32)
-import Data.Ranks (Name)
+import Data.Name (Name)
 import Data.Maybe (fromMaybe)
 import Data.Aeson
 import Control.Monad (mzero)
