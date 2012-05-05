@@ -2,29 +2,20 @@
 module State 
     -- re-exports
     ( IP (..)
-    , Player (..)
     , Vote (..)
     , Name (..)
-    , Post (..)
-    , R.validName
+    , N.validName
     -- The master state
     , AppState
     , emptyState
     -- Acidic
     ---- Stats
-    , AllPlayers (..)
-    , PlayerStats (..)
     , PlayerCount (..)
-    , SearchPlayer (..)
     , NewPlayer (..)
     ---- Voting
     , GetVote (..)
     , ProcessVote (..)
     ---- Posts
-    , GetThread (..)
-    , PlayerThreads (..)
-    , NewTopPost (..)
-    , NewReply (..)
     ) where
 
 import Data.Acid
@@ -36,17 +27,19 @@ import Data.Text (Text)
 import Prelude
 import Control.Applicative ((<$>))
 import Control.Arrow ((&&&))
+import Data.Maybe (fromMaybe)
 
 import Data.VoteHistory (IPStore, IP, Vote(..))
 import qualified Data.VoteHistory as V
 
-import Data.Ranks (PlayerStore, Player (..))
+import Data.Ranks (PlayerStore)
 import qualified Data.Ranks as R
 
-import Data.Posts (Post (..), PostStore)
+import Data.Posts (Thread (..), PostStore)
 import qualified Data.Posts as P
 
 import Data.Name (Name (..))
+import qualified Data.Name as N
 
 ----
 ----
@@ -75,7 +68,7 @@ updater getter setter f = do
     put $ setter x' state
     return result
 
-updaterMaybe :: (AppState -> s) -> (s -> AppState -> AppState) -> (s -> Maybe (s, b)) -> Update AppState b
+updaterMaybe :: (AppState -> s) -> (s -> AppState -> AppState) -> (s -> Maybe (s, b)) -> Update AppState (Maybe b)
 updaterMaybe getter setter f = do
     state <- get
     case f $ getter state of
@@ -91,31 +84,11 @@ emptyState = AppState R.empty V.empty P.empty
 
 ----
 
-playerUpdater :: (PlayerStore -> (PlayerStore, b)) -> Update AppState b
-playerUpdater = updater playerStore setPlayerStore
-
-playerUpdater_ :: (PlayerStore -> PlayerStore) -> Update AppState ()
-playerUpdater_ = updater' playerStore setPlayerStore
-
-playerQueryer ::  (PlayerStore -> b) -> Query AppState b
-playerQueryer = queryer playerStore
-
-----
-
 newPlayer ::  Name -> Update AppState ()
-newPlayer name = playerUpdater' $ R.newPlayer name
-
-getPlayer :: Name -> Query AppState (Maybe Player)
-getPlayer n = playerQueryer $ R.getPlayer n
-
-allPlayers :: Query AppState [Player]
-allPlayers = playerQueryer R.allPlayers
+newPlayer name = updater_ playerStore setPlayerStore $ R.newPlayer name
 
 playerCount ::  Query AppState Int
-playerCount = playerQueryer R.playerCount
-
-searchPlayer :: Text -> Query AppState [Player]
-searchPlayer name = playerQueryer $ R.searchPlayer name
+playerCount = queryer playerStore $ R.playerCount
 
 ---------------
 
@@ -129,47 +102,39 @@ getVote ip name = queryer ipStore $ V.getVote ip name
 ----------------
 ----------------
 
-applyVote ::  Vote -> Vote -> Player -> PlayerStore -> PlayerStore
-applyVote new old p =
-    f new old
-    where f Up      Up      = R.voteMod p 0  0
-          f Up      Neutral = R.voteMod p 1  0
-          f Up      Down    = R.voteMod p 1  (-1)
-          f Down    Down    = R.voteMod p 0  0
-          f Down    Neutral = R.voteMod p 0  1
-          f Down    Up      = R.voteMod p (-1) 1
-          f Neutral Neutral = R.voteMod p 0  0
-          f Neutral Up      = R.voteMod p (-1) 0
-          f Neutral Down    = R.voteMod p 0  (-1)
+applyVote ::  Vote -> Vote -> Name -> PlayerStore -> PlayerStore
+applyVote new old name store = fromMaybe store $ f new old store
+    where f Up      Up      = R.voteMod name 0  0
+          f Up      Neutral = R.voteMod name 1  0
+          f Up      Down    = R.voteMod name 1  (-1)
+          f Down    Down    = R.voteMod name 0  0
+          f Down    Neutral = R.voteMod name 0  1
+          f Down    Up      = R.voteMod name (-1) 1
+          f Neutral Neutral = R.voteMod name 0  0
+          f Neutral Up      = R.voteMod name (-1) 0
+          f Neutral Down    = R.voteMod name 0  (-1)
 
-processVote :: IP -> Name -> Vote -> Update AppState Bool
+processVote :: IP -> Name -> Vote -> Update AppState ()
 processVote ip n v = do
     state <- get
     let players = playerStore state
     let ips     = ipStore state
 
-    case R.getPlayer n players of
-        Nothing -> return False
-        Just player -> do
+    if R.playerExists n players
+        then do
             let (ips', prevVote) = V.vote ip n v ips
-            let thisVoteMod = applyVote v prevVote player
+            let thisVoteMod = applyVote v prevVote n
             let players' = thisVoteMod players
             put state {playerStore = players', ipStore =  ips'}
-            return True
+        else
+            return ()
 
 ------
 
 
 $(makeAcidic ''AppState [ 'newPlayer
-                        , 'getPlayer
-                        , 'allPlayers
                         , 'updateVote
                         , 'getVote
                         , 'processVote
                         , 'playerCount
-                        , 'searchPlayer
-                        , 'getThread
-                        , 'newTopPost
-                        , 'newReply
-                        , 'getPost
                         ])

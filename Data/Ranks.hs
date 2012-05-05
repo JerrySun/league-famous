@@ -9,6 +9,7 @@ module Data.Ranks
     , allStats
     , searchStats
     , playerCount
+    , playerExists
     ) where
 
 import Prelude
@@ -16,7 +17,7 @@ import Data.Typeable (Typeable)
 import Data.SafeCopy (base, deriveSafeCopy)
 import qualified Data.Map as M
 import qualified Data.IntMap as I
-import Data.Maybe (fromMaybe, fromJust)
+import Data.Maybe (fromMaybe, fromJust, isJust)
 import Data.Name
 import qualified Data.Text as T
 
@@ -108,3 +109,5 @@ addScore p scores = I.insert (playerScore p) nameMap scores
                                         Nothing -> M.singleton (playerName p) p
                                         Just nm -> M.insert (playerName p) p nm
 
+playerExists ::  Name -> PlayerStore -> Bool
+playerExists name store = isJust . M.lookup name . nameMap $ store

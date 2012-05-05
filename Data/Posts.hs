@@ -7,6 +7,8 @@ module Data.Posts
     , newReply
     , getThread
     , playerThreads
+    -------
+    , Thread (..)
     ) where
 
 import Prelude
