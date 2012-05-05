@@ -40,11 +40,13 @@ import Control.Arrow ((&&&))
 import Data.VoteHistory (IPStore, IP, Vote(..))
 import qualified Data.VoteHistory as V
 
-import Data.Ranks (PlayerStore, Player (..), Name)
+import Data.Ranks (PlayerStore, Player (..))
 import qualified Data.Ranks as R
 
 import Data.Posts (Post (..), PostStore)
 import qualified Data.Posts as P
+
+import Data.Name (Name (..))
 
 ----
 ----
@@ -73,8 +75,16 @@ updater getter setter f = do
     put $ setter x' state
     return result
 
-updater' :: (AppState -> s) -> (s -> AppState -> AppState) -> (s -> s) -> Update AppState ()
-updater' getter setter f = uncurry setter . ((f . getter) &&& id) <$> get >>= put
+updaterMaybe :: (AppState -> s) -> (s -> AppState -> AppState) -> (s -> Maybe (s, b)) -> Update AppState b
+updaterMaybe getter setter f = do
+    state <- get
+    case f $ getter state of
+        Just (x', result) -> do put $ setter x' state
+                                return $ Just result
+        Nothing -> return Nothing
+
+updater_ :: (AppState -> s) -> (s -> AppState -> AppState) -> (s -> s) -> Update AppState ()
+updater_ getter setter f = uncurry setter . ((f . getter) &&& id) <$> get >>= put
 
 emptyState ::  AppState
 emptyState = AppState R.empty V.empty P.empty
@@ -84,8 +94,8 @@ emptyState = AppState R.empty V.empty P.empty
 playerUpdater :: (PlayerStore -> (PlayerStore, b)) -> Update AppState b
 playerUpdater = updater playerStore setPlayerStore
 
-playerUpdater' :: (PlayerStore -> PlayerStore) -> Update AppState ()
-playerUpdater' = updater' playerStore setPlayerStore
+playerUpdater_ :: (PlayerStore -> PlayerStore) -> Update AppState ()
+playerUpdater_ = updater' playerStore setPlayerStore
 
 playerQueryer ::  (PlayerStore -> b) -> Query AppState b
 playerQueryer = queryer playerStore
@@ -107,24 +117,15 @@ playerCount = playerQueryer R.playerCount
 searchPlayer :: Text -> Query AppState [Player]
 searchPlayer name = playerQueryer $ R.searchPlayer name
 
-----------------
-----------------
-
-ipUpdater :: (IPStore -> (IPStore, a)) -> Update AppState a
-ipUpdater = updater ipStore setIPStore
-
-ipQueryer :: (IPStore -> a) -> Query AppState a
-ipQueryer = queryer ipStore
-
-
-
 ---------------
+
 updateVote :: IP -> Name -> Vote -> Update AppState Vote
-updateVote ip n v = ipUpdater $ V.vote ip n v
+updateVote ip n v = updater ipStore setIPStore $ V.vote ip n v
 
 
 getVote :: IP -> Name -> Query AppState Vote
-getVote ip name = ipQueryer $ V.getVote ip name
+getVote ip name = queryer ipStore $ V.getVote ip name
+
 ----------------
 ----------------
 
@@ -157,8 +158,6 @@ processVote ip n v = do
             return True
 
 ------
-
-getPost num = queryer postStore $ P.getPost num
 
 
 $(makeAcidic ''AppState [ 'newPlayer
