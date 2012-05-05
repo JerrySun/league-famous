@@ -20,7 +20,7 @@
         <div .pcommentwrapper>
             <div .pcommenttop>
                 <span .pcommentname>#{poster post}
-                <span .pcommenttime>#{show $ postTime post}
+                <span .pcommenttime>#{niceTime $ postTime post}
             <div .pcommentbody>
                 <div>
                 $maybe img <- imageUrl post

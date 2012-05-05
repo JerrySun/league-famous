@@ -10,7 +10,7 @@ attachReplyForm = ->
         maybeUrl = $("#replyUrl").val()
         if maybeUrl != ""
             post.url = maybeUrl
-        $.post "/reply", JSON.stringify(post)
+        $.post "/reply", JSON.stringify(post), -> location.reload()
 
 
 $(document).ready ->

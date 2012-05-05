@@ -16,7 +16,7 @@
                         <div .playerscore>#{playerScore player}
                 <td>
                     <div .playername> #{playerName player}
-                    <div .playerextra> 100 votes, 200 comments
+                    <div .playerextra> #{numVotes player} votes, #{nPosts player} comments
                 <td .playerlikes>#{playerUpvotes player}
                 <td .playerdislikes>#{playerDownvotes player}
                 <td .playerpercentage>#{show $ percent player}%

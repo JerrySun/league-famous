@@ -26,6 +26,7 @@ module State
     , NewReply (..)
     , GetPost (..)
     , RecentSummaries (..)
+    , NumPlayerPosts (..)
     ) where
 
 import Data.Acid
@@ -176,6 +177,7 @@ getPost num = queryer postStore $ P.getPost num
 recentSummaries :: Name -> Query AppState (Maybe [[(Int, Post)]])
 recentSummaries name = queryer postStore $ P.recentSummaries name
 
+numPlayerPosts name = queryer postStore $ P.numPlayerPosts name
 
 $(makeAcidic ''AppState [ 'newPlayer
                         , 'getPlayer
@@ -192,4 +194,5 @@ $(makeAcidic ''AppState [ 'newPlayer
                         , 'newReply
                         , 'getPost
                         , 'recentSummaries
+                        , 'numPlayerPosts
                         ])

@@ -10,7 +10,7 @@ attachCommentForm = ->
         maybeUrl = $("#commentUrl").val()
         if maybeUrl != ""
             post.url = maybeUrl
-        $.post "/newpost", JSON.stringify(post)
+        $.post "/newpost", JSON.stringify(post), -> location.reload()
 
 
 $(document).ready ->

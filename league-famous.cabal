@@ -121,6 +121,7 @@ executable         league-famous
                  , safe
                  , blaze-html
                  , time >= 1.4 && < 1.5
+                 , old-locale
 
 test-suite integration-tests
     type: exitcode-stdio-1.0

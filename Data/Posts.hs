@@ -10,6 +10,7 @@ module Data.Posts
     , newReply
     , getPost
     , recentSummaries
+    , numPlayerPosts 
     ) where
 
 import Prelude
@@ -119,3 +120,5 @@ replyCount num store = case byNumber store num of
                          _ -> 0
 
 getPost num store = fmap extractPost . byNumber store $ num
+
+numPlayerPosts name store = fromMaybe 0 . fmap length . M.lookup name . nameMap $ store

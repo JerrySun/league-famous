@@ -48,7 +48,7 @@
     <div .commentwrapper data-post=#{show parN}>
         <div .commenttop>
             <span .commentname>#{poster parent}
-            <span .commenttime>#{show $ postTime parent}
+            <span .commenttime>#{niceTime $ postTime parent}
         <div .commentbody>
             <div>
                 $maybe img <- imageUrl parent
@@ -59,7 +59,7 @@
             <div .replywrapper data-post=#{show pnum}>
                 <div .replytop>
                     <span .replyname>#{poster child}
-                    <span .replytime>#{show $ postTime child}
+                    <span .replytime>#{niceTime $ postTime child}
                 <div .replybody>
                     $maybe img <- imageUrl child
                         <a href=#{img}>

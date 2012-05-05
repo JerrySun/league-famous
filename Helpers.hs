@@ -3,6 +3,7 @@ module Helpers
     , parseJsonParam
     , parseJsonParam_
     , maybe404
+    , niceTime
     ) where
 
 import Prelude
@@ -14,6 +15,9 @@ import Data.Text (pack)
 import State (IP(..))
 import qualified Data.Aeson as J
 import Data.Attoparsec.ByteString (parse, maybeResult)
+import Data.Time.Format (formatTime)
+import Data.Time.LocalTime (utcToLocalTime, TimeZone (..))
+import System.Locale (defaultTimeLocale)
 
 maybe404 ::  GHandler sub master (Maybe b) -> GHandler sub master b
 maybe404 action = action >>= maybe notFound return
@@ -44,3 +48,5 @@ parseJsonParam_ = do
     case ra of
         J.Error s -> invalidArgs [pack s]
         J.Success a -> return a
+
+niceTime = formatTime defaultTimeLocale "%D @ %l:%M %P PDT" . utcToLocalTime (TimeZone (-420) True "PDT")
