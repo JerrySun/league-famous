@@ -43,12 +43,9 @@ makeTable page n mbSearch = do
     let players = take n . drop ((page - 1) * n) $ allPlayers
     ip <- requestIP
     votes <- mapM (query' acid . GetVote ip . playerName) players
-    nPostList <- mapM (query' acid . NumPlayerPosts . playerName) players
     let voteOf p = votes !! fromJust (elemIndex p players)
-    let nPosts p = nPostList !! fromJust (elemIndex p players)
     return $(hamletFile "templates/table.hamlet")
 
-numVotes p = playerUpvotes p + playerDownvotes p
 
 getTableR :: Handler RepHtml
 getTableR = do
@@ -62,8 +59,8 @@ getPreviewR :: Handler RepHtml
 getPreviewR = do
     (name:_) <- parseJsonParam_
     acid <- getAcid
-    player <- maybe404 $ query' acid $ GetPlayer name
-    posts <- fmap (fromMaybe []) $ fmap (fmap (take 4)) $ query' acid $ RecentTopPosts name
+    player <- maybe404 $ query' acid $ PlayerStats name
+    threads <- fmap (take 4) $ query' acid $ PlayerThreads name
     hamletToRepHtml $(hamletFile "templates/preview.hamlet")
 
 

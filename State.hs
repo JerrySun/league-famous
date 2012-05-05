@@ -7,26 +7,25 @@ module State
     , Name (..)
     , Post (..)
     , R.validName
-    , R.playerScore
     -- The master state
     , AppState
     , emptyState
     -- Acidic
+    ---- Stats
     , AllPlayers (..)
-    , GetVote (..)
-    , ProcessVote (..)
-    , NewPlayer (..)
-    , GetPlayer (..)
+    , PlayerStats (..)
     , PlayerCount (..)
     , SearchPlayer (..)
-    , GetThread (..)
-    , NewTopPost (..)
-    , RecentTopPosts (..)
-    , ReplyCount (..)
-    , NewReply (..)
+    , NewPlayer (..)
+    ---- Voting
+    , GetVote (..)
+    , ProcessVote (..)
+    ---- Posts
     , GetPost (..)
-    , RecentSummaries (..)
-    , NumPlayerPosts (..)
+    , GetThread (..)
+    , PlayerThreads (..)
+    , NewTopPost (..)
+    , NewReply (..)
     ) where
 
 import Data.Acid
@@ -160,24 +159,8 @@ processVote ip n v = do
 
 ------
 
-getThread :: Int -> Query AppState (Maybe [(Int, Post)])
-getThread num = queryer postStore $ P.getThread num
-
-newTopPost ::  Name -> Post -> Update AppState ()
-newTopPost name post = updater' postStore setPostStore $ P.newTopPost name post
-
-recentTopPosts name = queryer postStore $ P.recentTopPosts name
-
-replyCount num = queryer postStore $ P.replyCount num
-
-newReply parNum post = updater' postStore setPostStore $ P.newReply parNum post
-
 getPost num = queryer postStore $ P.getPost num
 
-recentSummaries :: Name -> Query AppState (Maybe [[(Int, Post)]])
-recentSummaries name = queryer postStore $ P.recentSummaries name
-
-numPlayerPosts name = queryer postStore $ P.numPlayerPosts name
 
 $(makeAcidic ''AppState [ 'newPlayer
                         , 'getPlayer
@@ -189,10 +172,6 @@ $(makeAcidic ''AppState [ 'newPlayer
                         , 'searchPlayer
                         , 'getThread
                         , 'newTopPost
-                        , 'recentTopPosts
-                        , 'replyCount
                         , 'newReply
                         , 'getPost
-                        , 'recentSummaries
-                        , 'numPlayerPosts
                         ])
