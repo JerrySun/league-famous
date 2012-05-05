@@ -21,7 +21,6 @@ module State
     , GetVote (..)
     , ProcessVote (..)
     ---- Posts
-    , GetPost (..)
     , GetThread (..)
     , PlayerThreads (..)
     , NewTopPost (..)

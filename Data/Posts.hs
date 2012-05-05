@@ -1,16 +1,12 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 module Data.Posts
-    ( Post (..)
+    ( PostContent (..)
     , PostStore (..)
     , empty
-    , newTopPost
-    , getThread
-    , recentTopPosts 
-    , replyCount
+    , newTopPostNC
     , newReply
-    , getPost
-    , recentSummaries
-    , numPlayerPosts 
+    , getThread
+    , playerThreads
     ) where
 
 import Prelude
@@ -25,17 +21,17 @@ import Data.Time (UTCTime)
 import Data.Ranks (Name)
 import Control.Applicative ((<$>))
 import Control.Arrow ((&&&))
+import Control.Monad (mfilter)
 
-data Post = Post { poster :: Text
-                 , message :: Text
-                 , imageUrl :: Maybe Text
-                 , postTime :: UTCTime
-                 , postPlayer :: Name
-                 } deriving (Typeable)
+data PostContent = PostContent { poster :: Text
+                               , message :: Text
+                               , imageUrl :: Maybe Text
+                               , postTime :: UTCTime
+                               } deriving (Typeable)
 
-$(deriveSafeCopy 0 'base ''Post)
+$(deriveSafeCopy 0 'base ''PostContent)
 
-data PostEntry = TLPost Post [Int] | CLPost Post Int
+data PostEntry = TLPost PostContent [Int] | CLPost PostContent Int
                     deriving (Typeable)
 
 extractPost (TLPost p _) = p
@@ -50,7 +46,6 @@ data PostStore = PostStore { essence :: I.IntMap PostEntry
 
 $(deriveSafeCopy 0 'base ''PostStore)
 
--- Can be a record update later if needed
 inject :: I.IntMap PostEntry -> PostStore -> PostStore
 inject im ps = ps {essence = im}
 
@@ -63,62 +58,60 @@ incIndex nm = nm { nextIndex = succ (nextIndex nm) }
 empty :: PostStore
 empty = PostStore I.empty M.empty 0
 
-newTopPost ::  Name -> Post -> PostStore -> PostStore
-newTopPost name post store = incIndex . setNameMap names . inject posts $ store
-    where posts = I.insert index entry $ essence store
-          index = nextIndex store
-          entry = TLPost post []
-
-          names = M.insert name (index : newList) $ nameMap store
-          newList = fromMaybe [] $ M.lookup name (nameMap store)
-
-newReply ::  Int -> Post -> PostStore -> PostStore
-newReply parNum post store = incIndex . setNameMap names . inject posts $ store
-    where name = postPlayer . extractPost $ parent
-          parent = fromJust . byNumber store $ parNum
-          parent' = (\(TLPost p children) -> TLPost p (index:children)) parent
-          posts = I.insert parNum parent' $ I.insert index entry $ essence store
-          index = nextIndex store
-          entry = CLPost post parNum
-
-          names = M.insert name (index : newList) $ nameMap store
-          newList = fromMaybe [] $ M.lookup name (nameMap store)
-
 byNumber ::  PostStore -> I.Key -> Maybe PostEntry
 byNumber store number = I.lookup number . essence $ store
 
-getThread ::  I.Key -> PostStore -> Maybe [(Int, Post)]
-getThread number store = case byNumber store number of
-                            Nothing -> Nothing
-                            Just (TLPost post pnums) -> Just $ (number, post) : map (id &&& extractPost . fromJust . byNumber store) (reverse pnums)
-                            Just (CLPost _ pnum) -> getThread pnum store
+
+------------------------------------------------------------------------------
+getThread :: Int -> PostStore -> Maybe Thread
+getThread number store = byNumber store number >>= doEntry
+    where doEntry (CLPost _ pnum) = getThread pnum store
+          doEntry tl@(TLPost _ _) = Just $ makeThread store tl
+
+playerThreads :: Name -> PostStore -> [Thread]
+playerThreads name store = map makeThread . filter isTL . catMaybes . map byNumber store $ pnums
+    where pnums = fromMaybe [] $ M.lookup name (nameMap store)
 
 
-recentTopPosts name store = fmap (map infoTriple . filter (isTop . snd) . map numAndPost) namePosts
-    where namePosts = M.lookup name . nameMap $ store
-          infoTriple (n, x) = (n, extractPost x, replyCount n store)
-          numAndPost n = (n, fromJust . byNumber store $ n)
-          isTop (TLPost _ _) = True
-          isTop _ = False
+-- No checking whether the Name is already a player in the ranks.  Do that in
+-- the State version before running this, wrap in Maybe.
+newTopPostNC :: Name -> PostContent -> PostStore -> (PostStore, Int)
+newTopPostNC name post store = (incIndex . setNameMap names . inject posts $ store, index)
+    where posts = I.insert index entry $ essence store
+          index = nextIndex store
+          entry = TLPost post []
+          names = addIndexToName index name $ nameMap store
+
+-- Maybe add the reply if parNum is an existing top-level post
+newReply :: Int -> PostContent -> PostStore -> Maybe (PostStore, Int)
+newReply parNum post store = fmap (newReplyOnTL post store) parent
+    where parent = byNumber store parNum >>= mfilter isTL
+
+-- Doesn't check whether parent exists
+newReplyOnTL :: PostContent -> PostStore -> PostEntry -> (PostStore, Int)
+newReplyOnTL post store parent = incIndex . setNameMap names . inject posts $ store
+    where name = postPlayer . extractPost $ parent
+          parent' = addChild index parent
+          posts = I.insert parNum parent' $ I.insert index entry $ essence store
+          index = nextIndex store
+          entry = CLPost post parNum
+          names = addIndexToName index name $ nameMap store
+
+------- New helpers
+addChild index (TLPost p children) = TLPost p (index:children)
+addChild _ _ = error "addChild called on non-TLPost" -- How bad is this?
+
+isTL :: PostEntry -> Bool
+isTL (TLPost _ _) = True
+isTL (CLPost _ _) = False
 
 
-recentSummaries name store = fmap (map miniThread . filter (isTop . snd) . map numAndPost) namePosts
-    where namePosts = M.lookup name . nameMap $ store
-          miniThread (n, x) = (n, extractPost x) :  map (id &&& extractPost . fromJust . byNumber store) ((reverse . take 2 . \(TLPost _ nums) -> nums) x)
-          numAndPost n = (n, fromJust . byNumber store $ n)
-          isTop (TLPost _ _) = True
-          isTop _ = False
+addIndexToName :: Int -> Name -> M.Map Name [Int] -> M.Map Name [Int]
+addIndexToName index name names = M.insert name (index : existing) $ names
+    where existing = fromMaybe [] $ M.lookup name names
 
-children :: Int -> PostStore -> [(Int, Post)]
-children num store = case byNumber store num of
-                         Just (TLPost _ xs) -> map (id &&& extractPost . fromJust . byNumber store) $ reverse xs
-                         _ -> []
+makeThread :: PostStore -> PostEntry -> Thread
+makeThread store tl@(TLPost tlContent childNums) = undefined
+makeThread _ _ = error "makeThread called on non-TLPost" -- :/
 
-replyCount :: Int -> PostStore -> Int
-replyCount num store = case byNumber store num of
-                         Just (TLPost _ xs) -> length xs
-                         _ -> 0
-
-getPost num store = fmap extractPost . byNumber store $ num
-
-numPlayerPosts name store = fromMaybe 0 . fmap length . M.lookup name . nameMap $ store
+--oldthing = (number, post) : map (id &&& extractPost . fromJust . byNumber store) (reverse pnums)
