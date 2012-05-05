@@ -17,54 +17,18 @@
                     <input #postsubmit type="submit" value="SUBMIT">
                     <div .formatting>formatting help
 <div #center>
-    <div .contentheader>
-        <h1>#{playerName player}
-        $case vote
-            $of Neutral
-                <ul .votebuttons .votebuttons-playerpage>
-                    <li .votethumbsupbg>
-                        <div .votethumbsup>
-                        <div .votelike>like
-                    <li .votethumbsdownbg>
-                        <div .votethumbsdown>
-            $of Up
-                <ul .votebuttons .votebuttons-playerpage .upvoted>
-                    <li .votethumbsupbg>
-                        <div .votethumbsup>
-                        <div .votelike>like
-                    <li .votethumbsdownbg>
-                        <div .votethumbsdown>
-            $of Down
-                <ul .votebuttons .votebuttons-playerpage .downvoted>
-                    <li .votethumbsupbg>
-                        <div .votethumbsup>
-                        <div .votelike>like
-                    <li .votethumbsdownbg>
-                        <div .votethumbsdown>
-        <ul #headerstats>
-            <li>
-                <div>#{playerRank player}
-                <div>rank
-            <li>
-                <div>#{playerScore player}
-                <div>score
-            <li .stat-blue>
-                <div>#{playerUpvotes player}
-                <div>likes
-            <li .stat-red>
-                <div>#{playerDownvotes player}
-                <div>dislikes
-    $forall (parN, parent, children) <- posts
+    ^{statsHeader player vote}
+    $forall thread <- threads
         <div .commentwrapper>
             <div .commenttop>
-                <span .commentname>#{poster parent}
-                <span .commenttime>#{niceTime $ postTime parent}
+                <span .commentname>#{poster (parent thread)}
+                <span .commenttime>#{niceTime $ postTime (parent thread)}
             <div .commentbody>
                 <div>
-                    $maybe url <- imageUrl parent
+                    $maybe url <- imageUrl (parent thread)
                         <img src=#{url} .topthumbnail>
-                    #{message parent}
-            $forall child <- children
+                    #{message (parent thread)}
+            $forall child <- recentChildren 2 thread
                 <div .replywrapper>
                     <div .replytop>
                         <span .replyname>#{poster child}
@@ -75,5 +39,5 @@
                         #{message child}
             <div .replyfooter>
                 <div .commentreply>
-                    <a href=@{PostR parN}>REPLY | 7 MORE REPLIES
+                    <a href=@{PostR parN}>REPLY | #{show $ (-) (length thread) (3)} MORE REPLIES
     <div .loadmore>LOAD MORE

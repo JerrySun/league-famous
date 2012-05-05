@@ -8,17 +8,17 @@
             <th .thpercentage>%
             <th .thvote>vote
         $forall player <- players
-            <tr .playerrow data-name=#{playerName player}>
+            <tr .playerrow data-name=#{statName player}>
                 <td>
                     <div .badgesmall>
                     <div .rankwrapper>
-                        <div .playerrank>#{playerRank player}
-                        <div .playerscore>#{playerScore player}
+                        <div .playerrank>#{statRank player}
+                        <div .playerscore>#{statScore player}
                 <td>
-                    <div .playername> #{playerName player}
-                    <div .playerextra> #{numVotes player} votes, #{nPosts player} comments
-                <td .playerlikes>#{playerUpvotes player}
-                <td .playerdislikes>#{playerDownvotes player}
+                    <div .playername> #{statName player}
+                    <div .playerextra> #{numVotes player} votes, #{statComments player} comments
+                <td .playerlikes>#{statUpvotes player}
+                <td .playerdislikes>#{statDownvotes player}
                 <td .playerpercentage>#{show $ percent player}%
                 <td>
                     $case voteOf player

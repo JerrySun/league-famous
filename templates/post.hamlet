@@ -6,57 +6,21 @@
     <div .writesomething>
 <div #preview .hidden>
 <div #center>
-    <div .contentheader>
-        <h1>#{playerName player}
-        $case vote
-            $of Neutral
-                <ul .votebuttons .votebuttons-playerpage>
-                    <li .votethumbsupbg>
-                        <div .votethumbsup>
-                        <div .votelike>like
-                    <li .votethumbsdownbg>
-                        <div .votethumbsdown>
-            $of Up
-                <ul .votebuttons .upvoted .votebuttons-playerpage>
-                    <li .votethumbsupbg>
-                        <div .votethumbsup>
-                        <div .votelike>like
-                    <li .votethumbsdownbg>
-                        <div .votethumbsdown>
-            $of Down
-                <ul .votebuttons .downvoted .votebuttons-playerpage>
-                    <li .votethumbsupbg>
-                        <div .votethumbsup>
-                        <div .votelike>like
-                    <li .votethumbsdownbg>
-                        <div .votethumbsdown>
-        <ul #headerstats>
-            <li>
-                <div>#{playerRank player}
-                <div>rank
-            <li>
-                <div>#{playerScore player}
-                <div>score
-            <li .stat-blue>
-                <div>#{playerUpvotes player}
-                <div>likes
-            <li .stat-red>
-                <div>#{playerDownvotes player}
-                <div>dislikes
+    ^{statsHeader player vote}
     <div .viewing>
-        You are now viewing all replies to a comment by <b>#{poster parent}</b> about <b>#{playerName player}</b>.
-    <div .commentwrapper data-post=#{show parN}>
+        You are now viewing all replies to a comment by <b>#{poster $ parent thread}</b> about <b>#{playerName player}</b>.
+    <div .commentwrapper data-post=#{show $ postNum (parent thread)}>
         <div .commenttop>
-            <span .commentname>#{poster parent}
-            <span .commenttime>#{niceTime $ postTime parent}
+            <span .commentname>#{poster (parent thread)}
+            <span .commenttime>#{niceTime $ postTime (parent thread)}
         <div .commentbody>
             <div>
-                $maybe img <- imageUrl parent
+                $maybe img <- imageUrl (parent thread)
                     <a href=#{img}>
                         <img src=#{img} .topthumbnail>
                 #{message parent}
-        $forall (pnum, child) <- children
-            <div .replywrapper data-post=#{show pnum}>
+        $forall child <- children thread
+            <div .replywrapper data-post=#{show $ postNum child}>
                 <div .replytop>
                     <span .replyname>#{poster child}
                     <span .replytime>#{niceTime $ postTime child}

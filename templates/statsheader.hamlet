@@ -1,0 +1,37 @@
+<div .contentheader>
+    <h1>#{statName player}
+    $case vote
+        $of Neutral
+            <ul .votebuttons .votebuttons-playerpage>
+                <li .votethumbsupbg>
+                    <div .votethumbsup>
+                    <div .votelike>like
+                <li .votethumbsdownbg>
+                    <div .votethumbsdown>
+        $of Up
+            <ul .votebuttons .upvoted .votebuttons-playerpage>
+                <li .votethumbsupbg>
+                    <div .votethumbsup>
+                    <div .votelike>like
+                <li .votethumbsdownbg>
+                    <div .votethumbsdown>
+        $of Down
+            <ul .votebuttons .downvoted .votebuttons-playerpage>
+                <li .votethumbsupbg>
+                    <div .votethumbsup>
+                    <div .votelike>like
+                <li .votethumbsdownbg>
+                    <div .votethumbsdown>
+    <ul #headerstats>
+        <li>
+            <div>#{statRank player}
+            <div>rank
+        <li>
+            <div>#{statScore player}
+            <div>score
+        <li .stat-blue>
+            <div>#{statUpvotes player}
+            <div>likes
+        <li .stat-red>
+            <div>#{statDownvotes player}
+            <div>dislikes
