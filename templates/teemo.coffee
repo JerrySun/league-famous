@@ -47,9 +47,10 @@ replacePreview = (name) ->
             event.preventDefault()
             post = { player: $("#previewPost").data("player")
                    , name: $("#prevPostName").val()
-                   , url: $("#prevPostUrl").val()
                    , text: $("#ptext").val()
                    }
+            if $("#prevPostUrl").val() != ""
+                post.url = $("#prevPostUrl").val()
             $.post "/newpost", JSON.stringify(post), -> replacePreview name
     loadPreview(name, action)
 

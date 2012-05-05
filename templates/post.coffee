@@ -5,9 +5,11 @@ attachReplyForm = ->
         event.preventDefault()
         post = { parent: pageParent
                , name: $("#replyName").val()
-               , url: $("#replyUrl").val()
                , text: $("#replyText").val()
                }
+        maybeUrl = $("#replyUrl").val()
+        if maybeUrl != ""
+            post.url = maybeUrl
         $.post "/reply", JSON.stringify(post)
 
 

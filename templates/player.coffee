@@ -5,9 +5,11 @@ attachCommentForm = ->
         event.preventDefault()
         post = { player: pagePlayer
                , name: $("#commentName").val()
-               , url: $("#commentUrl").val()
                , text: $("#commentText").val()
                }
+        maybeUrl = $("#commentUrl").val()
+        if maybeUrl != ""
+            post.url = maybeUrl
         $.post "/newpost", JSON.stringify(post)
 
 
