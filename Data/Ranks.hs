@@ -17,11 +17,8 @@ import Data.SafeCopy (base, deriveSafeCopy)
 import qualified Data.Map as M
 import qualified Data.IntMap as I
 import Data.Maybe (fromMaybe)
-import Data.String (IsString(..))
-import Data.Aeson (FromJSON (..))
-import Text.Blaze (ToHtml (..))
-import Yesod.Dispatch (PathPiece (..))
 import Data.Name
+import qualified Data.Text as T
 
 --TODO: remove all the stored rank, abstract stats out (into State module?)
 
@@ -31,9 +28,12 @@ data StoredPlayer = StoredPlayer { playerName :: Name
                                  } deriving (Eq, Typeable)
 
 
-data PlayerStore = PlayerStore { unwrapMap :: M.Map Name StoredPlayer
-                               , rankMap :: I.IntMap (M.Map Name StoredPlayer) }
+data PlayerStore = PlayerStore { nameMap :: M.Map Name StoredPlayer
+                               , scoreMap :: I.IntMap (M.Map Name StoredPlayer) }
                                deriving (Typeable)
+
+setNameMap nm store = store { nameMap = nm }
+setScoreMap sm store = store { scoreMap = sm }
 
 $(deriveSafeCopy 0 'base ''StoredPlayer)
 $(deriveSafeCopy 0 'base ''PlayerStore)
@@ -41,20 +41,26 @@ $(deriveSafeCopy 0 'base ''PlayerStore)
 empty :: PlayerStore
 empty = PlayerStore M.empty I.empty
 
-voteMod :: Player -> Int -> Int -> PlayerStore -> PlayerStore
-voteMod _ 0 0 store                      = store
-voteMod p u d store@(PlayerStore names scores) = fromMaybe store newStore
-    where newStore = fmap (uncurry PlayerStore) result
-          result = do
-              scores' <- do nameMap <- I.lookup (playerScore p) scores
-                            let nameMap' = M.delete (playerName p) nameMap
-                            return $ if M.null nameMap'
-                               then I.delete (playerScore p) scores
-                               else I.insert (playerScore p) nameMap' scores
-              let p' = (\(StoredPlayer n up dn) -> Player n (up + u) (dn + d)) p
-                  scores'' = addScore p' scores'
-                  names' = M.insert (playerName p') p' names
-              return (names', scores'')
+
+voteMod :: Name -> Int -> Int -> PlayerStore -> Maybe PlayerStore
+voteMod _    0 0 store = Nothing
+voteMod name u d store = fmap (voteModStats u d store) $ getStats name store
+
+voteModStored :: Int -> Int -> PlayerStore -> PlayerStats -> PlayerStore
+voteModStored u d store stored = setNameMap names . setScoreMap scores $ store
+    where names = M.insert name newPlayer . nameMap $ store
+          scores = setOldLevel . setNewLevel . scoreMap $ store
+          setOldLevel = if I.null oldScoreLevel
+                            then I.delete oldScore 
+                            else I.insert oldScore oldScoreLevel
+          setNewLevel = I.insert newScore newScoreLevel
+          oldScoreLevel = M.delete name . fromJust . I.lookup oldScore . scoreMap $ store
+          newScoreLevel = M.insert name newPlayer . fromMaybe I.empty . I.lookup newScore . scoreMap $ store
+          newPlayer = StoredPlayer name (playerUpvotes stored + u) (playerDownvotes stored + d)
+          name = playerName stored
+          oldScore = playerScore stored
+          newScore = playerScore newPlayer
+          
 
 -- rank of a score not in the thing
 findRank ::  I.Key -> I.IntMap (M.Map k a) -> Int
@@ -101,8 +107,7 @@ allPlayers ranks = concatMap extractPlayer sortedResults
 
 searchPlayer ::  Text -> PlayerStore -> [StoredPlayer]
 searchPlayer x ranks = filter match $ allPlayers ranks
-                       where match = T.isInfixOf (normalize x) . normalize
-                                     . unName . playerName
+    where match = T.isInfixOf (normalize x) . normalize . unName . playerName
 
 playerCount ::  PlayerStore -> Int
 playerCount = M.size . unwrapMap

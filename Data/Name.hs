@@ -2,11 +2,18 @@
 module Data.Name
     ( Name (..)
     , validName
+    , normalize
     ) where
 
 import Data.Text (Text)
 import qualified Data.Text as T 
 import qualified Data.Char as C
+import Data.SafeCopy (base, deriveSafeCopy)
+import Prelude
+import Data.String (IsString(..))
+import Data.Aeson (FromJSON (..))
+import Text.Blaze (ToHtml (..))
+import Yesod.Dispatch (PathPiece (..))
 
 newtype Name = Name { unName :: Text }
 
