@@ -45,6 +45,7 @@ import Prelude
 import Control.Applicative ((<$>))
 import Control.Arrow ((&&&))
 import Data.Maybe (fromMaybe)
+import Control.Monad (when)
 
 import Data.VoteHistory (IPStore, IP, Vote(..))
 import qualified Data.VoteHistory as V
@@ -105,7 +106,7 @@ newPlayer ::  Name -> Update AppState ()
 newPlayer name = updater_ playerStore setPlayerStore $ R.newPlayer name
 
 playerCount ::  Query AppState Int
-playerCount = queryer playerStore $ R.playerCount
+playerCount = queryer playerStore R.playerCount
 
 ---------------
 
@@ -133,14 +134,11 @@ processVote ip n v = do
     let players = playerStore state
     let ips     = ipStore state
 
-    if R.playerExists n players
-        then do
-            let (ips', prevVote) = V.vote ip n v ips
-            let thisVoteMod = applyVote v prevVote n
-            let players' = thisVoteMod players
-            put state {playerStore = players', ipStore =  ips'}
-        else
-            return ()
+    when (R.playerExists n players) $ do
+        let (ips', prevVote) = V.vote ip n v ips
+        let thisVoteMod = applyVote v prevVote n
+        let players' = thisVoteMod players
+        put state {playerStore = players', ipStore =  ips'}
 
 ------
 statPercent :: Stats -> Int

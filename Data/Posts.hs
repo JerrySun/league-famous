@@ -149,12 +149,12 @@ addChild index (TLPost p childNums player) = TLPost p (index:childNums) player
 addChild _ _ = error "addChild called on non-TLPost" -- How bad is this?
 
 isTL :: PostEntry -> Bool
-isTL (TLPost _ _ _) = True
-isTL (CLPost _ _) = False
+isTL TLPost{} = True
+isTL CLPost{} = False
 
 
 addIndexToName :: Int -> Name -> M.Map Name [Int] -> M.Map Name [Int]
-addIndexToName index name names = M.insert name (index : existing) $ names
+addIndexToName index name names = M.insert name (index : existing) names
     where existing = fromMaybe [] $ M.lookup name names
 
 makeThread :: PostStore -> Int -> PostEntry -> Thread

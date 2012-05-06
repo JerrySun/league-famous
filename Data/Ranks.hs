@@ -90,12 +90,12 @@ getStats ::  Name -> PlayerStore -> Maybe RankStats
 getStats name store = fmap (playerStats store) . M.lookup name . nameMap $ store
 
 allStats ::  PlayerStore -> [RankStats]
-allStats store = map (playerStats store) . concatMap (extractPlayers) . sortedResults $ store
+allStats store = map (playerStats store) . concatMap extractPlayers . sortedResults $ store
     where sortedResults = reverse . I.toAscList . scoreMap 
           extractPlayers = map snd . M.toAscList . snd
 
 searchStats ::  T.Text -> PlayerStore -> [RankStats]
-searchStats x store = map (playerStats store) . filter match . concatMap (extractPlayers) . sortedResults $ store
+searchStats x store = map (playerStats store) . filter match . concatMap extractPlayers . sortedResults $ store
     where match = T.isInfixOf (normalize x) . normalize . unName . playerName
           sortedResults = reverse . I.toAscList . scoreMap 
           extractPlayers = map snd . M.toAscList . snd
