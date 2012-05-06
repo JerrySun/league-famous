@@ -8,8 +8,12 @@ module Data.Posts
     , getThread
     , playerThreads
     , commentCount
+    , children
+    , threadLength
+    , recentChildren
     -------
     , Thread (..)
+    , Post (..)
     ) where
 
 import Prelude
@@ -65,19 +69,25 @@ byNumber ::  PostStore -> I.Key -> Maybe PostEntry
 byNumber store number = I.lookup number . essence $ store
 
 ------------------------------------------------------------------------------
-
-data Thread = Thread { parent :: Post
-                     , reverseChildren :: [Post]
-                     }
-
-children = reverse . reverseChildren
-
 data Post = Post { postNum :: Int
                  , poster :: Text
                  , message :: Text
                  , imageUrl :: Maybe Text
                  , postTime :: UTCTime
-                 } 
+                 } deriving (Typeable)
+
+$(deriveSafeCopy 0 'base ''Post)
+
+data Thread = Thread { parent :: Post
+                     , reverseChildren :: [Post]
+                     , threadPlayer :: Name
+                     } deriving (Typeable)
+
+$(deriveSafeCopy 0 'base ''Thread)
+
+children = reverse . reverseChildren
+
+threadLength = (+ 1) . length . reverseChildren
 
 setContent content post = post { poster = posterContent content
                                , message = messageContent content
@@ -89,7 +99,7 @@ emptyPost = Post undefined undefined undefined undefined undefined
 
 numberContents num content = setContent content $ emptyPost {postNum = num}
 
-threadLength = (+ 1) . length . reverseChildren
+recentChildren n = reverse . take n . reverseChildren
 
 ------------------------------------------------------------------------------
 getThread :: Int -> PostStore -> Maybe Thread
@@ -142,7 +152,7 @@ addIndexToName index name names = M.insert name (index : existing) $ names
     where existing = fromMaybe [] $ M.lookup name names
 
 makeThread :: PostStore -> Int -> PostEntry -> Thread
-makeThread store num tl@(TLPost tlContent childNums _) = Thread par childs
+makeThread store num tl@(TLPost tlContent childNums player) = Thread par childs player
     where par = numberContents num tlContent
           childContents = map (extractContent . fromJust . byNumber store) childNums
           childs = zipWith numberContents childNums childContents

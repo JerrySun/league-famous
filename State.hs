@@ -8,6 +8,16 @@ module State
     -- The master state
     , AppState
     , emptyState
+    --
+    , Stats (..)
+    , Thread (..)
+    , P.Post (..)
+    , P.PostContent (..)
+    , statScore
+    , statPercent
+    , P.children
+    , P.recentChildren
+    , P.threadLength
     -- Acidic
     ---- Stats
     , PlayerCount (..)
@@ -19,6 +29,10 @@ module State
     , GetVote (..)
     , ProcessVote (..)
     ---- Posts
+    , PlayerThreads (..)
+    , GetThread (..)
+    , NewTopPost (..)
+    , NewReply (..)
     ) where
 
 import Data.Acid
@@ -95,10 +109,6 @@ playerCount = queryer playerStore $ R.playerCount
 
 ---------------
 
-updateVote :: IP -> Name -> Vote -> Update AppState Vote
-updateVote ip n v = updater ipStore setIPStore $ V.vote ip n v
-
-
 getVote :: IP -> Name -> Query AppState Vote
 getVote ip name = queryer ipStore $ V.getVote ip name
 
@@ -133,8 +143,8 @@ processVote ip n v = do
             return ()
 
 ------
-percent :: Stats -> Int
-percent p = f u d
+statPercent :: Stats -> Int
+statPercent p = f u d
             where u = statUpvotes p
                   d = statDownvotes p
                   f 0 0 = 0
@@ -147,7 +157,9 @@ data Stats = Stats { statName :: Name
                    , statDownvotes :: Int
                    , statRank :: Int
                    , statComments :: Int
-                   } deriving (Typeable)
+                   } deriving (Typeable, Eq)
+
+statScore stats = statUpvotes stats - statDownvotes stats
 
 $(deriveSafeCopy 0 'base ''Stats)
 
@@ -187,12 +199,32 @@ searchStats x = do
 
 ------------------------------
 
+playerThreads name = queryer postStore $ P.playerThreads name
+
+getThread num = queryer postStore $ P.getThread num
+
+newTopPost :: Name -> P.PostContent -> Update AppState (Maybe Int)
+newTopPost name content = do
+    state <- get
+    let exists = R.playerExists name . playerStore $ state
+    if exists
+        then do
+            let (posts, num) = P.newTopPostNC name content . postStore $ state
+            put $ setPostStore posts state
+            return $ Just num
+        else return Nothing
+
+newReply parNum content = updaterMaybe postStore setPostStore $ P.newReply parNum content
+
 $(makeAcidic ''AppState [ 'newPlayer
-                        , 'updateVote
                         , 'getVote
                         , 'processVote
                         , 'playerCount
                         , 'allStats
                         , 'searchStats
                         , 'playerStats
+                        , 'playerThreads
+                        , 'getThread
+                        , 'newTopPost
+                        , 'newReply
                         ])

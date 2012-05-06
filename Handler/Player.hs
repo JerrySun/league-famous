@@ -32,3 +32,5 @@ getPostR num = do
     defaultLayout $ do
         $(widgetFile "comments")
         $(widgetFile "post")
+
+statsHeader player vote = $(widgetFile "statsheader")

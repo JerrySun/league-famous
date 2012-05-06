@@ -39,5 +39,5 @@
                         #{message child}
             <div .replyfooter>
                 <div .commentreply>
-                    <a href=@{PostR parN}>REPLY | #{show $ (-) (threadLength thread) (3)} MORE REPLIES
+                    <a href=@{PostR $ postNum (parent thread)}>REPLY | #{show ((-) 3 (threadLength thread))} MORE REPLIES
     <div .loadmore>LOAD MORE

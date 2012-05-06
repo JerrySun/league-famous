@@ -1,38 +1,38 @@
 <div #preview .hidden>
     <div #previewheader>
         <h3>
-            <a .plain href=@{PlayerR $ playerName player}>#{playerName player}
+            <a .plain href=@{PlayerR $ statName player}>#{statName player}
         <div #previewclose>
         <ul #previewstats>
             <li>
-                <div>#{playerRank player}
+                <div>#{statRank player}
                 <div>rank
             <li>
-                <div>#{playerScore player}
+                <div>#{statScore player}
                 <div>score
             <li .stat-blue>
-                <div>#{playerUpvotes player}
+                <div>#{statUpvotes player}
                 <div>likes
             <li .stat-red>
-                <div>#{playerDownvotes player}
+                <div>#{statDownvotes player}
                 <div>dislikes
-    $forall (pnum, post, replyCount) <- posts
+    $forall thread <- threads
         <div .pcommentwrapper>
             <div .pcommenttop>
-                <span .pcommentname>#{poster post}
-                <span .pcommenttime>#{niceTime $ postTime post}
+                <span .pcommentname>#{poster $ parent thread}
+                <span .pcommenttime>#{niceTime $ postTime (parent thread)}
             <div .pcommentbody>
                 <div>
-                $maybe img <- imageUrl post
+                $maybe img <- imageUrl (parent thread)
                     <img src=#{img} .pthumbnail>
-                #{message post}
+                #{message (parent thread)}
             <div .pcommentreply>
-                <a href=@{PostR pnum}>#{show replyCount} REPLIES
+                <a href=@{PostR $ postNum (parent thread)}>#{show $ length (reverseChildren thread)} REPLIES
     <div #quickreply>
-        <form #previewPost data-player=#{playerName player}>
+        <form #previewPost data-player=#{statName player}>
             <input #prevPostName placeholder="Anonymous" .pinput .pinputname>
             <input #prevPostUrl placeholder="Image URL" .pinput .pinputimage>
             <textarea #ptext placeholder="Write a comment...">
             <div #ppostarea>
                 <button #ppostbutton type=submit>SUBMIT
-                <a #previewfooter href=@{PlayerR $ playerName player}>VIEW ALL COMMENTS
+                <a #previewfooter href=@{PlayerR $ statName player}>VIEW ALL COMMENTS

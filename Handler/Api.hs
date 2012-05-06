@@ -47,7 +47,7 @@ postMakePostR = do
     time <- liftIO getCurrentTime
     let post = Post 
     acid <- getAcid
-    _ <- update' acid $ NewTopPost (Name player) name url text time
+    _ <- update' acid $ NewTopPost (Name player) $ PostContent name text url time
     jsonToRepJson ()
     
 data ReplyInput = ReplyInput Int Text (Maybe Text) Text
@@ -63,5 +63,7 @@ postMakeReplyR = do
     let name = if name1 == "" then "Anonymous" else name1
     acid <- getAcid
     time <- liftIO getCurrentTime
-    postNumber <- maybe404 $ update' acid $ NewReply parNum name url text time
+    postNumber <- maybe404 $ update' acid $ NewReply parNum $ PostContent name text url time
     jsonToRepJson ()
+
+

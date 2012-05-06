@@ -1,4 +1,4 @@
-pagePlayer = "%{unName $ playerName player}"
+pagePlayer = "%{unName $ statName player}"
 
 attachCommentForm = ->
     $("#newcomment").on "submit", (event) ->

@@ -16,10 +16,10 @@
                         <div .playerscore>#{statScore player}
                 <td>
                     <div .playername> #{statName player}
-                    <div .playerextra> #{numVotes player} votes, #{statComments player} comments
+                    <div .playerextra> #{(+) (statUpvotes player) (statDownvotes player)} votes, #{statComments player} comments
                 <td .playerlikes>#{statUpvotes player}
                 <td .playerdislikes>#{statDownvotes player}
-                <td .playerpercentage>#{show $ percent player}%
+                <td .playerpercentage>#{show $ statPercent player}%
                 <td>
                     $case voteOf player
                         $of Neutral

@@ -40,6 +40,7 @@ library
                      Data.Ranks
                      Data.VoteHistory
                      Data.Posts
+                     Data.Name
 
 
     ghc-options:   -Wall -threaded -O0
