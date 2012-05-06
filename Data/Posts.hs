@@ -23,10 +23,8 @@ import qualified Data.Map as M
 import qualified Data.IntMap as I
 import Data.Text (Text)
 import Data.Maybe (fromMaybe, fromJust)
-import Data.Aeson (FromJSON (..))
 import Data.Time (UTCTime)
 import Data.Name (Name)
-import Control.Applicative ((<$>))
 import Control.Arrow ((&&&))
 import Control.Monad (mfilter)
 
@@ -41,6 +39,7 @@ $(deriveSafeCopy 0 'base ''PostContent)
 data PostEntry = TLPost PostContent [Int] Name | CLPost PostContent Int
                     deriving (Typeable)
 
+extractContent ::  PostEntry -> PostContent
 extractContent (TLPost p _ _) = p
 extractContent (CLPost p _) = p
 
@@ -85,20 +84,26 @@ data Thread = Thread { parent :: Post
 
 $(deriveSafeCopy 0 'base ''Thread)
 
+children ::  Thread -> [Post]
 children = reverse . reverseChildren
 
+threadLength ::  Thread -> Int
 threadLength = (+ 1) . length . reverseChildren
 
+setContent ::  PostContent -> Post -> Post
 setContent content post = post { poster = posterContent content
                                , message = messageContent content
                                , imageUrl = imageUrlContent content
                                , postTime = postTimeContent content
                                }
 
+emptyPost ::  Post
 emptyPost = Post undefined undefined undefined undefined undefined
 
+numberContents ::  Int -> PostContent -> Post
 numberContents num content = setContent content $ emptyPost {postNum = num}
 
+recentChildren ::  Int -> Thread -> [Post]
 recentChildren n = reverse . take n . reverseChildren
 
 ------------------------------------------------------------------------------
@@ -125,21 +130,22 @@ newTopPostNC name post store = (incIndex . setNameMap names . inject posts $ sto
 
 -- Maybe add the reply if parNum is an existing top-level post
 newReply :: Int -> PostContent -> PostStore -> Maybe (PostStore, Int)
-newReply parNum post store = fmap (newReplyOnTL post store parNum) parent
-    where parent = mfilter isTL $ byNumber store parNum 
+newReply parNum post store = fmap (newReplyOnTL post store parNum) parEntry
+    where parEntry = mfilter isTL $ byNumber store parNum 
 
 -- Doesn't check whether parent exists
 newReplyOnTL :: PostContent -> PostStore -> Int -> PostEntry -> (PostStore, Int)
-newReplyOnTL post store parNum parent = (incIndex . setNameMap names . inject posts $ store, index)
-    where player = (\(TLPost _ _ name) -> name) parent
-          parent' = addChild index parent
+newReplyOnTL post store parNum parEntry = (incIndex . setNameMap names . inject posts $ store, index)
+    where player = (\(TLPost _ _ name) -> name) parEntry
+          parent' = addChild index parEntry
           posts = I.insert parNum parent' . I.insert index entry . essence $ store
           index = nextIndex store
           entry = CLPost post parNum
           names = addIndexToName index player $ nameMap store
 
 ------- New helpers
-addChild index (TLPost p children player) = TLPost p (index:children) player
+addChild ::  Int -> PostEntry -> PostEntry
+addChild index (TLPost p childNums player) = TLPost p (index:childNums) player
 addChild _ _ = error "addChild called on non-TLPost" -- How bad is this?
 
 isTL :: PostEntry -> Bool
@@ -152,11 +158,9 @@ addIndexToName index name names = M.insert name (index : existing) $ names
     where existing = fromMaybe [] $ M.lookup name names
 
 makeThread :: PostStore -> Int -> PostEntry -> Thread
-makeThread store num tl@(TLPost tlContent childNums player) = Thread par childs player
+makeThread store num (TLPost tlContent childNums player) = Thread par childs player
     where par = numberContents num tlContent
           childContents = map (extractContent . fromJust . byNumber store) childNums
           childs = zipWith numberContents childNums childContents
 
 makeThread _ _ _ = error "makeThread called on non-TLPost" -- :/
-
---oldthing = (number, post) : map (id &&& extractPost . fromJust . byNumber store) (reverse pnums)

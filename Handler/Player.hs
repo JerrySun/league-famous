@@ -4,9 +4,7 @@ module Handler.Player
     ) where
 
 import Import
-import Control.Arrow ((&&&))
 import Prelude (head, tail)
-import Data.Maybe (fromMaybe)
 
 getPlayerR :: Name -> Handler RepHtml
 getPlayerR name  = do
@@ -33,4 +31,5 @@ getPostR num = do
         $(widgetFile "comments")
         $(widgetFile "post")
 
+statsHeader ::  Stats -> Vote -> GWidget App App ()
 statsHeader player vote = $(widgetFile "statsheader")

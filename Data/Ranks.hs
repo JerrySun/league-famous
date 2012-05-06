@@ -35,7 +35,10 @@ data PlayerStore = PlayerStore { nameMap :: M.Map Name StoredPlayer
                                , scoreMap :: I.IntMap (M.Map Name StoredPlayer) }
                                deriving (Typeable)
 
+setNameMap ::  M.Map Name StoredPlayer -> PlayerStore -> PlayerStore
 setNameMap nm store = store { nameMap = nm }
+
+setScoreMap :: I.IntMap (M.Map Name StoredPlayer) -> PlayerStore -> PlayerStore
 setScoreMap sm store = store { scoreMap = sm }
 
 $(deriveSafeCopy 0 'base ''PlayerStore)
@@ -55,23 +58,23 @@ newPlayer name store = if validName (unName name) then
                              scores' = addScore p $ scoreMap store
 
 voteMod :: Name -> Int -> Int -> PlayerStore -> Maybe PlayerStore
-voteMod _    0 0 store = Nothing
+voteMod _    0 0 _     = Nothing
 voteMod name u d store = fmap (voteModStored u d store) . M.lookup name . nameMap $ store
 
 voteModStored :: Int -> Int -> PlayerStore -> StoredPlayer -> PlayerStore
 voteModStored u d store stored = setNameMap names . setScoreMap scores $ store
-    where names = M.insert name newPlayer . nameMap $ store
+    where names = M.insert name player' . nameMap $ store
           scores = setOldLevel . setNewLevel . scoreMap $ store
           setOldLevel = if M.null oldScoreLevel
                             then I.delete oldScore 
                             else I.insert oldScore oldScoreLevel
           setNewLevel = I.insert newScore newScoreLevel
           oldScoreLevel = M.delete name . fromJust . I.lookup oldScore . scoreMap $ store
-          newScoreLevel = M.insert name newPlayer . fromMaybe M.empty . I.lookup newScore . scoreMap $ store
-          newPlayer = StoredPlayer name (playerUpvotes stored + u) (playerDownvotes stored + d)
+          newScoreLevel = M.insert name player' . fromMaybe M.empty . I.lookup newScore . scoreMap $ store
+          player' = StoredPlayer name (playerUpvotes stored + u) (playerDownvotes stored + d)
           name = playerName stored
           oldScore = playerScore stored
-          newScore = playerScore newPlayer
+          newScore = playerScore player'
           
 
 playerCount ::  PlayerStore -> Int
@@ -83,31 +86,35 @@ data RankStats = RankStats { rankName :: Name
                            , rank :: Int
                            }
 
+getStats ::  Name -> PlayerStore -> Maybe RankStats
 getStats name store = fmap (playerStats store) . M.lookup name . nameMap $ store
 
+allStats ::  PlayerStore -> [RankStats]
 allStats store = map (playerStats store) . concatMap (extractPlayers) . sortedResults $ store
     where sortedResults = reverse . I.toAscList . scoreMap 
           extractPlayers = map snd . M.toAscList . snd
 
+searchStats ::  T.Text -> PlayerStore -> [RankStats]
 searchStats x store = map (playerStats store) . filter match . concatMap (extractPlayers) . sortedResults $ store
     where match = T.isInfixOf (normalize x) . normalize . unName . playerName
           sortedResults = reverse . I.toAscList . scoreMap 
           extractPlayers = map snd . M.toAscList . snd
 
+playerStats ::  PlayerStore -> StoredPlayer -> RankStats
 playerStats store p@(StoredPlayer n u d) = RankStats n u d (fr . playerScore $ p) 
     where fr = findRank (scoreMap store)
 
-findRank :: I.IntMap (M.Map k a) -> Int -> Int
+findRank :: I.IntMap (M.Map Name StoredPlayer) -> Int -> Int
 findRank scores score  = 1 + I.foldr' sumSizes 0 higherRanked
     where higherRanked = snd $ I.split score scores
-          sumSizes nameMap total = M.size nameMap + total
+          sumSizes scoreLevel total = M.size scoreLevel + total
 
 addScore :: StoredPlayer -> I.IntMap (M.Map Name StoredPlayer)
             -> I.IntMap (M.Map Name StoredPlayer)
-addScore p scores = I.insert (playerScore p) nameMap scores
-                    where nameMap = case I.lookup (playerScore p) scores of
-                                        Nothing -> M.singleton (playerName p) p
-                                        Just nm -> M.insert (playerName p) p nm
+addScore p scores = I.insert (playerScore p) scoreLevel scores
+                    where scoreLevel = case I.lookup (playerScore p) scores of
+                                           Nothing -> M.singleton (playerName p) p
+                                           Just nm -> M.insert (playerName p) p nm
 
 playerExists ::  Name -> PlayerStore -> Bool
 playerExists name store = isJust . M.lookup name . nameMap $ store

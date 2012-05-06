@@ -45,7 +45,6 @@ postMakePostR = do
     when (text == "" && isNothing url) notFound
     let name = if name1 == "" then "Anonymous" else name1
     time <- liftIO getCurrentTime
-    let post = Post 
     acid <- getAcid
     _ <- update' acid $ NewTopPost (Name player) $ PostContent name text url time
     jsonToRepJson ()
@@ -64,6 +63,4 @@ postMakeReplyR = do
     acid <- getAcid
     time <- liftIO getCurrentTime
     postNumber <- maybe404 $ update' acid $ NewReply parNum $ PostContent name text url time
-    jsonToRepJson ()
-
-
+    jsonToRepJson postNumber

@@ -159,10 +159,12 @@ data Stats = Stats { statName :: Name
                    , statComments :: Int
                    } deriving (Typeable, Eq)
 
+statScore ::  Stats -> Int
 statScore stats = statUpvotes stats - statDownvotes stats
 
 $(deriveSafeCopy 0 'base ''Stats)
 
+addCommentCount ::  Int -> R.RankStats -> Stats
 addCommentCount ncom rs = Stats { statName = R.rankName rs
                                             , statUpvotes = R.upvotes rs
                                             , statDownvotes = R.downvotes rs
@@ -199,8 +201,10 @@ searchStats x = do
 
 ------------------------------
 
+playerThreads ::  Name -> Query AppState [Thread]
 playerThreads name = queryer postStore $ P.playerThreads name
 
+getThread ::  Int -> Query AppState (Maybe Thread)
 getThread num = queryer postStore $ P.getThread num
 
 newTopPost :: Name -> P.PostContent -> Update AppState (Maybe Int)
@@ -214,6 +218,7 @@ newTopPost name content = do
             return $ Just num
         else return Nothing
 
+newReply ::  Int -> P.PostContent -> Update AppState (Maybe Int)
 newReply parNum content = updaterMaybe postStore setPostStore $ P.newReply parNum content
 
 $(makeAcidic ''AppState [ 'newPlayer

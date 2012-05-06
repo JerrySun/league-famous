@@ -15,6 +15,7 @@ import Data.Text (pack)
 import State (IP(..))
 import qualified Data.Aeson as J
 import Data.Attoparsec.ByteString (parse, maybeResult)
+import Data.Time (UTCTime)
 import Data.Time.Format (formatTime)
 import Data.Time.LocalTime (utcToLocalTime, TimeZone (..))
 import System.Locale (defaultTimeLocale)
@@ -49,4 +50,5 @@ parseJsonParam_ = do
         J.Error s -> invalidArgs [pack s]
         J.Success a -> return a
 
+niceTime :: UTCTime -> String
 niceTime = formatTime defaultTimeLocale "%D @ %l:%M %P PDT" . utcToLocalTime (TimeZone (-420) True "PDT")
