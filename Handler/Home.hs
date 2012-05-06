@@ -7,17 +7,6 @@ import Text.Hamlet (hamletFile)
 import Data.Text (unpack) 
 import Safe (readMay)
 
-playerScore ::  Player -> Int
-playerScore p = playerUpvotes p - playerDownvotes p 
-
-percent :: Player -> Int
-percent p = f u d
-            where u = playerUpvotes p
-                  d = playerDownvotes p
-                  f 0 0 = 0
-                  f _ 0 = 100
-                  f _ _ = (u * 100) `div` (u + d)
-                
 
 getHomeR :: Handler RepHtml
 getHomeR = getHomePageR 1
@@ -38,11 +27,11 @@ makeTable :: Int -> Int -> Maybe Text -> Handler (HtmlUrl (Route App))
 makeTable page n mbSearch = do
     acid <- getAcid
     allPlayers <- case mbSearch of
-                    Nothing -> query' acid AllPlayers
-                    Just s -> query' acid $ SearchPlayer s
+                    Nothing -> query' acid AllStats
+                    Just s -> query' acid $ SearchStats s
     let players = take n . drop ((page - 1) * n) $ allPlayers
     ip <- requestIP
-    votes <- mapM (query' acid . GetVote ip . playerName) players
+    votes <- mapM (query' acid . GetVote ip . statName) players
     let voteOf p = votes !! fromJust (elemIndex p players)
     return $(hamletFile "templates/table.hamlet")
 

@@ -83,18 +83,18 @@ data RankStats = RankStats { rankName :: Name
                            , rank :: Int
                            }
 
-getStats name store = fmap playerStats . M.lookup name . nameMap $ store
+getStats name store = fmap (playerStats store) . M.lookup name . nameMap $ store
 
-allStats store = map playerStats . concatMap (extractPlayers) . sortedResults $ store
+allStats store = map (playerStats store) . concatMap (extractPlayers) . sortedResults $ store
     where sortedResults = reverse . I.toAscList . scoreMap 
           extractPlayers = map snd . M.toAscList . snd
 
-searchStats x store = map playerStats . filter match . concatMap (extractPlayers) . sortedResults $ store
+searchStats x store = map (playerStats store) . filter match . concatMap (extractPlayers) . sortedResults $ store
     where match = T.isInfixOf (normalize x) . normalize . unName . playerName
           sortedResults = reverse . I.toAscList . scoreMap 
           extractPlayers = map snd . M.toAscList . snd
 
-playerStats p@(StoredPlayer n u d) store = RankStats n u d (fr . playerScore $ p) 
+playerStats store p@(StoredPlayer n u d) = RankStats n u d (fr . playerScore $ p) 
     where fr = findRank (scoreMap store)
 
 findRank :: I.IntMap (M.Map k a) -> Int -> Int

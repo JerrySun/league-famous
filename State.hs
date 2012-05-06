@@ -12,6 +12,9 @@ module State
     ---- Stats
     , PlayerCount (..)
     , NewPlayer (..)
+    , AllStats (..)
+    , SearchStats (..)
+    , PlayerStats (..)
     ---- Voting
     , GetVote (..)
     , ProcessVote (..)
@@ -130,11 +133,66 @@ processVote ip n v = do
             return ()
 
 ------
+percent :: Stats -> Int
+percent p = f u d
+            where u = statUpvotes p
+                  d = statDownvotes p
+                  f 0 0 = 0
+                  f _ 0 = 100
+                  f _ _ = (u * 100) `div` (u + d)
+                
 
+data Stats = Stats { statName :: Name
+                   , statUpvotes :: Int
+                   , statDownvotes :: Int
+                   , statRank :: Int
+                   , statComments :: Int
+                   } deriving (Typeable)
+
+$(deriveSafeCopy 0 'base ''Stats)
+
+addCommentCount ncom rs = Stats { statName = R.rankName rs
+                                            , statUpvotes = R.upvotes rs
+                                            , statDownvotes = R.downvotes rs
+                                            , statRank = R.rank rs
+                                            , statComments = ncom
+                                            }
+
+
+playerStats :: Name -> Query AppState (Maybe Stats)
+playerStats name = do
+    state <- ask
+    let rankStats = R.getStats name . playerStore $ state
+    let count = P.commentCount name . postStore $ state -- Is this lazy?
+    let stats = fmap (addCommentCount count) rankStats
+    return stats
+
+allStats :: Query AppState [Stats]
+allStats = do
+    state <- ask
+    let rankStats = R.allStats . playerStore $ state
+    let getCount rs = P.commentCount (R.rankName rs) . postStore $ state
+    let counts = map getCount rankStats
+    let stats = zipWith addCommentCount counts rankStats
+    return stats
+
+searchStats :: Text -> Query AppState [Stats]
+searchStats x = do
+    state <- ask
+    let rankStats = R.searchStats x . playerStore $ state
+    let getCount rs = P.commentCount (R.rankName rs) . postStore $ state
+    let counts = map getCount rankStats
+    let stats = zipWith addCommentCount counts rankStats
+    return stats
+
+------------------------------
 
 $(makeAcidic ''AppState [ 'newPlayer
                         , 'updateVote
                         , 'getVote
                         , 'processVote
                         , 'playerCount
+                        , 'allStats
+                        , 'searchStats
+                        , 'playerStats
                         ])

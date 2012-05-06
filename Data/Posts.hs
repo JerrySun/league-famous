@@ -7,6 +7,7 @@ module Data.Posts
     , newReply
     , getThread
     , playerThreads
+    , commentCount
     -------
     , Thread (..)
     ) where
@@ -100,6 +101,8 @@ playerThreads :: Name -> PostStore -> [Thread]
 playerThreads name store = map (uncurry (makeThread store)) . filter (isTL . snd) . map (id &&& (fromJust . byNumber store)) $ pnums
     where pnums = fromMaybe [] $ M.lookup name (nameMap store)
 
+commentCount ::  Name -> PostStore -> Int
+commentCount name store = fromMaybe 0 . fmap length . M.lookup name . nameMap $ store
 
 -- No checking whether the Name is already a player in the ranks.  Do that in
 -- the State version before running this, wrap in Maybe.
