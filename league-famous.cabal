@@ -67,7 +67,7 @@ executable         league-famous
         cpp-options:   -DDEVELOPMENT
         ghc-options:   -Wall -threaded -O0
     else
-        ghc-options:   -Wall -threaded -O2
+        ghc-options:   -Wall -threaded -O2 -with-rtsopts=-N
 
     main-is:       main.hs
 
@@ -123,6 +123,7 @@ executable         league-famous
                  , blaze-html
                  , time >= 1.4 && < 1.5
                  , old-locale
+                 , blaze-markup
 
 test-suite integration-tests
     type: exitcode-stdio-1.0

@@ -12,7 +12,7 @@ import Data.SafeCopy (base, deriveSafeCopy)
 import Prelude
 import Data.String (IsString(..))
 import Data.Aeson (FromJSON (..))
-import Text.Blaze (ToHtml (..))
+import Text.Blaze (ToMarkup (..))
 import Yesod.Dispatch (PathPiece (..))
 
 newtype Name = Name { unName :: Text }
@@ -34,8 +34,8 @@ instance IsString Name where
 instance FromJSON Name where
     parseJSON = fmap Name . parseJSON
 
-instance ToHtml Name where
-    toHtml = toHtml . unName
+instance ToMarkup Name where
+    toMarkup = toMarkup . unName
     
 instance Show Name where
     show = show . unName
