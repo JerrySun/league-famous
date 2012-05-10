@@ -137,17 +137,17 @@
 
 .commentwrapper{
 	margin-bottom:30px;
-	border-bottom:2px solid black;
+	border-bottom:1px solid #a0977d;
 	padding-bottom:10px;
 }
 
 .commenttop{
 	position:relative;
 	max-width:620px;
-    color:white;
-	font-size:16px;
-	background-color:#4a4946;
-    background-image:url('@{StaticR diagonallight_png}');
+    color:#736b54;
+	font-size:14px;
+	background-color:#d4c395;
+    background-image:url('@{StaticR diagonal_png}');
 	padding:5px 10px 5px;
 	margin-bottom:10px;
 }
@@ -160,7 +160,6 @@
 
 .commenttime{
 	position:relative;
-	color:#ddd;
 	font-size:12px;
 }
 
@@ -197,7 +196,7 @@
 	overflow:hidden;
     background-image:url('@{StaticR doublegreaterthan_png}');
     background-repeat:no-repeat;
-    background-position:0px 3px;
+    background-position:0px 1px;
 }
 
 .replyfooter{
@@ -208,10 +207,10 @@
 }
 
 .replytop{
-	font-size:16px;
-    color:white;
-	background-color:#4a4946;
-    background-image:url('@{StaticR diagonallight_png}');
+	font-size:14px;
+    color:#736b54;
+	background-color:#d4c395;
+    background-image:url('@{StaticR diagonal_png}');
 	padding:5px 10px 5px;
 	margin-bottom:10px;
 }
@@ -223,7 +222,6 @@
 
 .replytime{
 	position:relative;
-	color:#ddd;
 	font-size:12px;
 }
 
@@ -248,7 +246,7 @@
     display:block;
     max-width:618px;
     text-align:center;
-    font-size:14px;
+    font-size:2px;
     background-image:url('@{StaticR votebuttonbg_png}');
     background-repeat:repeat-x;
     margin-bottom:20px;
