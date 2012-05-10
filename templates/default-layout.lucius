@@ -398,6 +398,10 @@ h3{
 	padding:0px;
 }
 
+h3 a:hover{
+    text-decoration:underline;
+}
+
 .howto{
 	position:relative;
 	color:#9d9170;
