@@ -79,12 +79,22 @@ thumbnail :: Int -> Url -> IO (Either ThumbError ThumbResult)
 thumbnail maxBytes url = runErrorT $ do
     (imageType, imageData) <- fetchImage maxBytes url
     image <- lift $ loadImageByteString imageType imageData
+    (width, height) <- lift $ GD.imageSize image
+    small <- lift $ GD.resizeImage (width `div` 5) (height `div` 5) image
+    lift $ saveImage imageType "thumbnail" small
     
     return ThumbSuccess
     
+loadImageByteString ::  ImgType -> BL8.ByteString -> IO GD.Image
 loadImageByteString Png = GD.loadPngByteString
 loadImageByteString Gif = GD.loadGifByteString
 loadImageByteString Jpeg = GD.loadJpegByteString
+
+saveImage ::  ImgType -> FilePath -> GD.Image -> IO ()
+saveImage Png = GD.savePngFile
+saveImage Gif = GD.saveGifFile
+saveImage Jpeg = GD.saveJpegFile 90
+
 
 consumeEither ::  (Monad m, Error e) => Either e a -> ErrorT e m a
 consumeEither e = case e of
