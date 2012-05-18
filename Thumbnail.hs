@@ -1,4 +1,3 @@
-{-# LANGUAGE EmptyDataDecls #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module Thumbnail where
@@ -24,8 +23,12 @@ import Control.Monad.Trans (lift)
 import Control.Monad (mzero, when)
 import Data.Maybe (fromMaybe, isJust)
 import qualified Graphics.GD.ByteString.Lazy as GD
+import Control.Exception (catch, SomeException (..))
+import Prelude hiding (catch)
+import Control.Applicative ((<|>))
+import Data.Monoid ((<>))
 
-data ThumbResult = ThumbSuccess | ThumbFail deriving (Show)
+data ThumbResult = ThumbSuccess ImageType | ThumbFail deriving (Show)
 
 type Url = String
 
@@ -39,14 +42,19 @@ readDec s =
 contentLength :: ResponseHeaders -> Maybe Int
 contentLength hs = lookup "content-length" hs >>= readDec . B8.unpack
 
-data ImgType = Png | Jpeg | Gif
+data ImageType = Png | Jpeg | Gif deriving (Show)
 
-contentImgType :: ResponseHeaders -> Maybe ImgType
-contentImgType hs = lookup "content-type" hs >>= match
-    where match "image/gif" = Just Gif
-          match "image/jpeg" = Just Jpeg
-          match "image/png" = Just Png
-          match x = Nothing
+
+toMaybe :: Bool -> a -> Maybe a
+toMaybe False _ = Nothing
+toMaybe True  x = Just x
+
+magicDetect :: BL.ByteString -> Maybe ImageType
+magicDetect bs = match magicGif Gif <|> match magicJpeg Jpeg <|> match magicPng Png
+    where match theMagic = toMaybe (theMagic `BL.isPrefixOf` bs)
+          magicGif = BL8.pack "GIF8"
+          magicJpeg = BL.pack [0xFF, 0xD8]
+          magicPng = BL.pack [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]
 
 lbsSink :: Monad m => Pipe B.ByteString Void m BL.ByteString
 lbsSink = fmap BL.fromChunks CL.consume
@@ -62,35 +70,40 @@ data ThumbError = InvalidUrl | TooLarge | NotImage | ThumbError deriving (Show)
 instance Error ThumbError where
     noMsg = ThumbError
 
-fetchImage :: Int -> Url -> ErrorT ThumbError IO (ImgType, BL.ByteString)
+fetchImage :: Int -> Url -> ErrorT ThumbError IO (ImageType, BL.ByteString)
 fetchImage maxBytes url = do
     let specialManager = withManager :: (Manager -> ResourceT (ErrorT ThumbError IO) a) -> (ErrorT ThumbError IO) a
     specialManager $ \manager -> do
         request <- lift $ maybe (throwError InvalidUrl) return $ parseUrl url
         Response _ _ headers src <- http request manager
         lift $ whenJust (> maxBytes) (throwError TooLarge) $ contentLength headers
-        imgType <- lift $ maybe (throwError NotImage) return $ contentImgType headers
-        (reSrc, part) <- src $$+ CB.isolate maxBytes =$ lbsSink
+        (src', part1) <- src $$+ CB.isolate 8 =$ lbsSink
+        imgType <- lift $ maybe (throwError NotImage) return $ magicDetect part1
+        (reSrc, part2) <- src' $$+ CB.isolate (maxBytes - 8) =$ lbsSink
         case reSrc of
-            Done Nothing () -> return (imgType, part)
-            _ -> lift $ (throwError TooLarge)
+            Done Nothing () -> return (imgType, part1 <> part2)
+            _ -> lift $ throwError TooLarge
 
 thumbnail :: Int -> Url -> IO (Either ThumbError ThumbResult)
 thumbnail maxBytes url = runErrorT $ do
     (imageType, imageData) <- fetchImage maxBytes url
-    image <- lift $ loadImageByteString imageType imageData
+    image <- lift $ loadImage imageType imageData
     (width, height) <- lift $ GD.imageSize image
     small <- lift $ GD.resizeImage (width `div` 5) (height `div` 5) image
     lift $ saveImage imageType "thumbnail" small
     
-    return ThumbSuccess
-    
-loadImageByteString ::  ImgType -> BL8.ByteString -> IO GD.Image
-loadImageByteString Png = GD.loadPngByteString
-loadImageByteString Gif = GD.loadGifByteString
-loadImageByteString Jpeg = GD.loadJpegByteString
+    return $ ThumbSuccess imageType
 
-saveImage ::  ImgType -> FilePath -> GD.Image -> IO ()
+skip ::  IO a -> IO a -> IO a
+skip x y = x `catch` specialConst y
+    where specialConst = const :: a -> SomeException -> a 
+
+loadImage :: ImageType -> BL.ByteString -> IO GD.Image
+loadImage Png = GD.loadPngByteString
+loadImage Gif = GD.loadGifByteString
+loadImage Jpeg = GD.loadJpegByteString
+
+saveImage ::  ImageType -> FilePath -> GD.Image -> IO ()
 saveImage Png = GD.savePngFile
 saveImage Gif = GD.saveGifFile
 saveImage Jpeg = GD.saveJpegFile 90
