@@ -42,8 +42,8 @@ staticDir = "static"
 -- have to make a corresponding change here.
 --
 -- To see how this value is used, see urlRenderOverride in Foundation.hs
-staticRoot :: AppConfig DefaultEnv x -> Text
-staticRoot conf = [st|#{appRoot conf}/static|]
+staticRoot :: AppConfig DefaultEnv Extra -> Text
+staticRoot conf = extraStaticRoot . appExtra $ conf
 
 
 -- The rest of this file contains settings which rarely need changing by a
@@ -57,11 +57,11 @@ widgetFile = U.widgetFileNoReload
 #endif
 
 data Extra = Extra
-    { extraCopyright :: Text
+    { extraStaticRoot :: Text
     , extraAnalytics :: Maybe Text -- ^ Google Analytics
     } deriving Show
 
 parseExtra :: DefaultEnv -> Object -> Parser Extra
 parseExtra _ o = Extra
-    <$> o .:  "copyright"
+    <$> o .:  "staticroot"
     <*> o .:? "analytics"
