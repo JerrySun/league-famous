@@ -186,7 +186,6 @@
 	margin-right:10px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
-    width: 200px;
 }
 
 .replywrapper{
@@ -233,7 +232,6 @@
 }
 
 .replythumbnail{
-    width: 120px;
 	position:relative;
 	float:left;
 	vertical-align:top;

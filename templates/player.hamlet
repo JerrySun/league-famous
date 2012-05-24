@@ -25,8 +25,8 @@
                 <span .commenttime>#{niceTime $ postTime (parent thread)}
             <div .commentbody>
                 <div>
-                    $maybe url <- imageUrl (parent thread)
-                        <img src=#{url} .topthumbnail>
+                    $maybe Thumbnail _ hash fmt <- image (parent thread)
+                        <img src=@{thumbR hash fmt T200} .topthumbnail>
                     #{message (parent thread)}
             $forall child <- recentChildren 2 thread
                 <div .replywrapper>
@@ -34,8 +34,8 @@
                         <span .replyname>#{poster child}
                         <span .replytime>#{niceTime $ postTime child}
                     <div .replybody>
-                        $maybe url <- imageUrl child
-                            <img src=#{url} .replythumbnail>
+                        $maybe Thumbnail _ hash fmt <- image child
+                            <img src=@{thumbR hash fmt T120} .replythumbnail>
                         #{message child}
             <div .replyfooter>
                 <div .commentreply>

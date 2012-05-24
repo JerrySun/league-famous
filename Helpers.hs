@@ -5,6 +5,9 @@ module Helpers
     , maybe404
     , niceTime
     , createThumbs
+    , Thumbnail (..)
+    , ThumbError (..) , ThumbSize (..)
+    , thumbR
     ) where
 
 import Prelude
@@ -12,7 +15,7 @@ import Network.Wai (remoteHost, queryString)
 import Network.Socket (SockAddr(..))
 import Yesod.Handler (notFound, getRequest, GHandler, invalidArgs, waiRequest)
 import Yesod.Request (reqWaiRequest)
-import Data.Text (Text, pack)
+import qualified Data.Text as T
 import State (IP(..))
 import qualified Data.Aeson as J
 import Data.Attoparsec.ByteString (parse, maybeResult)
@@ -21,6 +24,8 @@ import Data.Time.Format (formatTime)
 import Data.Time.LocalTime (utcToLocalTime, TimeZone (..))
 import System.Locale (defaultTimeLocale)
 import Network.Thumbnail
+import Foundation (Route (..))
+import Data.Monoid ((<>))
 
 maybe404 ::  GHandler sub master (Maybe b) -> GHandler sub master b
 maybe404 action = action >>= maybe notFound return
@@ -49,7 +54,7 @@ parseJsonParam_ :: J.FromJSON a => GHandler sub master a
 parseJsonParam_ = do
     ra <- parseJsonParam
     case ra of
-        J.Error s -> invalidArgs [pack s]
+        J.Error s -> invalidArgs [T.pack s]
         J.Success a -> return a
 
 niceTime :: UTCTime -> String
@@ -64,13 +69,24 @@ thumbConfig = ThumbConfig { maxBytes = 10 * 1024 * 1024
                           , makeName = makeNameSplit 2
                           }
 
-data ThumbSize = T100 | T80 deriving (Show, Enum, Bounded)
+data ThumbSize = T100 | T120 | T200 deriving (Show, Enum, Bounded)
 
 instance Dimensions ThumbSize where
     widthHeight T100 = (100, 100)
-    widthHeight T80 = (80, 80)
+    widthHeight T120 = (120, 120)
+    widthHeight T200 = (200, 200)
 
     sizeTag = show
 
-createThumbs :: Text -> IO (Either ThumbError Thumbnail)
+createThumbs :: T.Text -> IO (Either ThumbError Thumbnail)
 createThumbs = thumbnail thumbConfig [minBound..maxBound]
+
+partitions :: Eq a => a -> [a] -> [[a]]
+partitions _ [] = []
+partitions a as = 
+ case break (==a) as of
+   (xs,[])   -> [xs]
+   (xs,_:ys) -> xs:partitions a ys
+
+thumbR hash imgt size = StaticR . simpleStaticRoute $ makeName thumbConfig imgt hash size
+    where simpleStaticRoute fpath = StaticRoute (fmap T.pack . drop 1 . partitions '/' . (saveRoot thumbConfig ++) $ fpath) []
