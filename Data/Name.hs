@@ -50,8 +50,9 @@ instance PathPiece Name where
 
 validName :: Text -> Bool
 validName = (<= 16) . T.length
-            &&* (>= 3) . T.length . T.filter (/= ' ')
+            &&* (>= 2) . T.length . T.filter (/= ' ')
             &&* T.all (C.isAlphaNum ||* (== ' '))
+            &&* T.any (not . C.isDigit)
 
 
 infixr 3 &&*

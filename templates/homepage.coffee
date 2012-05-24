@@ -97,7 +97,7 @@ attachAdd = ->
     $("form.addplayer").on "submit", (event) ->
         event.preventDefault()
         name = $(this).children("input").val()
-        if (name.length >= 3 && name.length <= 16)
+        if (name.length >= 2 && name.length <= 16)
             jsonName = JSON.stringify [name]
             $.post "/newplayer", jsonName, reloadTable
             $("#addplayerbottom").fadeOut()
