@@ -136,7 +136,7 @@ body{
 	/* padding-left & right can be changed in #menu ul - below */
 		font-size: 11px;
 	line-height: 14px;
-	}
+}
 	
 #menu ul{
 	list-style:none;
@@ -185,6 +185,7 @@ li.menu-item a{
 #wrapper{
 	position:relative;
     overflow-x:hidden;
+    overflow-y:hidden;
     min-width:880px;
 	max-width:1000px;
 	margin:0px auto 0px;
@@ -315,6 +316,7 @@ li.menu-item a{
 .login{
 	position:absolute;
 	right:0;
+    font-size:12px;
 	bottom:20px;
 }
 
@@ -394,6 +396,10 @@ h3{
 	color:black;
 	margin:0px;
 	padding:0px;
+}
+
+h3 a:hover{
+    text-decoration:underline;
 }
 
 .howto{

@@ -2,7 +2,7 @@
     <div .contentheader>
         <h2>WELCOME
         <div .login>
-            <a href="">LOGIN / REGISTER
+            <i>We are currently in Beta!</i>
     <div .writesomething>
         <h2>Write something
         <div>

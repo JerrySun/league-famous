@@ -2,7 +2,7 @@
     <div .contentheader>
         <h2>WELCOME
         <span .login>
-            <a href="">LOGIN / REGISTER
+            <i>We are currently in Beta!</i>
     <div .howto>
         <h2>How to use:
         <br>1. Find a player using the search.
@@ -17,8 +17,11 @@
                 <span .globe>NORTH AMERICA
     <div #filter>
         <form #searchform>
-            <input type="text" #searchinput .filter-input>
-        <span .pages>Page #{show pageNum} of #{show maxPageNum} #
+            <input type="text" maxlength="16" #searchinput .filter-input>
+        <span .pages>
+            <a href="">First 
+            <a href="">Previous 
+            | Page #{show pageNum} of #{show maxPageNum} # | 
             <a href=#{pageRoute $ min maxPageNum (succ pageNum)}>Next #
             <a href=#{pageRoute maxPageNum}>Last
     ^{playerTable}
@@ -31,7 +34,10 @@
                     <div .addplayerpopupbutton>
                     <form .addplayer>
                         <input type="text" .addplayer-input>
-        <span .pages>Page #{show pageNum} of #{show maxPageNum} #
+        <span .pages>
+            <a href="">First 
+            <a href="">Previous 
+            | Page #{show pageNum} of #{show maxPageNum} # | 
             <a href=#{pageRoute $ succ pageNum}>Next #
             <a href=#{pageRoute maxPageNum}>Last
     <div .clock>#{untilReset} until reset.<br>
