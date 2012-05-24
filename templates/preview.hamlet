@@ -23,8 +23,8 @@
                 <span .pcommenttime>#{niceTime $ postTime (parent thread)}
             <div .pcommentbody>
                 <div>
-                $maybe img <- imageUrl (parent thread)
-                    <img src=#{img} .pthumbnail>
+                $maybe Thumbnail _ imageHash <- image (parent thread)
+                    <img src=@{thumbR imageHash T100} .pthumbnail>
                 #{message (parent thread)}
             <div .pcommentreply>
                 <a href=@{PostR $ postNum (parent thread)}>#{show $ length (reverseChildren thread)} REPLIES

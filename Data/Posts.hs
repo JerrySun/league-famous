@@ -27,10 +27,15 @@ import Data.Time (UTCTime)
 import Data.Name (Name)
 import Control.Arrow ((&&&))
 import Control.Monad (mfilter)
+import qualified Data.ByteString as B
+import Network.Thumbnail (Thumbnail (..), ImageType (..))
+
+$(deriveSafeCopy 0 'base ''ImageType)
+$(deriveSafeCopy 0 'base ''Thumbnail)
 
 data PostContent = PostContent { posterContent :: Text
                                , messageContent :: Text
-                               , imageUrlContent :: Maybe Text
+                               , imageContent :: Maybe Thumbnail
                                , postTimeContent :: UTCTime
                                } deriving (Typeable)
 
@@ -71,7 +76,7 @@ byNumber store number = I.lookup number . essence $ store
 data Post = Post { postNum :: Int
                  , poster :: Text
                  , message :: Text
-                 , imageUrl :: Maybe Text
+                 , image :: Maybe Thumbnail
                  , postTime :: UTCTime
                  } deriving (Typeable)
 
@@ -93,7 +98,7 @@ threadLength = (+ 1) . length . reverseChildren
 setContent ::  PostContent -> Post -> Post
 setContent content post = post { poster = posterContent content
                                , message = messageContent content
-                               , imageUrl = imageUrlContent content
+                               , image = imageContent content
                                , postTime = postTimeContent content
                                }
 

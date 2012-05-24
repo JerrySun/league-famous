@@ -60,8 +60,9 @@ makeFoundation acid conf setLogger = do
 getApplicationDev :: IO (Int, Application)
 getApplicationDev = do
     acid <- openLocalState emptyState
-    putStrLn "============================================="
     createCheckpoint acid
+    putStrLn "============================================="
+    putStrLn "=        L e a g u e    F a m o u s         ="
     putStrLn "============================================="
     defaultDevelApp loader (makeApplication acid)
   where

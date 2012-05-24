@@ -124,6 +124,7 @@ executable         league-famous
                  , time >= 1.4 && < 1.5
                  , old-locale
                  , blaze-markup
+                 , web-thumbnail == 0.1.0.0
 
 test-suite integration-tests
     type: exitcode-stdio-1.0
