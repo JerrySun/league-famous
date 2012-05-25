@@ -22,6 +22,7 @@ import Data.SafeCopy (base, deriveSafeCopy)
 import qualified Data.Map as M
 import qualified Data.IntMap as I
 import Data.Text (Text)
+import qualified Data.Text as T
 import Data.Maybe (fromMaybe, fromJust)
 import Data.Time (UTCTime)
 import Data.Name (Name)
@@ -30,8 +31,15 @@ import Control.Monad (mfilter)
 import qualified Data.ByteString as B
 import Network.Thumbnail (Thumbnail (..), ImageType (..))
 
+toMaybe :: Bool -> a -> Maybe a
+toMaybe False _ = Nothing
+toMaybe True  x = Just x
+
 $(deriveSafeCopy 0 'base ''ImageType)
 $(deriveSafeCopy 0 'base ''Thumbnail)
+
+validatePostText :: Text -> Bool
+validatePostText = (< 6000) . T.length 
 
 data PostContent = PostContent { posterContent :: Text
                                , messageContent :: Text
@@ -126,8 +134,9 @@ commentCount name store = fromMaybe 0 . fmap length . M.lookup name . nameMap $ 
 
 -- No checking whether the Name is already a player in the ranks.  Do that in
 -- the State version before running this, wrap in Maybe.
-newTopPostNC :: Name -> PostContent -> PostStore -> (PostStore, Int)
-newTopPostNC name post store = (incIndex . setNameMap names . inject posts $ store, index)
+newTopPostNC :: Name -> PostContent -> PostStore -> Maybe (PostStore, Int)
+newTopPostNC name post store = toMaybe (validatePostText . messageContent $ post)
+                                       (incIndex . setNameMap names . inject posts $ store, index)
     where posts = I.insert index entry $ essence store
           index = nextIndex store
           entry = TLPost post [] name
@@ -135,8 +144,10 @@ newTopPostNC name post store = (incIndex . setNameMap names . inject posts $ sto
 
 -- Maybe add the reply if parNum is an existing top-level post
 newReply :: Int -> PostContent -> PostStore -> Maybe (PostStore, Int)
-newReply parNum post store = fmap (newReplyOnTL post store parNum) parEntry
-    where parEntry = mfilter isTL $ byNumber store parNum 
+newReply parNum post store = do
+    validPost <- mfilter (validatePostText . messageContent) $ return post
+    parEntry <- mfilter isTL $ byNumber store parNum 
+    return $ newReplyOnTL validPost store parNum parEntry
 
 -- Doesn't check whether parent exists
 newReplyOnTL :: PostContent -> PostStore -> Int -> PostEntry -> (PostStore, Int)

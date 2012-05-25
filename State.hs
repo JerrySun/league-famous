@@ -45,7 +45,9 @@ import Prelude
 import Control.Applicative ((<$>))
 import Control.Arrow ((&&&))
 import Data.Maybe (fromMaybe)
-import Control.Monad (when)
+import Control.Monad (when, mzero)
+import Control.Monad.Trans.Maybe (runMaybeT)
+import Control.Monad.Trans (lift)
 
 import Data.VoteHistory (IPStore, IP, Vote(..))
 import qualified Data.VoteHistory as V
@@ -209,12 +211,11 @@ newTopPost :: Name -> P.PostContent -> Update AppState (Maybe Int)
 newTopPost name content = do
     state <- get
     let exists = R.playerExists name . playerStore $ state
-    if exists
-        then do
-            let (posts, num) = P.newTopPostNC name content . postStore $ state
-            put $ setPostStore posts state
-            return $ Just num
-        else return Nothing
+    runMaybeT $ do
+        when (not exists) mzero
+        (posts, num) <- maybe mzero return . P.newTopPostNC name content . postStore $ state
+        lift $ put $ setPostStore posts state
+        return num
 
 newReply ::  Int -> P.PostContent -> Update AppState (Maybe Int)
 newReply parNum content = updaterMaybe postStore setPostStore $ P.newReply parNum content
