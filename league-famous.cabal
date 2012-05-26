@@ -125,6 +125,7 @@ executable         league-famous
                  , old-locale
                  , blaze-markup
                  , web-thumbnail == 0.1.0.0
+                 , ip-address == 0.1.0.0
 
 test-suite integration-tests
     type: exitcode-stdio-1.0

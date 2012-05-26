@@ -1,8 +1,7 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 module State 
     -- re-exports
-    ( IP (..)
-    , Vote (..)
+    ( Vote (..)
     , Name (..)
     , N.validName
     -- The master state
@@ -49,7 +48,7 @@ import Control.Monad (when, mzero)
 import Control.Monad.Trans.Maybe (runMaybeT)
 import Control.Monad.Trans (lift)
 
-import Data.VoteHistory (IPStore, IP, Vote(..))
+import Data.VoteHistory (IPStore, Vote(..))
 import qualified Data.VoteHistory as V
 
 import Data.Ranks (PlayerStore)
@@ -60,6 +59,7 @@ import qualified Data.Posts as P
 
 import Data.Name (Name (..))
 import qualified Data.Name as N
+import Data.IP.Address (IP)
 
 ----
 ----

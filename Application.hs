@@ -38,7 +38,7 @@ makeApplication :: AcidState AppState -> AppConfig DefaultEnv Extra -> Logger ->
 makeApplication acid conf logger = do
     foundation <- makeFoundation acid conf setLogger
     app <- toWaiApp foundation
-    return $ logWare app
+    return . logWare $ app
   where
 #ifdef DEVELOPMENT
     logWare = logCallbackDev (logBS setLogger)

@@ -1,7 +1,6 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 module Data.VoteHistory
-    ( IP (..)
-    , Vote (..)
+    ( Vote (..)
     , IPStore
     , vote
     , getVote
@@ -17,10 +16,9 @@ import Data.Name (Name)
 import Data.Maybe (fromMaybe)
 import Data.Aeson
 import Control.Monad (mzero)
+import Data.IP.Address (IP (..))
 
 data Vote = Up | Down | Neutral deriving (Show, Eq, Typeable)
-
-data IP = IPv4 Word32 | IPv6 (Word32, Word32, Word32, Word32) deriving (Ord, Eq, Typeable)
 
 data IPStore = IPStore { unwrapMap :: M.Map IP (M.Map Name Vote) } deriving (Typeable)
 
