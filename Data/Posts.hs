@@ -123,14 +123,14 @@ recentChildren n = reverse . take n . reverseChildren
 getThread :: Int -> PostStore -> Maybe Thread
 getThread number store = byNumber store number >>= doEntry
     where doEntry (CLPost _ pnum) = getThread pnum store
-          doEntry tl@(TLPost _ _ _) = Just $ makeThread store number tl
+          doEntry tl@TLPost{} = Just $ makeThread store number tl
 
 playerThreads :: Name -> PostStore -> [Thread]
 playerThreads name store = map (uncurry (makeThread store)) . filter (isTL . snd) . map (id &&& (fromJust . byNumber store)) $ pnums
     where pnums = fromMaybe [] $ M.lookup name (nameMap store)
 
 commentCount ::  Name -> PostStore -> Int
-commentCount name store = fromMaybe 0 . fmap length . M.lookup name . nameMap $ store
+commentCount name store = maybe 0 length . M.lookup name . nameMap $ store
 
 -- No checking whether the Name is already a player in the ranks.  Do that in
 -- the State version before running this, wrap in Maybe.

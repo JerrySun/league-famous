@@ -7,10 +7,9 @@ module Handler.Api
 
 import Import
 import Data.Aeson
-import Control.Monad (mzero, when)
+import Control.Monad (mzero, when, mfilter)
 import Data.Time (getCurrentTime)
 import Data.Maybe (isNothing)
-import Control.Monad (mfilter)
 
 data VoteReq = VoteReq Vote Name
 
@@ -35,7 +34,7 @@ postNewPlayerR = do
 
 data PostInput = PostInput { inputPlayer :: Text
                            , inputName :: Text
-                           , inputUrl :: (Maybe Text)
+                           , inputUrl :: Maybe Text
                            , inputBody :: Text
                            }
 
@@ -70,7 +69,7 @@ postMakePostR = do
     
 data ReplyInput = ReplyInput { replyParent :: Int
                            , replyName :: Text
-                           , replyUrl :: (Maybe Text)
+                           , replyUrl :: Maybe Text
                            , replyBody :: Text
                            }
 
