@@ -25,18 +25,23 @@ import System.Locale (defaultTimeLocale)
 import Network.Thumbnail
 import Foundation (Route (..))
 import Data.Monoid ((<>))
-import Data.IP.Address (IP (..), toIP)
+import Data.IP.Address (IP (..), toIP, toBits6)
+import Data.Maybe (fromMaybe, fromJust)
+import Control.Monad (mzero)
 
 maybe404 ::  GHandler sub master (Maybe b) -> GHandler sub master b
 maybe404 action = action >>= maybe notFound return
 
-requestIP ::  GHandler s m IP
-requestIP = fmap (sockIP . remoteHost . reqWaiRequest) getRequest
+-- Note: the address coming from remoteHost is little-endian
+requestIP' ::  GHandler s m IP
+requestIP' = fmap (sockIP . remoteHost . reqWaiRequest) getRequest
             where sockIP (SockAddrInet _ a) = IPv4 a
-                  sockIP (SockAddrInet6 _ _ a _) = IPv6 a
+                  sockIP (SockAddrInet6 _ _ a _) = IPv6 . fromJust . toBits6 $ a
                   sockIP _ = IPv4 0 -- Kind of just don't handle unix sockets
 
--- realIP = fmap toIP . lookup "X-Real-IP" . requestHeaders
+requestIP :: GHandler sub master IP
+requestIP = (>>= maybe (fail "no ip") return) . fmap realIP $ getRequest
+    where realIP = (>>= toIP) . lookup "X-Real-IP" . requestHeaders . reqWaiRequest
 
 
 -- FIXME this should parse the raw string, since not everything is actually
