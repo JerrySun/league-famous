@@ -15,7 +15,14 @@ Testing:
 Staging:
   <<: *defaults
 
+Jerry:
+  <<: *defaults
+  port: 3001
+  approot: "http://jerry.leaguefamous.com"
+  staticroot: "http://jerry.leaguefamous.com/static"
+
 Production:
   approot: "http://www.leaguefamous.com"
-  staticroot: "http://static.leaguefamous.com/"
+  #staticroot: "http://static.leaguefamous.com/"
+  staticroot: "http://www.leaguefamous.com/static"
   <<: *defaults
