@@ -3,6 +3,8 @@
         <h3>
             <a .plain href=@{PlayerR $ statName player}>#{statName player}
         <div #previewclose>
+        <span>
+            <a href="" .playerdelete>delete
         <ul #previewstats>
             <li>
                 <div>#{statRank player}

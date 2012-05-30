@@ -8,6 +8,8 @@
         <br>1. Find a player using the search.
         <br>2. Vote on every player once per day.
         <br>3. Use the "Add Player" button at the bottom of the list to add more players.
+        <br>4. Have fun.
+        <br>5. Don't be a bitch.
 <div #preview .hidden>
 <div #center>
     <div .contentheader>

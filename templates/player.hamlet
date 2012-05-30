@@ -23,6 +23,9 @@
             <div .commenttop>
                 <span .commentname>#{poster (parent thread)}
                 <span .commenttime>#{niceTime $ postTime (parent thread)}
+                $if True
+                    <span .commentdelete>
+                        <a href="">delete
             <div .commentbody>
                 <div>
                     $maybe Thumbnail _ hash fmt <- image (parent thread)
@@ -33,6 +36,11 @@
                     <div .replytop>
                         <span .replyname>#{poster child}
                         <span .replytime>#{niceTime $ postTime child}
+                        $if True
+                            <span .commentdelete>
+                                <a href="">delete
+                    <span .commentdelete>
+                        <a href="">delete
                     <div .replybody>
                         $maybe Thumbnail _ hash fmt <- image child
                             <img src=@{thumbR hash fmt T120} .replythumbnail>

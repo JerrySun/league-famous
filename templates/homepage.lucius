@@ -409,6 +409,19 @@
     font-size:10px;
 }
 
+.playerdelete{
+    display:block;
+    height:14px;
+    width:80px;
+    opacity:0;
+    font-size:11px;
+}
+
+.playerdelete:hover{
+    opacity:1;
+    color:red;
+}
+
 .pcommentwrapper{
     position:relative;
     overflow:hidden;

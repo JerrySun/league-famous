@@ -163,6 +163,20 @@
 	font-size:12px;
 }
 
+.commentdelete{
+	display:none;
+}
+
+.commenttop:hover .commentdelete, .replytop:hover .commentdelete{
+	display:block;
+	float:right;
+}
+
+.commentdelete a{
+	font-weight:bold;
+	color:red;
+}
+
 .commentbody{
 	overflow:hidden;
 	margin-bottom:20px;
