@@ -57,8 +57,8 @@ makeFoundation acid conf setLogger = do
 
 
 -- for yesod devel
-getApplicationDev :: IO (Int, Application)
-getApplicationDev = do
+--getApplicationDev :: IO (Int, Application)
+getApplicationDev confSet = do
     acid <- openLocalState emptyState
     createCheckpoint acid
     putStrLn "============================================="
@@ -66,6 +66,6 @@ getApplicationDev = do
     putStrLn "============================================="
     defaultDevelApp loader (makeApplication acid)
   where
-    loader = loadConfig (configSettings Development)
+    loader = loadConfig (configSettings confSet)
         { csParseExtra = parseExtra
         }

@@ -5,11 +5,17 @@ import Network.Wai.Handler.Warp
 import System.Directory (doesFileExist, removeFile)
 import System.Exit (exitSuccess)
 import Control.Concurrent (threadDelay, forkIO)
+import System.Environment (getArgs)
 
 main :: IO ()
 main = do
+    args <- getArgs
+    let confName = case args of
+                     [arg] -> arg
+                     _ -> "Development"
+
     putStrLn "Starting devel application"
-    (port, app) <- getApplicationDev
+    (port, app) <- getApplicationDev (read confName)
     forkIO $ runSettings defaultSettings
         { settingsPort = port
         } app
