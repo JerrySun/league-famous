@@ -6,6 +6,21 @@ module Data.Posts
     , BoardId (..)
     , PostStoreError (..)
     , empty
+    , newThread
+    , getThread
+    , newReply
+    ---
+    , commentCount
+    , playerThreads
+    , newTopPostNC
+    , PostContainer (..)
+    , children
+    , reverseChildren
+    , recentChildren
+    , threadLength
+    , parent
+    , ThreadMeta (..)
+    , getThreadMeta
     ) where
 
 import Prelude
@@ -19,6 +34,7 @@ import Data.Name (Name)
 import Network.Thumbnail (Thumbnail, ImageType)
 import Data.Maybe (isJust)
 import Control.Applicative ((<$>))
+import Control.Arrow (second)
 
 $(deriveSafeCopy 0 'base ''ImageType)
 $(deriveSafeCopy 0 'base ''Thumbnail)
@@ -66,9 +82,15 @@ data PostStoreError =   BoardDoesNotExist
                       | PostStoreError
                       | NoParent
                       | NoBoard
-                      deriving (Show)
+                      deriving (Show, Typeable)
+$(deriveSafeCopy 0 'base ''PostStoreError)
 
 type CanError a = Either PostStoreError a
+
+data ThreadMeta = ThreadMeta { threadBoard :: BoardId
+                             , threadIndex :: Int
+                             } deriving (Typeable)
+$(deriveSafeCopy 0 'base ''ThreadMeta)
 
 -- Setters for 'PostStore' records
 
@@ -119,6 +141,8 @@ threadSingle p = Thread p I.empty
 threadReply :: Int -> PostContainer -> Thread -> Thread
 threadReply i r (Thread p rs) = Thread p (I.insert i r rs)
 
+threadSize (Thread _ rs) = 1 + I.size rs
+
 newThread :: BoardId -> PostContainer -> PostStore -> CanError (PostStore, Int)
 newThread b p store = do
         board <- I.insert i (threadSingle p) <$> getBoard b store
@@ -129,13 +153,15 @@ newThread b p store = do
                          . modParents (I.insert i Self)
                          . modTopLevels (I.insert i b)
 
-getThread :: Int -> PostStore -> CanError Thread
-getThread num store  = do
+getThread num store = fst <$> getThreadMeta num store
+
+getThreadMeta :: Int -> PostStore -> CanError (Thread, ThreadMeta)
+getThreadMeta num store  = do
     parNum <- findParentIndex num store
     boardId <- findBoardId parNum store
     board <- getBoard boardId store
     thread <- maybeError MissingThread . I.lookup num $ board
-    return thread
+    return (thread, ThreadMeta boardId parNum)
 
     
 
@@ -164,9 +190,49 @@ findParentIndex num store = process <$> findParent num store
                             Self -> num
                             Parent n -> n
 
-findBoardId :: Int -> PostStore -> Either PostStoreError BoardId
+findBoardId :: Int -> PostStore -> CanError BoardId
 findBoardId parNum = maybeError NoBoard . I.lookup parNum . topLevels
 -- etc
 
 maybeError ::  a -> Maybe b -> Either a b
 maybeError e = maybe (Left e) Right
+
+------
+
+-- high level stuff from previous api
+commentCount ::  Name -> PostStore -> Int
+commentCount name store = 
+    case result of 
+        Right x -> x
+        Left _ -> 0
+    where result = I.foldr ((+) . threadSize) 0 <$> getBoard (PlayerBoard name) store
+
+playerThreads :: Name -> PostStore -> [(Thread, ThreadMeta)]
+playerThreads name store =
+    case result of
+        Right x -> x
+        Left _ -> []
+    where result = do
+              board <- getBoard (PlayerBoard name) store
+              return . reverse . map (second (\x -> ThreadMeta (PlayerBoard name) x)) . map (uncurry (flip (,))) . I.toAscList $ board
+
+newTopPostNC :: Name -> Post -> PostStore -> Maybe (PostStore, Int)
+newTopPostNC name post store =
+    case result of
+        Right x -> Just x
+        Left _ -> Nothing
+    where result = newThread (PlayerBoard name) (NormalPost post) store
+
+reverseChildren (Thread _ rs) = concatMap normals . I.toAscList $ rs
+    where normals (i, NormalPost x) = [(i,x)]
+          normals _ = []
+
+children = reverse . reverseChildren
+
+recentChildren i = reverse . take i . reverseChildren
+
+threadLength = threadSize
+
+parent (Thread (NormalPost p) _) = p
+
+threadPlayer _ = "Foo"

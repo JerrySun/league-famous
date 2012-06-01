@@ -18,7 +18,7 @@
                     <div .formatting>formatting help
 <div #center>
     ^{statsHeader player vote}
-    $forall thread <- threads
+    $forall (thread, meta) <- threads
         <div .commentwrapper>
             <div .commenttop>
                 <span .commentname>#{poster (parent thread)}
@@ -31,7 +31,7 @@
                     $maybe Thumbnail _ hash fmt <- image (parent thread)
                         <img src=@{thumbR hash fmt T200} .topthumbnail>
                     #{message (parent thread)}
-            $forall child <- recentChildren 2 thread
+            $forall (_, child) <- recentChildren 2 thread
                 <div .replywrapper>
                     <div .replytop>
                         <span .replyname>#{poster child}
@@ -47,6 +47,6 @@
                         #{message child}
             <div .replyfooter>
                 <div .commentreply>
-                    <a href=@{PostR $ postNum (parent thread)}>
+                    <a href=@{PostR $ threadIndex meta}>
                         REPLY | #{show (max 0 ((-) (threadLength thread) 3))} MORE REPLIES
     <div .loadmore>LOAD MORE

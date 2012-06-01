@@ -1,4 +1,4 @@
-pageParent = %{show $ postNum (parent thread)}
+pageParent = %{show $ threadIndex meta}
 
 attachReplyForm = ->
     $("#replyForm").on "submit", (event) ->

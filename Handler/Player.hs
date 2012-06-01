@@ -21,8 +21,10 @@ getPlayerR name  = do
 getPostR :: Int -> Handler RepHtml
 getPostR num = do
     acid <- getAcid
-    thread <- maybe404 $ query' acid $ GetThread num
-    let name = threadPlayer thread
+    (thread, meta) <- either500 $ query' acid $ GetThreadMeta num
+    let name = case threadBoard meta of
+                    PlayerBoard n -> n
+                    _ -> ""
     player <- maybe404 $ query' acid $ PlayerStats name
     ip <- requestIP
     vote <- query' acid $ GetVote ip name
