@@ -1,26 +1,13 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 module Data.Posts
-    ( PostStore (..)
+    ( module X 
+    , PostContainer (..)
     , Post (..)
-    , Thread (..)
     , BoardId (..)
-    , PostStoreError (..)
-    , empty
-    , newThread
-    , getThread
-    , newReply
-    ---
     , commentCount
     , playerThreads
     , newTopPostNC
-    , PostContainer (..)
-    , children
-    , reverseChildren
-    , recentChildren
-    , threadLength
-    , parent
-    , ThreadMeta (..)
-    , getThreadMeta
+    , hideDeleted
     ) where
 
 import Prelude
@@ -32,9 +19,12 @@ import Data.Text (Text)
 import Data.Time (UTCTime)
 import Data.Name (Name)
 import Network.Thumbnail (Thumbnail, ImageType)
-import Data.Maybe (isJust)
+import Data.Maybe (isJust, mapMaybe)
 import Control.Applicative ((<$>))
 import Control.Arrow (second)
+
+import Data.Posts.Thread as X
+import Data.Posts.Store as X
 
 $(deriveSafeCopy 0 'base ''ImageType)
 $(deriveSafeCopy 0 'base ''Thumbnail)
@@ -51,188 +41,53 @@ $(deriveSafeCopy 0 'base ''Post)
 data PostContainer = NormalPost Post | Deleted deriving (Show, Typeable)
 $(deriveSafeCopy 0 'base ''PostContainer)
 
--- | Thread data structure containing top post and any number of child posts
-data Thread = Thread PostContainer (I.IntMap PostContainer) deriving (Show, Typeable)
-$(deriveSafeCopy 0 'base ''Thread)
-
 -- | Possible boards to which threads can be posted
 data BoardId = PlayerBoard Name | General | OffTopic deriving (Show, Eq, Ord, Typeable)
 $(deriveSafeCopy 0 'base ''BoardId)
 
--- | The data structure that stores threads for one board
-type BoardThreads = I.IntMap Thread
-
--- | A map from board identifiers to corresponding threads
-type BoardMap = M.Map BoardId BoardThreads
-
--- | Indicate either a parent post number or that the post is itself top-level
-data Parent = Parent Int | Self deriving (Show, Typeable)
-$(deriveSafeCopy 0 'base ''Parent)
-
--- | Master data structure that stores posts, along with indices and other state
-data PostStore = PostStore { boards :: BoardMap -- ^ Post hierarchy with boards at the top level
-                           , parents :: I.IntMap Parent -- ^ Map from post indices to their parents' indices
-                           , topLevels :: I.IntMap BoardId -- ^ Map from thread parents to boards
-                           , nextIndex :: Int -- ^ Index that will be assigned to a new post
-                           } deriving (Show, Typeable)
-$(deriveSafeCopy 0 'base ''PostStore)
-
-data PostStoreError =   BoardDoesNotExist
-                      | MissingThread
-                      | PostStoreError
-                      | NoParent
-                      | NoBoard
-                      deriving (Show, Typeable)
-$(deriveSafeCopy 0 'base ''PostStoreError)
-
-type CanError a = Either PostStoreError a
-
-data ThreadMeta = ThreadMeta { threadBoard :: BoardId
-                             , threadIndex :: Int
-                             } deriving (Typeable)
-$(deriveSafeCopy 0 'base ''ThreadMeta)
-
--- Setters for 'PostStore' records
-
-setBoards ::  BoardMap -> PostStore -> PostStore
-setBoards x ps = ps {boards = x}
-
-modBoards ::  (BoardMap -> BoardMap) -> PostStore -> PostStore
-modBoards f ps = ps {boards = f (boards ps)}
-
-setParents ::  I.IntMap Parent -> PostStore -> PostStore
-setParents x ps = ps {parents = x}
-
-modParents ::  (I.IntMap Parent -> I.IntMap Parent) -> PostStore -> PostStore
-modParents f ps = ps {parents = f (parents ps)}
-
-setTopLevels ::  I.IntMap BoardId -> PostStore -> PostStore
-setTopLevels x ps = ps {topLevels = x}
-
-modTopLevels :: (I.IntMap BoardId -> I.IntMap BoardId) -> PostStore -> PostStore
-modTopLevels f ps = ps {topLevels = f (topLevels ps)}
-
--- | Empty initial post store
-empty :: PostStore
-empty = PostStore M.empty I.empty I.empty 0
-
-
--- | Increment the index counter
-incIndex ::  PostStore -> PostStore
-incIndex nm = nm { nextIndex = succ (nextIndex nm) }
-
 -- Basic operations
 
--- Boards
-
-createBoard :: BoardId -> PostStore -> PostStore
-createBoard b store = setBoards boards' $ store
-    where boards' = M.insert b emptyBoard . boards $ store
-          emptyBoard = I.empty
-
-getBoard :: BoardId -> PostStore -> CanError BoardThreads
-getBoard b = maybeError BoardDoesNotExist . M.lookup b . boards
-
--- Threads
-
-threadSingle :: PostContainer -> Thread
-threadSingle p = Thread p I.empty
-
-threadReply :: Int -> PostContainer -> Thread -> Thread
-threadReply i r (Thread p rs) = Thread p (I.insert i r rs)
-
-threadSize (Thread _ rs) = 1 + I.size rs
-
-newThread :: BoardId -> PostContainer -> PostStore -> CanError (PostStore, Int)
-newThread b p store = do
-        board <- I.insert i (threadSingle p) <$> getBoard b store
-        return (change board store, i)
-    where i = nextIndex store
-          change board = incIndex
-                         . modBoards (M.insert b board)
-                         . modParents (I.insert i Self)
-                         . modTopLevels (I.insert i b)
-
-getThread num store = fst <$> getThreadMeta num store
-
-getThreadMeta :: Int -> PostStore -> CanError (Thread, ThreadMeta)
-getThreadMeta num store  = do
-    parNum <- findParentIndex num store
-    boardId <- findBoardId parNum store
-    board <- getBoard boardId store
-    thread <- maybeError MissingThread . I.lookup num $ board
-    return (thread, ThreadMeta boardId parNum)
-
-    
 
 -- Replies
 
-newReply :: Int -> PostContainer -> PostStore -> CanError (PostStore, Int)
-newReply parNum post store = do
-        thread <- threadReply i post <$> getThread parNum store
-        boardId <- findBoardId parNum store
-        board <- I.insert parNum thread <$> getBoard boardId store
-        return (change boardId board store, i)
-    where i = nextIndex store
-          change bId board = incIndex
-                         . modBoards (M.insert bId board)
-                         . modParents (I.insert i (Parent parNum))
-
-
--- Posts
-
-findParent :: Int -> PostStore -> CanError Parent
-findParent num = maybeError NoParent . I.lookup num . parents
-
-findParentIndex ::  Int -> PostStore -> Either PostStoreError Int
-findParentIndex num store = process <$> findParent num store
-    where process par = case par of
-                            Self -> num
-                            Parent n -> n
-
-findBoardId :: Int -> PostStore -> CanError BoardId
-findBoardId parNum = maybeError NoBoard . I.lookup parNum . topLevels
--- etc
-
-maybeError ::  a -> Maybe b -> Either a b
-maybeError e = maybe (Left e) Right
-
-------
-
 -- high level stuff from previous api
-commentCount ::  Name -> PostStore -> Int
+commentCount ::  Name -> PostStore BoardId p -> Int
 commentCount name store = 
     case result of 
         Right x -> x
         Left _ -> 0
-    where result = I.foldr ((+) . threadSize) 0 <$> getBoard (PlayerBoard name) store
+    where result = I.foldr ((+) . threadLength) 0 <$> getBoard (PlayerBoard name) store
 
-playerThreads :: Name -> PostStore -> [(Thread, ThreadMeta)]
+hideDeleted :: Thread PostContainer -> Maybe (Thread Post)
+hideDeleted (Thread Deleted _) = Nothing
+hideDeleted t = Just . fmap unwrapPost . hideReplies $ t
+    where hideReplies (Thread p c) = Thread p (I.filter isNormalPost c)
+          unwrapPost (NormalPost x) = x
+          isNormalPost (NormalPost x) = True
+          isNormalPost _ = False
+
+
+playerThreads :: Name -> PostStore BoardId PostContainer -> [(Thread Post, ThreadMeta BoardId)]
 playerThreads name store =
     case result of
         Right x -> x
         Left _ -> []
     where result = do
               board <- getBoard (PlayerBoard name) store
-              return . reverse . map (second (\x -> ThreadMeta (PlayerBoard name) x)) . map (uncurry (flip (,))) . I.toAscList $ board
+              return
+                . reverse
+                . map (second (\x -> ThreadMeta (PlayerBoard name) x))
+                . map (uncurry (flip (,)))
+                . mapMaybe hideDelPair
+                . I.toAscList
+                $ board
 
-newTopPostNC :: Name -> Post -> PostStore -> Maybe (PostStore, Int)
+hideDelPair ::  (t, Thread PostContainer) -> Maybe (t, Thread Post)
+hideDelPair (m, t) = fmap (\x -> (m,x)) . hideDeleted $ t
+
+newTopPostNC :: Name -> Post -> PostStore BoardId PostContainer -> Maybe (PostStore BoardId PostContainer, Int)
 newTopPostNC name post store =
     case result of
         Right x -> Just x
         Left _ -> Nothing
     where result = newThread (PlayerBoard name) (NormalPost post) store
-
-reverseChildren (Thread _ rs) = concatMap normals . I.toAscList $ rs
-    where normals (i, NormalPost x) = [(i,x)]
-          normals _ = []
-
-children = reverse . reverseChildren
-
-recentChildren i = reverse . take i . reverseChildren
-
-threadLength = threadSize
-
-parent (Thread (NormalPost p) _) = p
-
-threadPlayer _ = "Foo"

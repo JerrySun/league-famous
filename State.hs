@@ -58,7 +58,7 @@ import qualified Data.VoteHistory as V
 import Data.Ranks (PlayerStore)
 import qualified Data.Ranks as R
 
-import Data.Posts (Thread (..), PostStore)
+import Data.Posts (Thread (..), PostContainer, BoardId, PostStore)
 import qualified Data.Posts as P
 
 import Data.Name (Name (..))
@@ -69,7 +69,7 @@ import Data.IP.Address (IP)
 ----
 data AppState = AppState { playerStore :: PlayerStore
                          , ipStore :: IPStore
-                         , postStore :: PostStore } deriving (Typeable)
+                         , postStore :: PostStore P.BoardId P.PostContainer } deriving (Typeable)
 
 $(deriveSafeCopy 0 'base ''AppState)
 
@@ -79,7 +79,7 @@ setPlayerStore ps  state = state { playerStore = ps}
 setIPStore ::  IPStore -> AppState -> AppState
 setIPStore     ips state = state { ipStore = ips}
 
-setPostStore ::  PostStore -> AppState -> AppState
+setPostStore ::  PostStore P.BoardId P.PostContainer -> AppState -> AppState
 setPostStore  posts state = state { postStore = posts }
 
 queryer ::  (AppState -> s) -> (s -> b) -> Query AppState b
@@ -213,14 +213,18 @@ searchStats x = do
 
 ------------------------------
 
-playerThreads ::  Name -> Query AppState [(Thread, P.ThreadMeta)]
+playerThreads ::  Name -> Query AppState [(Thread P.Post, P.ThreadMeta BoardId)]
 playerThreads name = queryer postStore $ P.playerThreads name
 
-getThread ::  Int -> Query AppState (Either P.PostStoreError Thread)
+getThread ::  Int -> Query AppState (Either P.PostStoreError (Thread PostContainer))
 getThread num = queryer postStore $ P.getThread num
 
-getThreadMeta ::  Int -> Query AppState (Either P.PostStoreError (Thread, P.ThreadMeta))
-getThreadMeta num = queryer postStore $ P.getThreadMeta num
+getThreadMeta ::  Int -> Query AppState (Either P.PostStoreError (Thread P.Post, P.ThreadMeta BoardId))
+getThreadMeta num = do
+    result <- queryer postStore $ P.getThreadMeta num
+    return $ result >>= hideDel'
+  where hideDel (t, m) = fmap (\x -> (x, m)) (P.hideDeleted t)
+        hideDel' = maybe (Left P.PostStoreError) return . hideDel
 
 newTopPost :: Name -> P.Post -> Update AppState (Maybe Int)
 newTopPost name post = do
