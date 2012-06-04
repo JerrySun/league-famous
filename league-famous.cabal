@@ -33,7 +33,7 @@ library
                      Settings
                      Settings.StaticFiles
                      Handler.Home
-                     Handler.Player
+                     Handler.Comments
                      Handler.Api
                      Handler.Misc
                      State

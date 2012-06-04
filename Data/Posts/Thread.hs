@@ -9,6 +9,7 @@ module Data.Posts.Thread
     , reverseChildren
     , recentChildren
     , parent
+    , PostIx
     ) where
 
 import Prelude
@@ -25,6 +26,7 @@ import qualified Data.IntMap as I
 import qualified Data.Foldable as FO
 import Data.Monoid (mappend)
 
+type PostIx = Int
 
 -- | Thread data structure containing top post and any number of child posts
 data Thread post = Thread post (I.IntMap post) deriving (Show, Typeable)
@@ -37,7 +39,7 @@ instance FO.Foldable Thread where
     foldMap f (Thread par chil) = f par `mappend` FO.foldMap f chil
 
 data ThreadMeta bid = ThreadMeta { threadBoard ::  bid
-                             , threadIndex :: Int
+                             , threadIndex :: PostIx
                              } deriving (Typeable)
 $(deriveSafeCopy 0 'base ''ThreadMeta)
 
@@ -47,19 +49,19 @@ singletonThread = threadSingle
 threadSingle :: p -> Thread p
 threadSingle p = Thread p I.empty
 
-threadReply :: Int -> p -> Thread p -> Thread p
+threadReply :: PostIx -> p -> Thread p -> Thread p
 threadReply i r (Thread p rs) = Thread p (I.insert i r rs)
 
 threadLength (Thread _ rs) = 1 + I.size rs
 
 -- high level stuff from previous api
-children ::  Thread p -> [(I.Key, p)]
+children ::  Thread p -> [(PostIx, p)]
 children (Thread _ rs) = I.toAscList rs
 
-reverseChildren ::  Thread p -> [(I.Key, p)]
+reverseChildren ::  Thread p -> [(PostIx, p)]
 reverseChildren = reverse . children
 
-recentChildren ::  Int -> Thread p -> [(I.Key, p)]
+recentChildren ::  PostIx -> Thread p -> [(PostIx, p)]
 recentChildren i = reverse . take i . reverseChildren
 
 

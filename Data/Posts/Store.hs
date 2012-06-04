@@ -1,13 +1,23 @@
 {-# LANGUAGE DeriveDataTypeable #-}
+-- | This module defines a message board data structure for user-defined post
+-- and board id types.
 module Data.Posts.Store 
     ( PostStore (..)
+    , PostIx
+    , Board
+    , BoardMap
+    , Parent (..)
     , empty
+    -- * Thread operations
+    , newThread
+    , newReply
     , getThread
     , getThreadMeta
-    , newReply
-    , PostStoreError (..)
+    -- * Board operations
+    , createBoard
     , getBoard
-    , newThread
+    -- * Error handling
+    , PostStoreError (..)
     ) where
 
 import Prelude
@@ -22,24 +32,29 @@ import Control.Arrow (second)
 
 import Data.Posts.Thread
 
-type PostId = Int
+--type PostIx = Int
 
 -- | The data structure that stores threads for one board
-type BoardThreads post = I.IntMap (Thread post)
+type Board post = I.IntMap (Thread post)
 
 -- | A map from board identifiers to corresponding threads
-type BoardMap bid post = M.Map bid (BoardThreads post)
+type BoardMap bid post = M.Map bid (Board post)
 
 -- | Indicate either a parent post number or that the post is itself top-level
-data Parent = Parent PostId | Self deriving (Show, Typeable)
+data Parent = Parent PostIx | Self deriving (Show, Typeable)
 $(deriveSafeCopy 0 'base ''Parent)
 
 -- | Master data structure that stores posts, along with indices and other state
-data PostStore bid post = PostStore { boards :: BoardMap bid post -- ^ Post hierarchy with boards at the top level
-                           , parents :: I.IntMap Parent -- ^ Map from post indices to their parents' indices
-                           , topLevels :: I.IntMap bid -- ^ Map from thread parents to boards
-                           , nextIndex :: PostId -- ^ Index that will be assigned to a new post
-                           } deriving (Show, Typeable)
+data PostStore bid post =
+    PostStore { -- | Post hierarchy with boards at the top level
+                boards :: BoardMap bid post 
+                -- | Map from post indices to their parents' indices
+              , parents :: I.IntMap Parent
+                -- | Map from thread parents' indices to the ids of the board on which they exist
+              , threadLocations :: I.IntMap bid 
+                -- | Index that will be assigned to a new post
+              , nextIndex :: PostIx 
+              } deriving (Show, Typeable)
 
 
 instance (Ord bid, SafeCopy bid, SafeCopy post) => SafeCopy (PostStore bid post) where
@@ -71,10 +86,10 @@ modParents ::  (I.IntMap Parent -> I.IntMap Parent) -> PostStore b p -> PostStor
 modParents f ps = ps {parents = f (parents ps)}
 
 setTopLevels ::  I.IntMap b -> PostStore b p -> PostStore b p
-setTopLevels x ps = ps {topLevels = x}
+setTopLevels x ps = ps {threadLocations = x}
 
 modTopLevels :: (I.IntMap b -> I.IntMap b) -> PostStore b p -> PostStore b p
-modTopLevels f ps = ps {topLevels = f (topLevels ps)}
+modTopLevels f ps = ps {threadLocations = f (threadLocations ps)}
 
 -- | Empty initial post store
 empty :: PostStore b p
@@ -92,12 +107,13 @@ createBoard b store = setBoards boards' $ store
     where boards' = M.insert b emptyBoard . boards $ store
           emptyBoard = I.empty
 
-getBoard :: Ord b => b -> PostStore b p -> CanError (BoardThreads p)
+getBoard :: Ord b => b -> PostStore b p -> CanError (Board p)
 getBoard b = maybeError BoardDoesNotExist . M.lookup b . boards
 
 -- Threads
 
-newThread :: Ord b => b -> p -> PostStore b p -> CanError (PostStore b p, PostId)
+-- | Create a new thread in the specified board. Fails if the board does not exist.
+newThread :: Ord b => b -> p -> PostStore b p -> CanError (PostStore b p, PostIx)
 newThread b p store = do
         board <- I.insert i (threadSingle p) <$> getBoard b store
         return (change board store, i)
@@ -107,19 +123,8 @@ newThread b p store = do
                          . modParents (I.insert i Self)
                          . modTopLevels (I.insert i b)
 
-getThread :: Ord b => PostId -> PostStore b p -> CanError (Thread p)
-getThread num store = fst <$> getThreadMeta num store
-
-getThreadMeta :: Ord b => PostId -> PostStore b p -> CanError (Thread p, ThreadMeta b)
-getThreadMeta num store  = do
-    parNum <- findParentIndex num store
-    boardId <- findBoardId parNum store
-    board <- getBoard boardId store
-    thread <- maybeError MissingThread . I.lookup num $ board
-    return (thread, ThreadMeta boardId parNum)
-
--- Replies
-newReply :: Ord b => PostId -> p -> PostStore b p -> CanError (PostStore b p, PostId)
+-- | Create a reply to the given parent post index, returning the reply's index
+newReply :: Ord b => PostIx -> p -> PostStore b p -> CanError (PostStore b p, PostIx)
 newReply parNum post store = do
         thread <- threadReply i post <$> getThread parNum store
         boardId <- findBoardId parNum store
@@ -130,20 +135,35 @@ newReply parNum post store = do
                          . modBoards (M.insert bId board)
                          . modParents (I.insert i (Parent parNum))
 
+-- | Retrieve the thread that contains the given post index (as a reply or
+-- parent comment)
+getThread :: Ord b => PostIx -> PostStore b p -> CanError (Thread p)
+getThread num store = fst <$> getThreadMeta num store
+
+-- | Retrieve the thread that contains the given post index, along with its
+-- location metadata
+getThreadMeta :: Ord b => PostIx -> PostStore b p -> CanError (Thread p, ThreadMeta b)
+getThreadMeta num store  = do
+    parNum <- findParentIndex num store
+    boardId <- findBoardId parNum store
+    board <- getBoard boardId store
+    thread <- maybeError MissingThread . I.lookup num $ board
+    return (thread, ThreadMeta boardId parNum)
+
 
 -- Posts
 
-findParent :: PostId -> PostStore b p -> CanError Parent
+findParent :: PostIx -> PostStore b p -> CanError Parent
 findParent num = maybeError NoParent . I.lookup num . parents
 
-findParentIndex ::  PostId -> PostStore b p -> Either PostStoreError PostId
+findParentIndex ::  PostIx -> PostStore b p -> Either PostStoreError PostIx
 findParentIndex num store = process <$> findParent num store
     where process par = case par of
                             Self -> num
                             Parent n -> n
 
-findBoardId :: PostId -> PostStore b p -> CanError b
-findBoardId parNum = maybeError NoBoard . I.lookup parNum . topLevels
+findBoardId :: PostIx -> PostStore b p -> CanError b
+findBoardId parNum = maybeError NoBoard . I.lookup parNum . threadLocations
 -- etc
 
 maybeError ::  a -> Maybe b -> Either a b

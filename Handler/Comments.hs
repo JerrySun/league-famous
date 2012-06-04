@@ -1,4 +1,4 @@
-module Handler.Player
+module Handler.Comments
     ( getPlayerR
     , getPostR
     ) where
