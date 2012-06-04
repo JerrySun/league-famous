@@ -117,7 +117,10 @@ emptyState = AppState R.empty V.empty P.empty
 ----
 
 newPlayer ::  Name -> Update AppState ()
-newPlayer name = updater_ playerStore setPlayerStore $ R.newPlayer name
+newPlayer name = do 
+    updater_ playerStore setPlayerStore $ R.newPlayer name
+    _ <- updaterMaybe postStore setPostStore $ (fmap (\x -> (x,())) . P.createBoardIfMissing (P.PlayerBoard name))
+    return ()
 
 playerCount ::  Query AppState Int
 playerCount = queryer playerStore R.playerCount

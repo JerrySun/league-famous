@@ -15,6 +15,7 @@ module Data.Posts.Store
     , getThreadMeta
     -- * Board operations
     , createBoard
+    , createBoardIfMissing
     , getBoard
     -- * Error handling
     , PostStoreError (..)
@@ -109,6 +110,11 @@ createBoard b store = setBoards boards' $ store
 
 getBoard :: Ord b => b -> PostStore b p -> CanError (Board p)
 getBoard b = maybeError BoardDoesNotExist . M.lookup b . boards
+
+createBoardIfMissing :: Ord b => b -> PostStore b p -> Maybe (PostStore b p)
+createBoardIfMissing b store = if (not . M.member b . boards $ store)
+                                   then Just . createBoard b $ store
+                                   else Nothing
 
 -- Threads
 
