@@ -12,7 +12,6 @@ module Settings
     ) where
 
 import Prelude
-import Text.Shakespeare.Text (st)
 import Language.Haskell.TH.Syntax
 import Yesod.Default.Config
 --import qualified Yesod.Default.Util

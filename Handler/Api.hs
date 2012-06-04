@@ -7,7 +7,7 @@ module Handler.Api
 
 import Import
 import Data.Aeson
-import Control.Monad (mzero, when, mfilter)
+import Control.Monad (mzero, when)
 import Data.Time (getCurrentTime)
 import Data.Maybe (isNothing)
 
@@ -41,12 +41,6 @@ data PostInput = PostInput { inputPlayer :: Text
 instance FromJSON PostInput where
     parseJSON (Object v) = PostInput <$> v .: "player" <*> v .: "name" <*> v .:? "url" <*> v .: "text"
     parseJSON _          = mzero
-
-
-isRight x = case x of
-    Left _ -> False
-    Right _ -> True
-
 
 maybeRight :: Either z a -> Maybe a
 maybeRight x = case x of 

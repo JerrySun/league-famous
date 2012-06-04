@@ -58,7 +58,7 @@ makeFoundation acid conf setLogger = do
 
 
 -- for yesod devel
---getApplicationDev :: IO (Int, Application)
+getApplicationDev ::  DefaultEnv -> IO (Int, Application)
 getApplicationDev confSet = do
     acid <- openLocalState emptyState
     createCheckpoint acid

@@ -22,14 +22,12 @@ module Data.Posts.Store
     ) where
 
 import Prelude
-import Data.Typeable (Typeable, Typeable2)
+import Data.Typeable (Typeable)
 import Data.SafeCopy (base, deriveSafeCopy, SafeCopy (..), contain, safePut, safeGet)
 import Control.Monad (liftM4)
 import qualified Data.Map as M
 import qualified Data.IntMap as I
-import Data.Maybe (isJust)
 import Control.Applicative ((<$>))
-import Control.Arrow (second)
 
 import Data.Posts.Thread
 
@@ -104,7 +102,7 @@ incIndex nm = nm { nextIndex = succ (nextIndex nm) }
 -- Boards
 
 createBoard :: Ord b => b -> PostStore b p -> PostStore b p
-createBoard b store = setBoards boards' $ store
+createBoard b store = setBoards boards' store
     where boards' = M.insert b emptyBoard . boards $ store
           emptyBoard = I.empty
 
@@ -112,7 +110,7 @@ getBoard :: Ord b => b -> PostStore b p -> CanError (Board p)
 getBoard b = maybeError BoardDoesNotExist . M.lookup b . boards
 
 createBoardIfMissing :: Ord b => b -> PostStore b p -> Maybe (PostStore b p)
-createBoardIfMissing b store = if (not . M.member b . boards $ store)
+createBoardIfMissing b store = if not . M.member b . boards $ store
                                    then Just . createBoard b $ store
                                    else Nothing
 

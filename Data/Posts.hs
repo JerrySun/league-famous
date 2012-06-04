@@ -13,13 +13,12 @@ module Data.Posts
 import Prelude
 import Data.Typeable (Typeable)
 import Data.SafeCopy (base, deriveSafeCopy)
-import qualified Data.Map as M
 import qualified Data.IntMap as I
 import Data.Text (Text)
 import Data.Time (UTCTime)
 import Data.Name (Name)
 import Network.Thumbnail (Thumbnail, ImageType)
-import Data.Maybe (isJust, mapMaybe)
+import Data.Maybe (mapMaybe)
 import Control.Applicative ((<$>))
 import Control.Arrow (second)
 
@@ -63,7 +62,7 @@ hideDeleted (Thread Deleted _) = Nothing
 hideDeleted t = Just . fmap unwrapPost . hideReplies $ t
     where hideReplies (Thread p c) = Thread p (I.filter isNormalPost c)
           unwrapPost (NormalPost x) = x
-          isNormalPost (NormalPost x) = True
+          isNormalPost (NormalPost _) = True
           isNormalPost _ = False
 
 
@@ -76,8 +75,7 @@ playerThreads name store =
               board <- getBoard (PlayerBoard name) store
               return
                 . reverse
-                . map (second (\x -> ThreadMeta (PlayerBoard name) x))
-                . map (uncurry (flip (,)))
+                . map (second (ThreadMeta (PlayerBoard name)) . uncurry (flip (,)))
                 . mapMaybe hideDelPair
                 . I.toAscList
                 $ board
