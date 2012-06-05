@@ -36,6 +36,7 @@ module State
     , GetThreadMeta (..)
     , NewTopPost (..)
     , NewReply (..)
+    , DeletePost (..)
     ) where
 
 import Data.Acid
@@ -104,6 +105,14 @@ updaterEither :: (AppState -> s) -> (s -> AppState -> AppState) -> (s -> Either 
 updaterEither getter setter f = do
     state <- get
     case f $ getter state of
+        Right (x', result) -> do put $ setter x' state
+                                 return $ Right result
+        Left a -> return $ Left a
+
+updaterEither_ :: (AppState -> s) -> (s -> AppState -> AppState) -> (s -> Either a s) -> Update AppState (Either a ())
+updaterEither_ getter setter f = do
+    state <- get
+    case fmap (\x -> (x,())) . f $ getter state of
         Right (x', result) -> do put $ setter x' state
                                  return $ Right result
         Left a -> return $ Left a
@@ -242,6 +251,9 @@ newTopPost name post = do
 newReply ::  Int -> P.Post -> Update AppState (Either P.PostStoreError Int)
 newReply parNum post = updaterEither postStore setPostStore $ P.newReply parNum (P.NormalPost post)
 
+deletePost :: P.PostIx -> Update AppState (Either P.PostStoreError ())
+deletePost num = updaterEither_ postStore setPostStore $ P.deletePost num
+
 $(makeAcidic ''AppState [ 'newPlayer
                         , 'getVote
                         , 'processVote
@@ -254,4 +266,5 @@ $(makeAcidic ''AppState [ 'newPlayer
                         , 'newTopPost
                         , 'newReply
                         , 'getThreadMeta
+                        , 'deletePost
                         ])

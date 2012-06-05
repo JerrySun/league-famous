@@ -17,6 +17,8 @@ module Data.Posts.Store
     , createBoard
     , createBoardIfMissing
     , getBoard
+    -- * Post operations
+    , modifyPost
     -- * Error handling
     , PostStoreError (..)
     ) where
@@ -109,6 +111,14 @@ createBoard b store = setBoards boards' store
 getBoard :: Ord b => b -> PostStore b p -> CanError (Board p)
 getBoard b = maybeError BoardDoesNotExist . M.lookup b . boards
 
+modifyBoard :: Ord b => (Board p -> Board p) -> b -> PostStore b p -> CanError (PostStore b p, Board p)
+modifyBoard f b store = do
+    board <- fmap f . getBoard b $ store
+    let store' = modBoards (M.insert b board) store
+    return  (store', board)
+
+
+
 createBoardIfMissing :: Ord b => b -> PostStore b p -> Maybe (PostStore b p)
 createBoardIfMissing b store = if not . M.member b . boards $ store
                                    then Just . createBoard b $ store
@@ -156,6 +166,25 @@ getThreadMeta num store  = do
 
 
 -- Posts
+
+modifyPost :: Ord b => PostIx -> (p -> p) -> PostStore b p -> CanError (PostStore b p)
+modifyPost num f store = do
+    parent <- findParent num store
+    let parNum = case parent of
+                    Self -> num
+                    Parent n -> n
+    boardId <- findBoardId parNum store
+    board <- getBoard boardId store
+    thread <- maybeError MissingThread . I.lookup parNum $ board
+    let thread' = case parent of
+                    Self -> modpar thread
+                    Parent _ -> modchil num thread
+    (store', _) <- modifyBoard (I.insert parNum thread') boardId $ store
+    return store'
+  where
+    modpar (Thread p cs) = Thread (f p) cs
+    modchil i (Thread p cs) = Thread p (I.adjust f i cs)
+
 
 findParent :: PostIx -> PostStore b p -> CanError Parent
 findParent num = maybeError NoParent . I.lookup num . parents

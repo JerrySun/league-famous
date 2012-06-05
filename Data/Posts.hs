@@ -8,6 +8,7 @@ module Data.Posts
     , playerThreads
     , newTopPostNC
     , hideDeleted
+    , deletePost
     ) where
 
 import Prelude
@@ -46,16 +47,18 @@ $(deriveSafeCopy 0 'base ''BoardId)
 
 -- Basic operations
 
+deletePost :: Ord b => PostIx-> PostStore b PostContainer -> Either PostStoreError (PostStore b PostContainer)
+deletePost i = modifyPost i (const Deleted) 
 
 -- Replies
 
 -- high level stuff from previous api
-commentCount ::  Name -> PostStore BoardId p -> Int
+commentCount ::  Name -> PostStore BoardId PostContainer -> Int
 commentCount name store = 
     case result of 
         Right x -> x
         Left _ -> 0
-    where result = I.foldr ((+) . threadLength) 0 <$> getBoard (PlayerBoard name) store
+    where result = I.foldr ((+) . maybe 0 threadLength . hideDeleted) 0 <$> getBoard (PlayerBoard name) store
 
 hideDeleted :: Thread PostContainer -> Maybe (Thread Post)
 hideDeleted (Thread Deleted _) = Nothing
