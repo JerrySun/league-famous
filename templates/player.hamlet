@@ -2,7 +2,7 @@
     <div .contentheader>
         <h2>WELCOME
         <div .login>
-            <i>We are currently in Beta!</i>
+            <i>We are currently in Beta!
     <div .writesomething>
         <h2>Write something
         <div>
@@ -20,31 +20,33 @@
     ^{statsHeader player vote}
     $forall thread <- threads
         <div .commentwrapper>
-            <div .commenttop>
-                <span .commentname>#{poster (parent thread)}
-                <span .commenttime>#{niceTime $ postTime (parent thread)}
-                $if True
-                    <span .commentdelete>
-                        <a href="">delete
-            <div .commentbody>
-                <div>
-                    $maybe Thumbnail _ hash fmt <- image (parent thread)
-                        <img src=@{thumbR hash fmt T200} .topthumbnail>
-                    #{message (parent thread)}
+            <div .opwrapper>
+                <div .commenttop>
+                    <span .commentname>#{poster (parent thread)}
+                    <span .commenttime>#{niceTime $ postTime (parent thread)}
+                    $if True
+                        <span .commentdelete>
+                            <a href="">delete
+                <div .commentbody>
+                    <div>
+                        $maybe Thumbnail _ hash fmt <- image (parent thread)
+                            <img src=@{thumbR hash fmt T200} .topthumbnail>
+                        #{message (parent thread)}
             $forall child <- recentChildren 2 thread
                 <div .replywrapper>
-                    <div .replytop>
-                        <span .replyname>#{poster child}
-                        <span .replytime>#{niceTime $ postTime child}
-                        $if True
-                            <span .commentdelete>
-                                <a href="">delete
-                    <span .commentdelete>
-                        <a href="">delete
-                    <div .replybody>
-                        $maybe Thumbnail _ hash fmt <- image child
-                            <img src=@{thumbR hash fmt T120} .replythumbnail>
-                        #{message child}
+                    <div .replyinner>
+                        <div .replytop>
+                            <span .replyname>#{poster child}
+                            <span .replytime>#{niceTime $ postTime child}
+                            $if True
+                                <span .commentdelete>
+                                    <a href="">delete
+                        <span .commentdelete>
+                            <a href="">delete
+                        <div .replybody>
+                            $maybe Thumbnail _ hash fmt <- image child
+                                <img src=@{thumbR hash fmt T120} .replythumbnail>
+                            #{message child}
             <div .replyfooter>
                 <div .commentreply>
                     <a href=@{PostR $ postNum (parent thread)}>

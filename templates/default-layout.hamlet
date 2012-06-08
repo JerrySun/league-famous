@@ -4,13 +4,13 @@
         <div #topmenu>
             <ul>
                 <li>
-                    <a href=@{HomeR} .menubrowse>BROWSE
+                    <a href=@{HomeR} .menubrowse>HOME
                 <li>
-                    <a href=@{HomeR} .menuforums>FORUMS
+                    <a href=@{HomeR} .menuforums>GENERAL
                 <li>
-                    <a href=@{HomeR} .menublog>BLOG
+                    <a href=@{HomeR} .menublog>OFF TOPIC
                 <li>
-                    <a href=@{HomeR} .menuhelp>HELP / FAQ
+                    <a href=@{FaqR} .menuhelp>HELP / FAQ
 <div #wrapper>
     ^{widget}
 <div #footer-wrapper>

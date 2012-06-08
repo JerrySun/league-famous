@@ -394,7 +394,7 @@ h3{
 	left:0;
 	font-size:25px;
 	font-weight:bold;
-	color:black;
+	color:#9d9170;
 	margin:0px;
 	padding:0px;
 }
