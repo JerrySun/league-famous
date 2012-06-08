@@ -22,7 +22,7 @@ import Network.HTTP.Conduit (newManager, def)
 -- Import all relevant handler modules here.
 -- Don't forget to add new modules to your cabal file!
 import Handler.Home
-import Handler.Player
+import Handler.Comments
 import Handler.Api
 import Handler.Misc
 
@@ -58,7 +58,7 @@ makeFoundation acid conf setLogger = do
 
 
 -- for yesod devel
---getApplicationDev :: IO (Int, Application)
+getApplicationDev ::  DefaultEnv -> IO (Int, Application)
 getApplicationDev confSet = do
     acid <- openLocalState emptyState
     createCheckpoint acid

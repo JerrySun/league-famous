@@ -27,12 +27,13 @@ library
         Buildable: False
 
     exposed-modules: Application
-    other-modules:   Foundation
+    --other-modules:   
+                     Foundation
                      Import
                      Settings
                      Settings.StaticFiles
                      Handler.Home
-                     Handler.Player
+                     Handler.Comments
                      Handler.Api
                      Handler.Misc
                      State
@@ -41,6 +42,8 @@ library
                      Data.Ranks
                      Data.VoteHistory
                      Data.Posts
+                     Data.Posts.Store
+                     Data.Posts.Thread
                      Data.Name
 
 

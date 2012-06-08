@@ -7,7 +7,7 @@ module Handler.Api
 
 import Import
 import Data.Aeson
-import Control.Monad (mzero, when, mfilter)
+import Control.Monad (mzero, when)
 import Data.Time (getCurrentTime)
 import Data.Maybe (isNothing)
 
@@ -42,12 +42,6 @@ instance FromJSON PostInput where
     parseJSON (Object v) = PostInput <$> v .: "player" <*> v .: "name" <*> v .:? "url" <*> v .: "text"
     parseJSON _          = mzero
 
-
-isRight x = case x of
-    Left _ -> False
-    Right _ -> True
-
-
 maybeRight :: Either z a -> Maybe a
 maybeRight x = case x of 
     Right y -> Just y
@@ -64,8 +58,8 @@ postMakePostR = do
     let thumb = maybeRight thumb_
     time <- liftIO getCurrentTime
     acid <- getAcid
-    _ <- update' acid $ NewTopPost (Name player) $ PostContent name text thumb time
-    jsonToRepJson ()
+    num <- update' acid $ NewTopPost (Name player) $ Post name text thumb time
+    jsonToRepJson num
     
 data ReplyInput = ReplyInput { replyParent :: Int
                            , replyName :: Text
@@ -88,5 +82,5 @@ postMakeReplyR = do
     let thumb = maybeRight thumb_
     acid <- getAcid
     time <- liftIO getCurrentTime
-    postNumber <- maybe404 $ update' acid $ NewReply parNum $ PostContent name text thumb time
+    postNumber <- either500 $ update' acid $ NewReply parNum $ Post name text thumb time
     jsonToRepJson postNumber

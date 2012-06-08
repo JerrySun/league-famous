@@ -1,0 +1,21 @@
+.faqheader{
+	background-image:url('@{StaticR rammus_png}');
+	background-position:right;
+	background-repeat: no-repeat;
+	position:relative;
+	height:120px;
+	border-top: 1px solid #a0977d;
+	border-bottom: 1px solid #a0977d;
+	padding:25px 0px 25px 0px;
+	margin:0px 0px 20px 0px;
+}
+
+.faq{
+    list-style:none;
+    padding:0px;
+    margin:0px;
+}
+
+.faq li{
+    font-weight:bold;
+}

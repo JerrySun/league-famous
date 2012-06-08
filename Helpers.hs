@@ -3,6 +3,7 @@ module Helpers
     , parseJsonParam
     , parseJsonParam_
     , maybe404
+    , either500
     , niceTime
     , createThumbs
     , Thumbnail (..)
@@ -23,14 +24,20 @@ import Data.Time.Format (formatTime)
 import Data.Time.LocalTime (utcToLocalTime, TimeZone (..))
 import System.Locale (defaultTimeLocale)
 import Network.Thumbnail
-import Foundation (Route (..))
-import Data.Monoid ((<>))
+import Foundation (Route (..), App)
 import Data.IP.Address (IP (..), toIP, toBits6)
-import Data.Maybe (fromMaybe, fromJust)
-import Control.Monad (mzero)
+import Data.Maybe (fromJust)
+import Data.ByteString (ByteString)
 
 maybe404 ::  GHandler sub master (Maybe b) -> GHandler sub master b
 maybe404 action = action >>= maybe notFound return
+
+either500 ::  (Monad m, Show a) => m (Either a b) -> m b
+either500 action = do
+    result <- action
+    case result of
+        Right x -> return x
+        Left y -> fail $ show y
 
 -- Note: the address coming from remoteHost is little-endian
 requestIP' ::  GHandler s m IP
@@ -95,5 +102,6 @@ partitions a as =
    (xs,[])   -> [xs]
    (xs,_:ys) -> xs:partitions a ys
 
+thumbR :: ByteString -> ImageType -> ThumbSize -> Route App
 thumbR hash imgt size = StaticR . simpleStaticRoute $ makeName thumbConfig imgt hash size
     where simpleStaticRoute fpath = StaticRoute (fmap T.pack . drop 1 . partitions '/' . (saveRoot thumbConfig ++) $ fpath) []

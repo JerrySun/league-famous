@@ -1,0 +1,21 @@
+<div #right>
+    <div .contentheader>
+        <h2>WELCOME
+        <div .login>
+            <i>We are currently in Beta!
+<div #center>
+    <div .faqheader>
+        <h1>HELP / FAQ
+    <h3>FAQ
+    <div>
+        <ul .faq>
+            <li>
+                <a href="">How do I post?
+            <li>
+                <a href="">What is League Famous about?
+            <li>
+                <a href="">What is the comment posting policy?
+            <li>
+                <a href="">Who made this website?
+            <li>
+                <a href="">How was this website built?

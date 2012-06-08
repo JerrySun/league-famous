@@ -18,7 +18,7 @@
             <li .stat-red>
                 <div>#{statDownvotes player}
                 <div>dislikes
-    $forall thread <- threads
+    $forall (thread, meta) <- threads
         <div .pcommentwrapper>
             <div .pcommenttop>
                 <span .pcommentname>#{poster $ parent thread}
@@ -29,7 +29,7 @@
                     <img src=@{thumbR imageHash imgType T100} .pthumbnail>
                 #{message (parent thread)}
             <div .pcommentreply>
-                <a href=@{PostR $ postNum (parent thread)}>#{show $ length (reverseChildren thread)} REPLIES
+                <a href=@{PostR $ threadIndex meta}>#{show $ length (reverseChildren thread)} REPLIES
     <div #quickreply>
         <form #previewPost data-player=#{statName player}>
             <input #prevPostName placeholder="Anonymous" .pinput .pinputname>

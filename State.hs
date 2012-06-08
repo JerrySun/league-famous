@@ -11,12 +11,15 @@ module State
     , Stats (..)
     , Thread (..)
     , P.Post (..)
-    , P.PostContent (..)
     , statScore
     , statPercent
     , P.children
     , P.recentChildren
+    , P.reverseChildren
     , P.threadLength
+    , P.parent
+    , P.ThreadMeta (..)
+    , P.BoardId (..)
     -- Acidic
     ---- Stats
     , PlayerCount (..)
@@ -30,8 +33,10 @@ module State
     ---- Posts
     , PlayerThreads (..)
     , GetThread (..)
+    , GetThreadMeta (..)
     , NewTopPost (..)
     , NewReply (..)
+    , DeletePost (..)
     ) where
 
 import Data.Acid
@@ -54,7 +59,7 @@ import qualified Data.VoteHistory as V
 import Data.Ranks (PlayerStore)
 import qualified Data.Ranks as R
 
-import Data.Posts (Thread (..), PostStore)
+import Data.Posts (Thread (..), PostContainer, BoardId, PostStore)
 import qualified Data.Posts as P
 
 import Data.Name (Name (..))
@@ -65,7 +70,7 @@ import Data.IP.Address (IP)
 ----
 data AppState = AppState { playerStore :: PlayerStore
                          , ipStore :: IPStore
-                         , postStore :: PostStore } deriving (Typeable)
+                         , postStore :: PostStore P.BoardId P.PostContainer } deriving (Typeable)
 
 $(deriveSafeCopy 0 'base ''AppState)
 
@@ -75,7 +80,7 @@ setPlayerStore ps  state = state { playerStore = ps}
 setIPStore ::  IPStore -> AppState -> AppState
 setIPStore     ips state = state { ipStore = ips}
 
-setPostStore ::  PostStore -> AppState -> AppState
+setPostStore ::  PostStore P.BoardId P.PostContainer -> AppState -> AppState
 setPostStore  posts state = state { postStore = posts }
 
 queryer ::  (AppState -> s) -> (s -> b) -> Query AppState b
@@ -96,6 +101,22 @@ updaterMaybe getter setter f = do
                                 return $ Just result
         Nothing -> return Nothing
 
+updaterEither :: (AppState -> s) -> (s -> AppState -> AppState) -> (s -> Either a (s, b)) -> Update AppState (Either a b)
+updaterEither getter setter f = do
+    state <- get
+    case f $ getter state of
+        Right (x', result) -> do put $ setter x' state
+                                 return $ Right result
+        Left a -> return $ Left a
+
+updaterEither_ :: (AppState -> s) -> (s -> AppState -> AppState) -> (s -> Either a s) -> Update AppState (Either a ())
+updaterEither_ getter setter f = do
+    state <- get
+    case fmap (\x -> (x,())) . f $ getter state of
+        Right (x', result) -> do put $ setter x' state
+                                 return $ Right result
+        Left a -> return $ Left a
+
 updater_ :: (AppState -> s) -> (s -> AppState -> AppState) -> (s -> s) -> Update AppState ()
 updater_ getter setter f = uncurry setter . ((f . getter) &&& id) <$> get >>= put
 
@@ -105,7 +126,10 @@ emptyState = AppState R.empty V.empty P.empty
 ----
 
 newPlayer ::  Name -> Update AppState ()
-newPlayer name = updater_ playerStore setPlayerStore $ R.newPlayer name
+newPlayer name = do 
+    updater_ playerStore setPlayerStore $ R.newPlayer name
+    _ <- updaterMaybe postStore setPostStore $ (fmap (\x -> (x,())) . P.createBoardIfMissing (P.PlayerBoard name))
+    return ()
 
 playerCount ::  Query AppState Int
 playerCount = queryer playerStore R.playerCount
@@ -201,24 +225,34 @@ searchStats x = do
 
 ------------------------------
 
-playerThreads ::  Name -> Query AppState [Thread]
+playerThreads ::  Name -> Query AppState [(Thread P.Post, P.ThreadMeta BoardId)]
 playerThreads name = queryer postStore $ P.playerThreads name
 
-getThread ::  Int -> Query AppState (Maybe Thread)
+getThread ::  Int -> Query AppState (Either P.PostStoreError (Thread PostContainer))
 getThread num = queryer postStore $ P.getThread num
 
-newTopPost :: Name -> P.PostContent -> Update AppState (Maybe Int)
-newTopPost name content = do
+getThreadMeta ::  Int -> Query AppState (Either P.PostStoreError (Thread P.Post, P.ThreadMeta BoardId))
+getThreadMeta num = do
+    result <- queryer postStore $ P.getThreadMeta num
+    return $ result >>= hideDel'
+  where hideDel (t, m) = fmap (\x -> (x, m)) (P.hideDeleted t)
+        hideDel' = maybe (Left P.PostStoreError) return . hideDel
+
+newTopPost :: Name -> P.Post -> Update AppState (Maybe Int)
+newTopPost name post = do
     state <- get
     let exists = R.playerExists name . playerStore $ state
     runMaybeT $ do
         when (not exists) mzero
-        (posts, num) <- maybe mzero return . P.newTopPostNC name content . postStore $ state
+        (posts, num) <- maybe mzero return . P.newTopPostNC name post . postStore $ state
         lift $ put $ setPostStore posts state
         return num
 
-newReply ::  Int -> P.PostContent -> Update AppState (Maybe Int)
-newReply parNum content = updaterMaybe postStore setPostStore $ P.newReply parNum content
+newReply ::  Int -> P.Post -> Update AppState (Either P.PostStoreError Int)
+newReply parNum post = updaterEither postStore setPostStore $ P.newReply parNum (P.NormalPost post)
+
+deletePost :: P.PostIx -> Update AppState (Either P.PostStoreError ())
+deletePost num = updaterEither_ postStore setPostStore $ P.deletePost num
 
 $(makeAcidic ''AppState [ 'newPlayer
                         , 'getVote
@@ -231,4 +265,6 @@ $(makeAcidic ''AppState [ 'newPlayer
                         , 'getThread
                         , 'newTopPost
                         , 'newReply
+                        , 'getThreadMeta
+                        , 'deletePost
                         ])

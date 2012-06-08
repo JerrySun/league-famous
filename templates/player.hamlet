@@ -18,8 +18,9 @@
                     <div .formatting>formatting help
 <div #center>
     ^{statsHeader player vote}
-    $forall thread <- threads
+    $forall (thread, meta) <- threads
         <div .commentwrapper>
+<<<<<<< HEAD
             <div .opwrapper>
                 <div .commenttop>
                     <span .commentname>#{poster (parent thread)}
@@ -33,6 +34,20 @@
                             <img src=@{thumbR hash fmt T200} .topthumbnail>
                         #{message (parent thread)}
             $forall child <- recentChildren 2 thread
+=======
+            <div .commenttop>
+                <span .commentname>#{poster (parent thread)}
+                <span .commenttime>#{niceTime $ postTime (parent thread)}
+                $if True
+                    <span .commentdelete>
+                        <a href="">delete
+            <div .commentbody>
+                <div>
+                    $maybe Thumbnail _ hash fmt <- image (parent thread)
+                        <img src=@{thumbR hash fmt T200} .topthumbnail>
+                    #{message (parent thread)}
+            $forall (_, child) <- recentChildren 2 thread
+>>>>>>> b96d71480d80a6dadff370692644c6d024852ac8
                 <div .replywrapper>
                     <div .replyinner>
                         <div .replytop>
@@ -49,6 +64,6 @@
                             #{message child}
             <div .replyfooter>
                 <div .commentreply>
-                    <a href=@{PostR $ postNum (parent thread)}>
+                    <a href=@{PostR $ threadIndex meta}>
                         REPLY | #{show (max 0 ((-) (threadLength thread) 3))} MORE REPLIES
     <div .loadmore>LOAD MORE
