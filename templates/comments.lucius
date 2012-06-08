@@ -137,8 +137,13 @@
 
 .commentwrapper{
 	margin-bottom:30px;
-	border-bottom:1px solid #a0977d;
 	padding-bottom:10px;
+}
+
+.opwrapper{
+	background-color:#d4c395;
+    background-image:url('@{StaticR diagonal_png}');
+    border-radius:10px;
 }
 
 .commenttop{
@@ -146,10 +151,8 @@
 	max-width:620px;
     color:#736b54;
 	font-size:14px;
-	background-color:#d4c395;
-    background-image:url('@{StaticR diagonal_png}');
-	padding:5px 10px 5px;
-	margin-bottom:10px;
+	padding:10px 10px 0px;
+	margin-bottom:0px;
 }
 
 .commentname{
@@ -179,9 +182,10 @@
 
 .commentbody{
 	overflow:hidden;
-	margin-bottom:20px;
+	margin-bottom:10px;
     font-size:14px;
     line-height:150%;
+    padding:10px;
 }
 
 .commentreply{
@@ -204,12 +208,18 @@
 
 .replywrapper{
 	max-width:610px;
-	margin-bottom:30px;
+	margin-bottom:10px;
     padding-left:30px;
 	overflow:hidden;
     background-image:url('@{StaticR doublegreaterthan_png}');
     background-repeat:no-repeat;
     background-position:0px 1px;
+}
+
+.replyinner{
+	background-color:#d4c395;
+    background-image:url('@{StaticR diagonal_png}');
+    border-radius:10px;
 }
 
 .replyfooter{
@@ -222,10 +232,8 @@
 .replytop{
 	font-size:14px;
     color:#736b54;
-	background-color:#d4c395;
-    background-image:url('@{StaticR diagonal_png}');
-	padding:5px 10px 5px;
-	margin-bottom:10px;
+	padding:10px 10px 0px;
+	margin-bottom:0px;
 }
 
 .replyname{
@@ -239,7 +247,7 @@
 }
 
 .replybody{
-	padding-left:0px;
+	padding:10px;
 	overflow:hidden;
     font-size:14px;
     line-height:150%;

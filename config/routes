@@ -20,3 +20,5 @@
 
 /newpost      MakePostR  POST
 /reply        MakeReplyR  POST
+
+/faq          FaqR       GET

@@ -10,31 +10,33 @@
     <div .viewing>
         You are now viewing all replies to a comment by <b>#{poster $ parent thread}</b> about <b>#{statName player}</b>.
     <div .commentwrapper data-post=#{show $ threadIndex meta}>
-        <div .commenttop>
-            <span .commentname>#{poster (parent thread)}
-            <span .commenttime>#{niceTime $ postTime (parent thread)}
-            $if True
-                <span .commentdelete>
-                    <a href="">delete
-        <div .commentbody>
-            <div>
-                $maybe Thumbnail url hash fmt <- image (parent thread)
-                    <a href=#{url}>
-                        <img src=@{thumbR hash fmt T200} .topthumbnail>
-                #{message (parent thread)}
+        <div .opwrapper>
+            <div .commenttop>
+                <span .commentname>#{poster (parent thread)}
+                <span .commenttime>#{niceTime $ postTime (parent thread)}
+                $if True
+                    <span .commentdelete>
+                        <a href="">delete
+            <div .commentbody>
+                <div>
+                    $maybe Thumbnail url hash fmt <- image (parent thread)
+                        <a href=#{url}>
+                            <img src=@{thumbR hash fmt T200} .topthumbnail>
+                    #{message (parent thread)}
         $forall (postNum, child) <- children thread
             <div .replywrapper data-post=#{show $ postNum}>
-                <div .replytop>
-                    <span .replyname>#{poster child}
-                    <span .replytime>#{niceTime $ postTime child}
-                    $if True
-                        <span .commentdelete>
-                            <a href="">delete
-                <div .replybody>
-                    $maybe Thumbnail url hash fmt <- image child
-                        <a href=#{url}>
-                            <img src=@{thumbR hash fmt T120} .replythumbnail>
-                    #{message child}
+                <div .replyinner>
+                    <div .replytop>
+                        <span .replyname>#{poster child}
+                        <span .replytime>#{niceTime $ postTime child}
+                        $if True
+                            <span .commentdelete>
+                                <a href="">delete
+                    <div .replybody>
+                        $maybe Thumbnail url hash fmt <- image child
+                            <a href=#{url}>
+                                <img src=@{thumbR hash fmt T120} .replythumbnail>
+                        #{message child}
 
     <div .writesomething>
         <h2>Write a reply

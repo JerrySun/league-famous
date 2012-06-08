@@ -135,13 +135,13 @@
 
 .filter-input{
 	margin:0px;
-	width:180px;
-	height:24px;
+	width:200px;
+	height:28px;
 	padding:2px 25px 0px 5px;
 	background-color:#e0d7b8;
 	background-image:url('@{StaticR magnifyingglass_png}');
 	background-repeat:no-repeat;
-	background-position:188px 6px;
+	background-position:208px 6px;
 	border: 2px solid #aea386;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
@@ -454,6 +454,7 @@
 
 .pcommentreply{
 	position:relative;
+    text-align:right;
 	background-position:0px -48px;
 	background-repeat:no-repeat;
 	font-size:10px;
