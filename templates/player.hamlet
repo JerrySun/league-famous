@@ -32,7 +32,7 @@
                         $maybe Thumbnail _ hash fmt <- image (parent thread)
                             <img src=@{thumbR hash fmt T200} .topthumbnail>
                         #{message (parent thread)}
-                $forall (_, child) <- recentChildren 2 thread
+            $forall (_, child) <- recentChildren 2 thread
                 <div .replywrapper>
                     <div .replyinner>
                         <div .replytop>
