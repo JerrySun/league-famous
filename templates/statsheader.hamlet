@@ -1,5 +1,6 @@
 <div .contentheader>
-    <h1>#{statName player}
+    <h1>
+        <a href=@{PlayerR (statName player)}>#{statName player}
     $case vote
         $of Neutral
             <ul .votebuttons .votebuttons-playerpage>
