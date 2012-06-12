@@ -549,3 +549,61 @@
     background-image:none;
     background-color:e2d7b9;
 }
+
+.howto{
+	position:relative;
+	color:#9d9170;
+	font-size:14px;
+	font-weight:bold;
+    margin-bottom:20px;
+    border:6px solid #bcae89;
+    border-radius:10px;
+    padding:10px;
+}
+
+.howto ul{
+    padding-left:20px;
+    margin:0.5em 0px 0px;
+}
+
+.recentouter{
+    margin-bottom:20px;
+}
+
+.recentwrapper{
+	background-color:#d4c395;
+    background-image:url('@{StaticR diagonal_png}');
+    border-radius:10px;
+}
+
+.recentplayer{
+    font-family:Quantico,Arial;
+    font-size:24px;    
+    font-weight:bold;
+    color:white;
+}
+
+.recentheader{
+	position:relative;
+	max-width:620px;
+    color:#9D9170;
+	font-size:14px;
+	padding:10px 10px 0px;
+	margin-bottom:0px;
+}
+
+.recentname{
+    font-weight:bold;
+}
+
+.recentbody{
+	overflow:hidden;
+	margin-bottom:10px;
+    font-size:14px;
+    line-height:150%;
+    padding:10px;
+}
+
+.recentreplywrapper{
+    padding-left:16px;
+}

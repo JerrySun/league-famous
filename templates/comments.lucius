@@ -27,7 +27,7 @@
 }
 
 .writesomething h2{
-	color:#8c805e;
+	color:#9D9170;
 }
 
 .commentinginput{
@@ -149,7 +149,7 @@
 .commenttop{
 	position:relative;
 	max-width:620px;
-    color:#736b54;
+    color:#9D9170;
 	font-size:14px;
 	padding:10px 10px 0px;
 	margin-bottom:0px;
@@ -231,7 +231,7 @@
 
 .replytop{
 	font-size:14px;
-    color:#736b54;
+    color:#9D9170;
 	padding:10px 10px 0px;
 	margin-bottom:0px;
 }
@@ -266,24 +266,25 @@
     display:block;
     max-width:618px;
     text-align:center;
-    font-size:2px;
-    background-image:url('@{StaticR votebuttonbg_png}');
-    background-repeat:repeat-x;
+	color:#9d9170;
+	font-size:14px;
+	font-weight:bold;
     margin-bottom:20px;
-    border:1px dotted #77684e;
-    padding:10px;
+    border:6px solid #bcae89;
+    border-radius:10px;
+    padding:5px;
 }
 
 .viewing{
     display:block;
-    max-width:628px;
+    max-width:618px;
     text-align:center;
-    font-size:14px;
-    background-image:url('@{StaticR votebuttonbg_png}');
-    background-repeat:repeat-x;
+	color:#9d9170;
+	font-size:14px;
     margin-bottom:20px;
-    border:1px dotted #77684e;
-    padding:10px 5px 10px;
+    border:6px solid #bcae89;
+    border-radius:10px;
+    padding:5px;
 }
 
 #postsubmit{
