@@ -21,8 +21,8 @@
         <form #searchform>
             <input type="text" maxlength="16" #searchinput .filter-input>
         <span .pages>
-            <a href="">First 
-            <a href="">Previous 
+            <a href=#{pageRoute 1}>First 
+            <a href=#{pageRoute $ max 1 (pred pageNum)}>Previous 
             | Page #{show pageNum} of #{show maxPageNum} # | 
             <a href=#{pageRoute $ min maxPageNum (succ pageNum)}>Next #
             <a href=#{pageRoute maxPageNum}>Last
@@ -37,10 +37,10 @@
                     <form .addplayer>
                         <input type="text" .addplayer-input>
         <span .pages>
-            <a href="">First 
-            <a href="">Previous 
+            <a href=#{pageRoute 1}>First 
+            <a href=#{pageRoute $ max 1 (pred pageNum)}>Previous 
             | Page #{show pageNum} of #{show maxPageNum} # | 
-            <a href=#{pageRoute $ succ pageNum}>Next #
+            <a href=#{pageRoute $ min maxPageNum (succ pageNum)}>Next #
             <a href=#{pageRoute maxPageNum}>Last
     <div .clock>#{untilReset} until reset.<br>
         <span .clockinfo>After 11:59 PM PST, you will be able to vote on every player once again!
