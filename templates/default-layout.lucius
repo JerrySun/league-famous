@@ -340,7 +340,7 @@ h2{
 	display:block;
 	font-size:20px;
 	font-weight:bold;
-	color:white;
+	color:#9d9170;
 	margin-bottom:0px;
 }
 
@@ -362,6 +362,7 @@ a{
 	padding-top:2px;
 	padding-left:24px;
 	font-size:10px;
+    margin-bottom:30px;
 }
 
 .clock span{display:none;}
@@ -403,16 +404,6 @@ h3 a:hover{
     text-decoration:underline;
 }
 
-.howto{
-	position:relative;
-	color:#9d9170;
-	font-size:14px;
-	font-weight:bold;
-}
-
-.howto h2{
-	color:#9d9170;
-}
 
 #footer-wrapper{
 	position:relative;

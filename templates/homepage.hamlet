@@ -3,13 +3,83 @@
         <h2>WELCOME
         <span .login>
             <i>We are currently in Beta!
-    <div .howto>
-        <h2>How to use:
-        <ul>
-            <li>Vote like on outstanding players.
-            <li>Vote dislike on toxic players.
-            <li>Use the "Add Player" button to add new players.
-            <li>Click on player names to read comments about them.
+    <h2>Recent comments:
+    <div .recentouter>
+        <div .recentplayer>Azingy
+        <div .recentwrapper>
+            <div .recentheader>
+                <span .recentname>Anonymous
+                <span .recenttime> 3 hours ago
+            <div .recentbody>
+                <img .pthumbnail src="@{StaticR jellyfishsmall_jpg}">
+                Pretty fly for a white guy.
+        <div .recentreplywrapper>
+            <div .recentwrapper>
+                <div .recentheader>
+                    <span .recentname>Anonymous
+                    <span .recenttime> 2 hours ago
+                <div .recentbody>
+                    <img .pthumbnail src="@{StaticR jellyfishsmall_jpg}">
+                    Pretty dumb for a nig nog.
+        <div .pcommentreply>
+            <a href="">3 MORE REPLIES
+    <div .recentouter>
+        <div .recentplayer>Azingy
+        <div .recentwrapper>
+            <div .recentheader>
+                <span .recentname>Anonymous
+                <span .recenttime> 3 hours ago
+            <div .recentbody>
+                <img .pthumbnail src="@{StaticR jellyfishsmall_jpg}">
+                Pretty fly for a white guy.
+        <div .recentreplywrapper>
+            <div .recentwrapper>
+                <div .recentheader>
+                    <span .recentname>Anonymous
+                    <span .recenttime> 2 hours ago
+                <div .recentbody>
+                    <img .pthumbnail src="@{StaticR jellyfishsmall_jpg}">
+                    Pretty dumb for a nig nog.
+        <div .pcommentreply>
+            <a href="">3 MORE REPLIES
+    <div .recentouter>
+        <div .recentplayer>Azingy
+        <div .recentwrapper>
+            <div .recentheader>
+                <span .recentname>Anonymous
+                <span .recenttime> 3 hours ago
+            <div .recentbody>
+                <img .pthumbnail src="@{StaticR jellyfishsmall_jpg}">
+                Pretty fly for a white guy.
+        <div .recentreplywrapper>
+            <div .recentwrapper>
+                <div .recentheader>
+                    <span .recentname>Anonymous
+                    <span .recenttime> 2 hours ago
+                <div .recentbody>
+                    <img .pthumbnail src="@{StaticR jellyfishsmall_jpg}">
+                    Pretty dumb for a nig nog.
+        <div .pcommentreply>
+            <a href="">3 MORE REPLIES
+    <div .recentouter>
+        <div .recentplayer>Azingy
+        <div .recentwrapper>
+            <div .recentheader>
+                <span .recentname>Anonymous
+                <span .recenttime> 3 hours ago
+            <div .recentbody>
+                <img .pthumbnail src="@{StaticR jellyfishsmall_jpg}">
+                Pretty fly for a white guy.
+        <div .recentreplywrapper>
+            <div .recentwrapper>
+                <div .recentheader>
+                    <span .recentname>Anonymous
+                    <span .recenttime> 2 hours ago
+                <div .recentbody>
+                    <img .pthumbnail src="@{StaticR jellyfishsmall_jpg}">
+                    Pretty dumb for a nig nog.
+        <div .pcommentreply>
+            <a href="">3 MORE REPLIES
 <div #preview .hidden>
 <div #center>
     <div .contentheader>
@@ -44,3 +114,10 @@
             <a href=#{pageRoute maxPageNum}>Last
     <div .clock>#{untilReset} until reset.<br>
         <span .clockinfo>After 11:59 PM PST, you will be able to vote on every player once again!
+    <div .howto>
+        <span><h3>How to use:</h3>
+        <ul>
+            <li>Vote like on outstanding players.
+            <li>Vote dislike on toxic players.
+            <li>Use the "Add Player" button to add new players.
+            <li>Click on player names to read comments about them.
