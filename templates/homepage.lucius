@@ -607,3 +607,7 @@
 .recentreplywrapper{
     padding-left:16px;
 }
+
+.selectedname {
+    color: #88D
+}

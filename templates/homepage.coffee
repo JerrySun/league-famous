@@ -83,8 +83,14 @@ attachRow = ->
             novote name
     
     $(".playerrow").on "click", ".playername", ->
-        name = $(this).parent().parent().data("name")
-        replacePreview name
+        if $(this).hasClass("selectedname")
+            $("#preview").hide()
+        else
+            $(".selectedname").toggleClass("selectedname")
+            name = $(this).parent().parent().data("name")
+            replacePreview name
+
+        $(this).toggleClass("selectedname")
 
 
 attachAdd = ->
