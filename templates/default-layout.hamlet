@@ -16,4 +16,7 @@
 <div #footer-wrapper>
     <div #footer-center>
         <div #footer-logo>
-        <div #footer-about><b>About</b><br>League Famous is a place for League of Legends players to rate and talk about each other.
+        <div #footer-about>
+            <b>About</b>
+            <br>League Famous is a place for League of Legends players to rate and talk about each other.
+            <a href="http://signup.leagueoflegends.com/?ref=4cd4c1dd9556f048740763">Play League of Legends

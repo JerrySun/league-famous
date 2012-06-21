@@ -234,7 +234,6 @@ li.menu-item a{
 	float:left;
 	width:40px;
 	height:20px;
-	background-color:#ebdfbc;
 	background-image:url('@{StaticR votebuttonbg_png}');
 	background-repeat:repeat-x;
 	border-top-left-radius:5px;
@@ -244,7 +243,6 @@ li.menu-item a{
 }
 
 .votethumbsupbg:hover{
-	background-color:#f0e6c8;
 	border:1px solid #716a56;
 	z-index:2;
 }
@@ -279,7 +277,6 @@ li.menu-item a{
 	position:absolute;
 	right:0px;
 	width:20px;
-	background-color:#ebdfbc;
 	background-image:url('@{StaticR votebuttonbg_png}');
 	background-repeat:repeat-x;
 	border-top-right-radius:5px;
@@ -291,7 +288,6 @@ li.menu-item a{
 }
 
 .votethumbsdownbg:hover{
-	background-color:#f0e6c8;
 	border:1px solid #716a56;
 }
 
@@ -334,6 +330,10 @@ h1{
     font-family:Quantico,Arial;
 	color:white;
     line-height:30px;
+}
+
+h1 a, h1 a:visited{
+    color:white;
 }
 
 h2{

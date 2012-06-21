@@ -1,0 +1,7 @@
+<div #login>
+    <h1 .title>Login
+    <div .inputarea>
+        <p .loginlabel>User Name
+        <input .logininput>
+        <p .loginlabel>Password
+        <input .logininput type="password">
