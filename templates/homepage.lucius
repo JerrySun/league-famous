@@ -229,6 +229,7 @@
 
 .playerscore{
 	font-size:12px;
+    color:#766C51;
 }
 
 .playername {
@@ -338,7 +339,7 @@
     display:hidden;
     position:absolute;
     right:0px;
-    top:159px;
+    top:179px;
     background-color:#e2dab9;
     box-shadow:0px 10px 20px -6px rgba(0,0,0,0.3);
     width:300px;
@@ -402,11 +403,13 @@
     position:absolute;
     bottom:10px;
     right:10px;
-    font-size:10px;
+    font-size:12px;
 }
 
-#previewfooter a{
-    font-size:10px;
+#previewfooter{
+    font-size:12px;
+    font-weight:bold;
+    color:#0088cc;
 }
 
 .playerdelete{
@@ -466,8 +469,13 @@
     text-align:right;
 	background-position:0px -48px;
 	background-repeat:no-repeat;
-	font-size:10px;
+	font-size:12px;
+    font-weight:bold;
     padding-top:5px;
+}
+
+.pcommentreply a{
+    color:#0088cc;
 }
 
 .pthumbnail{
@@ -529,7 +537,7 @@
 	float:left;
 	width:60px;
 	height:26px;
-	font-size:10px;
+	font-size:12px;
 	font-family:Helvetica,Arial;
 	font-weight:bold;
 	text-align:center;

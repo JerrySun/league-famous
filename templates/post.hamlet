@@ -49,5 +49,5 @@
                 <div .commentingbubble>INTERESTING COMMENT
                 <textarea #replyText .commentingtext>
                 <div .postarea>
-                    <input #postsubmit type="submit" value="SUBMIT">
+                    <input #postsubmit type="submit" value="submit">
                     <div .formatting>formatting help

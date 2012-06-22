@@ -30,12 +30,12 @@
                         <img src=@{thumbR imageHash imgType T100} .pthumbnail>
                 #{message (parent thread)}
             <div .pcommentreply>
-                <a href=@{PostR $ threadIndex meta}>#{show $ length (reverseChildren thread)} REPLIES
+                <a href=@{PostR $ threadIndex meta}>#{show $ length (reverseChildren thread)} replies
     <div #quickreply>
         <form #previewPost data-player=#{statName player}>
             <input #prevPostName placeholder="Anonymous" .pinput .pinputname>
             <input #prevPostUrl placeholder="Image URL" .pinput .pinputimage>
             <textarea #ptext placeholder="Write a comment...">
             <div #ppostarea>
-                <button #ppostbutton type=submit>SUBMIT
-                <a #previewfooter href=@{PlayerR $ statName player}>VIEW ALL COMMENTS
+                <button #ppostbutton type="submit">submit
+                <a #previewfooter href=@{PlayerR $ statName player}>view all comments

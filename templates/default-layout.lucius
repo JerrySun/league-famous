@@ -401,7 +401,7 @@ h3{
 }
 
 h3 a:hover{
-    text-decoration:underline;
+    color:#0088cc;
 }
 
 

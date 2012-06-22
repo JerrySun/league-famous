@@ -10,7 +10,7 @@
                 <li>
                     <a href=@{HomeR} .menublog>OFF TOPIC
                 <li>
-                    <a href=@{FaqR} .menuhelp>HELP / FAQ
+                    <a href=@{FaqR} .menuhelp>HELP + FAQ
 <div #wrapper>
     ^{widget}
 <div #footer-wrapper>

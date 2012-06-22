@@ -14,7 +14,7 @@
                 <div .commentingbubble>INTERESTING COMMENT
                 <textarea #commentText .commentingtext>
                 <div .postarea>
-                    <input #postsubmit type="submit" value="SUBMIT">
+                    <input #postsubmit type="submit" value="submit">
                     <div .formatting>formatting help
 <div #center>
     ^{statsHeader player vote}
@@ -52,5 +52,5 @@
             <div .replyfooter>
                 <div .commentreply>
                     <a href=@{PostR $ threadIndex meta}>
-                        REPLY | #{show (max 0 ((-) (threadLength thread) 3))} MORE REPLIES
+                        #{show (max 0 ((-) (threadLength thread) 3))} more replies
     <div .loadmore>LOAD MORE

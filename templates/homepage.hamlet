@@ -22,7 +22,7 @@
                     <img .pthumbnail src="@{StaticR jellyfishsmall_jpg}">
                     Pretty dumb for a nig nog.
         <div .pcommentreply>
-            <a href="">3 MORE REPLIES
+            <a href="">3 more replies
 <div #preview .hidden>
 <div #center>
     <div .contentheader>

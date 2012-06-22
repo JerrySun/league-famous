@@ -1,7 +1,8 @@
 <div #login>
     <h1 .title>Login
-    <div .inputarea>
+    <form #inputform>
         <p .loginlabel>User Name
         <input .logininput>
         <p .loginlabel>Password
         <input .logininput type="password">
+        <input type="submit" value="log in" .loginbutton>
