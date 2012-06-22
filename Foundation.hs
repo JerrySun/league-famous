@@ -32,6 +32,10 @@ import Data.Text (Text)
 import State (AppState, Name)
 import Data.Acid (AcidState)
 
+import qualified Network.Wai as W
+import qualified Data.Text.Encoding as TE
+import qualified Data.Text.Encoding.Error as TEE
+
 -- | The site argument for your application. This can be a good place to
 -- keep settings and values requiring initialization before your application
 -- starts running, such as database connections. Every handler will have
@@ -121,6 +125,13 @@ instance Yesod App where
     -- Place Javascript at bottom of the body tag so the rest of the page loads first
     jsLoader _ = BottomOfBody
 
+    errorHandler NotFound = fmap chooseRep $ getErrorR
+    errorHandler other = defaultErrorHandler other
+
+getErrorR = do
+    r <- waiRequest
+    let path' = TE.decodeUtf8With TEE.lenientDecode $ W.rawPathInfo r
+    defaultLayout $(widgetFile "error")
 
 instance YesodAuth App where
     type AuthId App = Text

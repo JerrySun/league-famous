@@ -2,4 +2,4 @@
     <h1 .sadface>:(
     <div .errorbox>
         <p .message>The following URL seems to be missing:
-        <p .url>/errer
+        <p .url>#{path'}

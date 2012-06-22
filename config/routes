@@ -22,5 +22,4 @@
 /reply        MakeReplyR  POST
 
 /faq          FaqR       GET
-/error        ErrorR     GET
 /login        UserLoginR     GET
